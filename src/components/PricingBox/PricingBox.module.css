@@ -1,0 +1,102 @@
+/* PricingBox Styles - Token references only */
+
+.pricingBox {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-lg);
+}
+
+.title {
+    font-size: var(--font-size-heading-sm);
+    color: var(--color-text-primary);
+    margin-bottom: var(--space-md);
+}
+
+.breakdown {
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: var(--space-md);
+    margin-bottom: var(--space-md);
+}
+
+.row {
+    display: flex;
+    justify-content: space-between;
+    font-size: var(--font-size-body-small);
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-sm);
+}
+
+.discount {
+    color: var(--color-success);
+}
+
+.quantityRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-md);
+}
+
+.quantityControl {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+}
+
+.qtyBtn {
+    width: 32px;
+    height: 32px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    background: transparent;
+    color: var(--color-text-primary);
+    cursor: pointer;
+    font-size: var(--font-size-body-lg);
+}
+
+.qtyBtn:hover {
+    border-color: var(--color-primary);
+}
+
+.qtyValue {
+    min-width: 40px;
+    text-align: center;
+    font-size: var(--font-size-body-regular);
+    color: var(--color-text-primary);
+}
+
+.total {
+    display: flex;
+    justify-content: space-between;
+    font-size: var(--font-size-heading-sm);
+    color: var(--color-text-primary);
+    margin-bottom: var(--space-lg);
+}
+
+.totalValue {
+    color: var(--color-primary);
+    font-weight: 700;
+}
+
+.addToCart {
+    width: 100%;
+    padding: var(--space-md);
+    background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+    border: none;
+    border-radius: var(--radius-md);
+    color: white;
+    font-size: var(--font-size-body-regular);
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform var(--motion-fast), box-shadow var(--motion-fast);
+}
+
+.addToCart:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--elevation-glow);
+}
+
+.pluginSlot {
+    margin-top: var(--space-md);
+}

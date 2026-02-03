@@ -1,0 +1,119 @@
+/* CartSummary Styles */
+
+.cartSummary {
+    background: var(--color-surface);
+    border-radius: var(--radius-lg);
+    padding: var(--space-xl);
+}
+
+.title {
+    font-size: var(--font-size-heading-md);
+    color: var(--color-text-primary);
+    margin-bottom: var(--space-lg);
+}
+
+.empty {
+    text-align: center;
+    padding: var(--space-3xl);
+    color: var(--color-text-muted);
+}
+
+.items {
+    margin-bottom: var(--space-lg);
+}
+
+.item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--space-md);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.itemInfo {
+    flex: 1;
+}
+
+.itemName {
+    font-size: var(--font-size-body-regular);
+    color: var(--color-text-primary);
+    margin-bottom: var(--space-xs);
+}
+
+.itemMeta {
+    font-size: var(--font-size-caption);
+    color: var(--color-text-muted);
+}
+
+.itemActions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+}
+
+.quantity {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+}
+
+.quantity button {
+    width: 28px;
+    height: 28px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    background: transparent;
+    color: var(--color-text-primary);
+    cursor: pointer;
+}
+
+.itemPrice {
+    min-width: 80px;
+    text-align: right;
+    font-weight: 600;
+    color: var(--color-text-primary);
+}
+
+.removeBtn {
+    background: none;
+    border: none;
+    color: var(--color-error);
+    font-size: var(--font-size-heading-sm);
+    cursor: pointer;
+}
+
+.totals {
+    border-top: 2px solid var(--color-border);
+    padding-top: var(--space-md);
+    margin-bottom: var(--space-lg);
+}
+
+.row {
+    display: flex;
+    justify-content: space-between;
+    padding: var(--space-sm) 0;
+    font-size: var(--font-size-body-regular);
+    color: var(--color-text-secondary);
+}
+
+.totalRow {
+    font-size: var(--font-size-heading-sm);
+    font-weight: 700;
+    color: var(--color-text-primary);
+}
+
+.checkoutBtn {
+    width: 100%;
+    padding: var(--space-md);
+    background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+    border: none;
+    border-radius: var(--radius-md);
+    color: white;
+    font-size: var(--font-size-body-regular);
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.pluginSlot {
+    margin-top: var(--space-md);
+}

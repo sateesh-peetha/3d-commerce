@@ -1,0 +1,54 @@
+/* FileUpload Styles - Token references only */
+
+.uploadContainer {
+    padding: var(--space-xl);
+}
+
+.dropzone {
+    position: relative;
+    border: 2px dashed var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: var(--space-3xl);
+    text-align: center;
+    cursor: pointer;
+    transition: all var(--motion-normal);
+    background: var(--color-surface);
+}
+
+.dropzone:hover {
+    border-color: var(--color-primary);
+    background: var(--color-surface-hover);
+}
+
+.icon {
+    font-size: 4rem;
+    margin-bottom: var(--space-md);
+}
+
+.title {
+    font-size: var(--font-size-heading-md);
+    color: var(--color-text-primary);
+    margin-bottom: var(--space-sm);
+}
+
+.subtitle {
+    font-size: var(--font-size-body-regular);
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-md);
+}
+
+.formats {
+    font-size: var(--font-size-caption);
+    color: var(--color-text-muted);
+}
+
+.fileInput {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.pluginSlot {
+    margin-top: var(--space-md);
+}

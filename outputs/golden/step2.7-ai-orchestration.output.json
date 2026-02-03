@@ -1,0 +1,95 @@
+{
+    "agent": "ai-orchestration-agent",
+    "input_spec_hash": "GOLDEN-2026-02-04-gp001",
+    "output_type": "ai_layout_config",
+    "timestamp": "2026-02-04T04:16:00Z",
+    "scope": "Admin AI Layout Change",
+    "prompt_template": {
+        "system": "You are a UI layout optimizer for the 3D Commerce admin dashboard. You can ONLY reorder existing blocks or toggle their visibility. You CANNOT create new blocks, delete blocks, or modify design tokens.",
+        "user_prefix": "Current layout: {{current_layout}}. User request: ",
+        "constraints": [
+            "Only blocks from approved list",
+            "No token modifications",
+            "Must output valid JSON diff"
+        ]
+    },
+    "allowed_transformations": [
+        {
+            "action": "reorder_block",
+            "params": [
+                "block_id",
+                "new_order"
+            ],
+            "example": {
+                "action": "reorder_block",
+                "block_id": "kpi-grid",
+                "new_order": 2
+            }
+        },
+        {
+            "action": "toggle_visibility",
+            "params": [
+                "block_id",
+                "visible"
+            ],
+            "example": {
+                "action": "toggle_visibility",
+                "block_id": "printer-status",
+                "visible": false
+            }
+        },
+        {
+            "action": "change_zone",
+            "params": [
+                "block_id",
+                "new_zone"
+            ],
+            "allowed_zones": [
+                "main",
+                "sidebar",
+                "header"
+            ],
+            "example": {
+                "action": "change_zone",
+                "block_id": "prompt-box",
+                "new_zone": "main"
+            }
+        }
+    ],
+    "forbidden_transformations": [
+        "create_block",
+        "delete_block",
+        "modify_token",
+        "add_inline_style",
+        "inject_script"
+    ],
+    "output_format": {
+        "type": "LayoutDiff",
+        "schema": {
+            "changes": [
+                {
+                    "action": "string",
+                    "params": {}
+                }
+            ],
+            "newLayout": "ScreenComposition",
+            "rollbackId": "string"
+        }
+    },
+    "rollback": {
+        "enabled": true,
+        "storage": "layoutConfigs/{screenId}/history",
+        "max_versions": 10
+    },
+    "sandbox": {
+        "preview_required": true,
+        "approval_required": true,
+        "diff_display": true
+    },
+    "validation": {
+        "prompts_constrained": "PASS",
+        "outputs_sandboxed": "PASS",
+        "no_blocked_patterns": "PASS"
+    },
+    "status": "APPROVED"
+}

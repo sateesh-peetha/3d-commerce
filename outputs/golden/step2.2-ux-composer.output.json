@@ -1,0 +1,63 @@
+{
+    "agent": "ux-composer-agent",
+    "input_spec_hash": "GOLDEN-2026-02-04-gp001",
+    "output_type": "screen_compositions",
+    "timestamp": "2026-02-04T04:06:00Z",
+    "artifacts": [
+        {
+            "id": "home",
+            "path": "/outputs/golden/compositions/home.json"
+        },
+        {
+            "id": "3d-upload",
+            "path": "/outputs/golden/compositions/3d-upload.json"
+        },
+        {
+            "id": "checkout",
+            "path": "/outputs/golden/compositions/checkout.json"
+        },
+        {
+            "id": "order-confirmation",
+            "path": "/outputs/golden/compositions/order-confirmation.json"
+        },
+        {
+            "id": "admin-dashboard",
+            "path": "/outputs/golden/compositions/admin-dashboard.json"
+        },
+        {
+            "id": "admin-api-keys",
+            "path": "/outputs/golden/compositions/admin-api-keys.json"
+        }
+    ],
+    "blocks_used": [
+        "header-main-nav",
+        "prompt-box",
+        "product-grid",
+        "footer-main",
+        "file-upload",
+        "model-viewer",
+        "config-panel",
+        "material-selector",
+        "pricing-box",
+        "cart-summary",
+        "order-card",
+        "kpi-grid",
+        "printer-status",
+        "order-queue"
+    ],
+    "inline_components": [
+        "shipping-form",
+        "mock-payment-button",
+        "success-message",
+        "api-key-form",
+        "api-key-list"
+    ],
+    "assumptions": [],
+    "violations": [],
+    "validation": {
+        "only_approved_blocks": "PASS",
+        "no_undefined_blocks": "PASS",
+        "device_rules_respected": "PASS"
+    },
+    "status": "APPROVED"
+}

@@ -1,0 +1,52 @@
+{
+    "screen": "Admin/Dashboard",
+    "spec_hash": "GOLDEN-2026-02-04-gp001",
+    "device": "web_desktop",
+    "auth_required": true,
+    "required_role": "admin",
+    "blocks": [
+        {
+            "id": "header-main-nav",
+            "zone": "header",
+            "order": 0,
+            "props": {
+                "admin_mode": true
+            }
+        },
+        {
+            "id": "kpi-grid",
+            "zone": "main",
+            "order": 1
+        },
+        {
+            "id": "printer-status",
+            "zone": "main",
+            "order": 2
+        },
+        {
+            "id": "order-queue",
+            "zone": "main",
+            "order": 3
+        },
+        {
+            "id": "prompt-box",
+            "zone": "sidebar",
+            "order": 1,
+            "props": {
+                "ai_mode": "layout_change"
+            }
+        }
+    ],
+    "ai_modifiable": true,
+    "ai_rules": {
+        "allowed": [
+            "reorder_blocks",
+            "toggle_visibility"
+        ],
+        "forbidden": [
+            "create_block",
+            "delete_block",
+            "modify_tokens"
+        ]
+    }
+}

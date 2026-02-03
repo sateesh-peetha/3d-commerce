@@ -1,0 +1,46 @@
+{
+    "agent": "security-policy-agent",
+    "input_spec_hash": "GOLDEN-2026-02-04-gp001",
+    "output_type": "security_rules",
+    "timestamp": "2026-02-04T04:12:00Z",
+    "artifacts": [
+        {
+            "id": "firestore-rules",
+            "path": "/outputs/golden/firestore.rules"
+        },
+        {
+            "id": "access-matrix",
+            "path": "/outputs/golden/access-matrix.json"
+        }
+    ],
+    "threat_analysis": [
+        {
+            "threat": "IDOR - User viewing other user's orders",
+            "mitigation": "Firestore rule: resource.data.userId == request.auth.uid",
+            "status": "MITIGATED"
+        },
+        {
+            "threat": "Role escalation - Customer accessing admin endpoints",
+            "mitigation": "Firestore rule: isAdmin() function check",
+            "status": "MITIGATED"
+        },
+        {
+            "threat": "Unauthenticated cart access",
+            "mitigation": "Firestore rule: isAuthenticated() && isOwner(userId)",
+            "status": "MITIGATED"
+        },
+        {
+            "threat": "Admin without admin claim modifying orders",
+            "mitigation": "Firestore rule: getUserRole() == 'admin'",
+            "status": "MITIGATED"
+        }
+    ],
+    "assumptions": [],
+    "violations": [],
+    "validation": {
+        "no_cross_user_access": "PASS",
+        "admin_actions_gated": "PASS",
+        "secrets_not_exposed": "PASS"
+    },
+    "status": "APPROVED"
+}

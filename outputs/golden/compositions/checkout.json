@@ -1,0 +1,43 @@
+{
+    "screen": "Web/Checkout",
+    "spec_hash": "GOLDEN-2026-02-04-gp001",
+    "device": "web_desktop",
+    "auth_required": true,
+    "blocks": [
+        {
+            "id": "header-main-nav",
+            "zone": "header",
+            "order": 0,
+            "props": {
+                "minimal": true
+            }
+        },
+        {
+            "id": "cart-summary",
+            "zone": "main",
+            "order": 1
+        },
+        {
+            "id": "shipping-form",
+            "zone": "main",
+            "order": 2,
+            "type": "inline_component",
+            "source": "components.css",
+            "fields": [
+                "name",
+                "address",
+                "city",
+                "postal",
+                "country"
+            ]
+        },
+        {
+            "id": "mock-payment-button",
+            "zone": "main",
+            "order": 3,
+            "type": "inline_component",
+            "source": "components.css",
+            "action": "mock_payment_redirect"
+        }
+    ]
+}

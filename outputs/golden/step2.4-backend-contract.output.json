@@ -1,0 +1,225 @@
+{
+    "agent": "backend-contract-agent",
+    "input_spec_hash": "GOLDEN-2026-02-04-gp001",
+    "output_type": "api_contracts",
+    "timestamp": "2026-02-04T04:11:00Z",
+    "endpoints": [
+        {
+            "id": "get-products",
+            "method": "GET",
+            "path": "/api/products",
+            "auth": {
+                "required": false
+            },
+            "query": {
+                "featured": "boolean?",
+                "limit": "number?"
+            },
+            "response": {
+                "products": "Product[]"
+            }
+        },
+        {
+            "id": "get-materials",
+            "method": "GET",
+            "path": "/api/materials",
+            "auth": {
+                "required": false
+            },
+            "response": {
+                "materials": "Material[]"
+            }
+        },
+        {
+            "id": "post-pricing-estimate",
+            "method": "POST",
+            "path": "/api/pricing/estimate",
+            "auth": {
+                "required": false
+            },
+            "body": {
+                "modelVolume": "number",
+                "materialId": "string",
+                "config": "PrintConfig"
+            },
+            "response": {
+                "estimate": "PricingEstimate"
+            }
+        },
+        {
+            "id": "post-upload",
+            "method": "POST",
+            "path": "/api/upload",
+            "auth": {
+                "required": false
+            },
+            "body": {
+                "file": "File"
+            },
+            "response": {
+                "modelId": "string",
+                "preview": "string"
+            }
+        },
+        {
+            "id": "get-cart",
+            "method": "GET",
+            "path": "/api/cart",
+            "auth": {
+                "required": true,
+                "roles": [
+                    "customer",
+                    "admin"
+                ]
+            },
+            "response": {
+                "cart": "Cart"
+            }
+        },
+        {
+            "id": "post-cart",
+            "method": "POST",
+            "path": "/api/cart",
+            "auth": {
+                "required": true,
+                "roles": [
+                    "customer"
+                ]
+            },
+            "body": {
+                "item": "CartItem"
+            },
+            "response": {
+                "cart": "Cart"
+            }
+        },
+        {
+            "id": "post-orders",
+            "method": "POST",
+            "path": "/api/orders",
+            "auth": {
+                "required": true,
+                "roles": [
+                    "customer"
+                ]
+            },
+            "body": {
+                "shippingAddress": "Address",
+                "paymentMethod": "string"
+            },
+            "response": {
+                "order": "Order"
+            }
+        },
+        {
+            "id": "get-order",
+            "method": "GET",
+            "path": "/api/orders/:id",
+            "auth": {
+                "required": true,
+                "roles": [
+                    "customer",
+                    "admin"
+                ]
+            },
+            "params": {
+                "id": "string"
+            },
+            "response": {
+                "order": "Order"
+            }
+        },
+        {
+            "id": "get-admin-dashboard",
+            "method": "GET",
+            "path": "/api/admin/dashboard",
+            "auth": {
+                "required": true,
+                "roles": [
+                    "admin"
+                ]
+            },
+            "response": {
+                "kpis": "AdminKPI[]",
+                "printers": "Printer[]"
+            }
+        },
+        {
+            "id": "get-admin-orders",
+            "method": "GET",
+            "path": "/api/admin/orders",
+            "auth": {
+                "required": true,
+                "roles": [
+                    "admin"
+                ]
+            },
+            "query": {
+                "status": "string?",
+                "limit": "number?"
+            },
+            "response": {
+                "orders": "Order[]"
+            }
+        },
+        {
+            "id": "get-admin-api-keys",
+            "method": "GET",
+            "path": "/api/admin/api-keys",
+            "auth": {
+                "required": true,
+                "roles": [
+                    "admin"
+                ]
+            },
+            "response": {
+                "keys": "ApiKeyConfig[]"
+            }
+        },
+        {
+            "id": "post-admin-api-keys",
+            "method": "POST",
+            "path": "/api/admin/api-keys",
+            "auth": {
+                "required": true,
+                "roles": [
+                    "admin"
+                ]
+            },
+            "body": {
+                "provider": "string",
+                "apiKey": "string",
+                "enabled": "boolean"
+            },
+            "response": {
+                "key": "ApiKeyConfig"
+            }
+        },
+        {
+            "id": "post-admin-layout",
+            "method": "POST",
+            "path": "/api/admin/layout",
+            "auth": {
+                "required": true,
+                "roles": [
+                    "admin"
+                ]
+            },
+            "body": {
+                "prompt": "string",
+                "screen": "string"
+            },
+            "response": {
+                "newLayout": "ScreenComposition",
+                "diff": "LayoutDiff",
+                "rollbackId": "string"
+            }
+        }
+    ],
+    "validation": {
+        "all_endpoints_authenticated_appropriately": "PASS",
+        "no_over_fetching": "PASS",
+        "no_ui_dependency": "PASS"
+    },
+    "status": "APPROVED"
+}

@@ -1,0 +1,45 @@
+{
+    "agent": "frontend-scaffold-agent",
+    "input_spec_hash": "GOLDEN-2026-02-04-gp001",
+    "output_type": "component_stubs",
+    "timestamp": "2026-02-04T04:10:00Z",
+    "artifacts": [
+        {
+            "id": "types-tokens",
+            "path": "/src/types/tokens.ts"
+        },
+        {
+            "id": "types-api",
+            "path": "/src/types/api.ts"
+        },
+        {
+            "id": "types-components",
+            "path": "/src/types/components.ts"
+        },
+        {
+            "id": "HeaderMainNav",
+            "path": "/src/components/HeaderMainNav/"
+        },
+        {
+            "id": "FileUpload",
+            "path": "/src/components/FileUpload/"
+        },
+        {
+            "id": "PricingBox",
+            "path": "/src/components/PricingBox/"
+        },
+        {
+            "id": "CartSummary",
+            "path": "/src/components/CartSummary/"
+        }
+    ],
+    "assumptions": [],
+    "violations": [],
+    "validation": {
+        "no_inline_styles": "PASS",
+        "token_references_only": "PASS",
+        "no_business_logic": "PASS",
+        "typescript_strict": "PASS"
+    },
+    "status": "APPROVED"
+}

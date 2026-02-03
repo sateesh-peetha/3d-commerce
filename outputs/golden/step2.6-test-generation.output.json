@@ -1,0 +1,54 @@
+{
+    "agent": "test-generation-agent",
+    "input_spec_hash": "GOLDEN-2026-02-04-gp001",
+    "output_type": "test_suite",
+    "timestamp": "2026-02-04T04:15:00Z",
+    "artifacts": [
+        {
+            "id": "e2e-golden",
+            "path": "/tests/e2e/golden-path.spec.ts",
+            "type": "playwright"
+        },
+        {
+            "id": "security-golden",
+            "path": "/tests/security/golden-path-security.spec.ts",
+            "type": "playwright"
+        },
+        {
+            "id": "unit-pricing",
+            "path": "/tests/unit/pricing.test.ts",
+            "type": "vitest"
+        }
+    ],
+    "coverage": {
+        "golden_flows": {
+            "user_upload_configure": "COVERED",
+            "user_add_to_cart": "COVERED",
+            "user_checkout": "COVERED",
+            "admin_view_dashboard": "COVERED",
+            "admin_see_order": "COVERED",
+            "admin_ai_layout_change": "COVERED"
+        },
+        "security_tests": {
+            "idor_order_access": "COVERED",
+            "idor_cart_access": "COVERED",
+            "role_escalation_admin": "COVERED",
+            "role_escalation_ai": "COVERED",
+            "unauthenticated_access": "COVERED"
+        },
+        "unit_tests": {
+            "pricing_base": "COVERED",
+            "pricing_material": "COVERED",
+            "pricing_quality": "COVERED",
+            "pricing_volume": "COVERED",
+            "pricing_quantity": "COVERED"
+        }
+    },
+    "assumptions": [],
+    "violations": [],
+    "validation": {
+        "golden_flows_covered": "PASS",
+        "security_tests_present": "PASS"
+    },
+    "status": "APPROVED"
+}

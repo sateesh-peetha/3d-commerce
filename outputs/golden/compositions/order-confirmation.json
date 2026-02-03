@@ -1,0 +1,34 @@
+{
+    "screen": "Web/OrderConfirmation",
+    "spec_hash": "GOLDEN-2026-02-04-gp001",
+    "device": "web_desktop",
+    "auth_required": true,
+    "blocks": [
+        {
+            "id": "header-main-nav",
+            "zone": "header",
+            "order": 0
+        },
+        {
+            "id": "success-message",
+            "zone": "main",
+            "order": 1,
+            "type": "inline_component",
+            "content": {
+                "icon": "check-circle",
+                "title": "Order Placed!",
+                "subtitle": "Thank you for your order."
+            }
+        },
+        {
+            "id": "order-card",
+            "zone": "main",
+            "order": 2
+        },
+        {
+            "id": "footer-main",
+            "zone": "footer",
+            "order": 99
+        }
+    ]
+}

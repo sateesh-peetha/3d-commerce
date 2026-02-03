@@ -1,0 +1,53 @@
+{
+    "screen": "Admin/ApiKeys",
+    "spec_hash": "GOLDEN-2026-02-04-gp001",
+    "device": "web_desktop",
+    "auth_required": true,
+    "required_role": "admin",
+    "blocks": [
+        {
+            "id": "header-main-nav",
+            "zone": "header",
+            "order": 0,
+            "props": {
+                "admin_mode": true
+            }
+        },
+        {
+            "id": "api-key-form",
+            "zone": "main",
+            "order": 1,
+            "type": "inline_component",
+            "source": "components.css",
+            "fields": [
+                {
+                    "name": "provider",
+                    "type": "select",
+                    "options": [
+                        "mock_provider"
+                    ]
+                },
+                {
+                    "name": "api_key",
+                    "type": "password"
+                },
+                {
+                    "name": "enabled",
+                    "type": "toggle"
+                }
+            ]
+        },
+        {
+            "id": "api-key-list",
+            "zone": "main",
+            "order": 2,
+            "type": "inline_component",
+            "columns": [
+                "provider",
+                "status",
+                "created",
+                "actions"
+            ]
+        }
+    ]
+}

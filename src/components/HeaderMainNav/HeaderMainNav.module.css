@@ -1,0 +1,75 @@
+/* HeaderMainNav Styles - Token references only */
+
+.header {
+    background: var(--color-surface);
+    border-bottom: 1px solid var(--color-border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: var(--space-md) var(--space-lg);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-lg);
+}
+
+.logo a {
+    font-size: var(--font-size-heading-sm);
+    font-weight: 700;
+    color: var(--color-text-primary);
+    text-decoration: none;
+}
+
+.nav {
+    display: flex;
+    gap: var(--space-lg);
+}
+
+.navLink {
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    font-size: var(--font-size-body-regular);
+    transition: color var(--motion-fast);
+}
+
+.navLink:hover {
+    color: var(--color-primary);
+}
+
+.actions {
+    display: flex;
+    gap: var(--space-sm);
+}
+
+.actionBtn {
+    padding: var(--space-sm) var(--space-md);
+    background: transparent;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    font-size: var(--font-size-body-small);
+    transition: all var(--motion-fast);
+}
+
+.actionBtn:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+}
+
+.minimal .nav {
+    display: none;
+}
+
+.admin .logo a {
+    color: var(--color-secondary);
+}
+
+.pluginSlot {
+    /* Reserved for plugin injection */
+}

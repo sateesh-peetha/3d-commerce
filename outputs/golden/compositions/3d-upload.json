@@ -1,0 +1,58 @@
+{
+    "screen": "Web/3DUpload",
+    "spec_hash": "GOLDEN-2026-02-04-gp001",
+    "device": "web_desktop",
+    "auth_required": false,
+    "blocks": [
+        {
+            "id": "header-main-nav",
+            "zone": "header",
+            "order": 0
+        },
+        {
+            "id": "file-upload",
+            "zone": "main",
+            "order": 1,
+            "conditional": {
+                "hide_if": "model_loaded"
+            }
+        },
+        {
+            "id": "model-viewer",
+            "zone": "main",
+            "order": 2,
+            "conditional": {
+                "show_if": "model_loaded"
+            }
+        },
+        {
+            "id": "material-selector",
+            "zone": "aside",
+            "order": 1,
+            "conditional": {
+                "show_if": "model_loaded"
+            }
+        },
+        {
+            "id": "config-panel",
+            "zone": "aside",
+            "order": 2,
+            "conditional": {
+                "show_if": "model_loaded"
+            }
+        },
+        {
+            "id": "pricing-box",
+            "zone": "aside",
+            "order": 3,
+            "conditional": {
+                "show_if": "model_loaded"
+            }
+        },
+        {
+            "id": "footer-main",
+            "zone": "footer",
+            "order": 99
+        }
+    ]
+}

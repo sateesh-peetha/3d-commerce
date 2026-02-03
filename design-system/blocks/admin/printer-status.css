@@ -1,0 +1,239 @@
+/**
+ * Block: Admin/PrinterStatus
+ * 
+ * Purpose: 3D printer fleet status monitoring
+ * Devices: Web Desktop
+ * Plugin Points: .printer-status-slot
+ */
+
+.block-admin-printer-status {
+    background: var(--color-surface);
+    border-radius: var(--radius-xl);
+    border: 1px solid var(--color-border);
+    overflow: hidden;
+}
+
+.block-admin-printer-status__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-lg);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.block-admin-printer-status__title {
+    font-size: var(--font-size-heading-sm);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-primary);
+}
+
+.block-admin-printer-status__summary {
+    display: flex;
+    gap: var(--space-md);
+}
+
+.block-admin-printer-status__summary-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    font-size: var(--font-size-caption);
+}
+
+.block-admin-printer-status__summary-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+
+.block-admin-printer-status__summary-dot--active {
+    background: var(--color-success);
+}
+
+.block-admin-printer-status__summary-dot--idle {
+    background: var(--color-warning);
+}
+
+.block-admin-printer-status__summary-dot--offline {
+    background: var(--color-text-muted);
+}
+
+/* Printer grid */
+.block-admin-printer-status__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-md);
+    padding: var(--space-lg);
+}
+
+.block-admin-printer-status__card {
+    background: var(--color-background);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-border);
+    padding: var(--space-md);
+    transition: all var(--motion-fast) var(--ease-out);
+}
+
+.block-admin-printer-status__card:hover {
+    border-color: var(--color-primary);
+}
+
+.block-admin-printer-status__card--active {
+    border-color: var(--color-success);
+}
+
+.block-admin-printer-status__card--error {
+    border-color: var(--color-error);
+}
+
+.block-admin-printer-status__card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--space-md);
+}
+
+.block-admin-printer-status__card-name {
+    font-size: var(--font-size-body-small);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-primary);
+}
+
+.block-admin-printer-status__card-status {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+.block-admin-printer-status__card-status--active {
+    background: var(--color-success);
+}
+
+.block-admin-printer-status__card-status--idle {
+    background: var(--color-warning);
+    animation: none;
+}
+
+.block-admin-printer-status__card-status--offline {
+    background: var(--color-text-muted);
+    animation: none;
+}
+
+.block-admin-printer-status__card-status--error {
+    background: var(--color-error);
+}
+
+/* Progress indicator */
+.block-admin-printer-status__progress {
+    margin-bottom: var(--space-md);
+}
+
+.block-admin-printer-status__progress-bar {
+    height: 6px;
+    background: var(--color-border);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+    margin-bottom: var(--space-xs);
+}
+
+.block-admin-printer-status__progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--color-primary) 0%, var(--color-success) 100%);
+    border-radius: var(--radius-full);
+    transition: width var(--motion-normal) var(--ease-out);
+}
+
+.block-admin-printer-status__progress-info {
+    display: flex;
+    justify-content: space-between;
+    font-size: var(--font-size-caption);
+    color: var(--color-text-muted);
+}
+
+/* Job info */
+.block-admin-printer-status__job {
+    font-size: var(--font-size-caption);
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-sm);
+}
+
+.block-admin-printer-status__job-name {
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-primary);
+}
+
+/* Metrics */
+.block-admin-printer-status__metrics {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-sm);
+}
+
+.block-admin-printer-status__metric {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.block-admin-printer-status__metric-label {
+    font-size: 10px;
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+}
+
+.block-admin-printer-status__metric-value {
+    font-size: var(--font-size-body-small);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-primary);
+}
+
+/* Controls */
+.block-admin-printer-status__controls {
+    display: flex;
+    gap: var(--space-xs);
+    margin-top: var(--space-md);
+    padding-top: var(--space-md);
+    border-top: 1px solid var(--color-border);
+}
+
+.block-admin-printer-status__control-btn {
+    flex: 1;
+    padding: var(--space-xs);
+    background: transparent;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    font-size: 12px;
+    transition: all var(--motion-fast) var(--ease-out);
+}
+
+.block-admin-printer-status__control-btn:hover {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    color: white;
+}
+
+.block-admin-printer-status__control-btn--danger:hover {
+    background: var(--color-error);
+    border-color: var(--color-error);
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .block-admin-printer-status__grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .block-admin-printer-status__grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Plugin slot */
+.block-admin-printer-status__slot {
+    padding: var(--space-md) var(--space-lg);
+    border-top: 1px solid var(--color-border);
+}

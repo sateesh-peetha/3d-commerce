@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>3D Commerce - Web Homepage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../tokens/base.css">
+  <link rel="stylesheet" href="../../blocks/shared/components.css">
+  <link rel="stylesheet" href="../../blocks/navigation/header-main-nav.css">
+  <link rel="stylesheet" href="../../blocks/navigation/footer-main.css">
+  <link rel="stylesheet" href="../../blocks/commerce/product-card.css">
+  <link rel="stylesheet" href="../../blocks/commerce/product-grid.css">
+  <link rel="stylesheet" href="../../layouts/device-rules.css">
+  <style>
+    /* Screen-specific layout composition */
+    .hero-section {
+      min-height: 80vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: var(--space-3xl) var(--space-lg);
+      background: radial-gradient(ellipse at center, var(--color-surface) 0%, var(--color-background) 100%);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .hero-section::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: 
+        linear-gradient(rgba(99, 102, 241, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(99, 102, 241, 0.05) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+    
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 800px;
+    }
+    
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-sm);
+      padding: var(--space-xs) var(--space-md);
+      background: rgba(99, 102, 241, 0.1);
+      border: 1px solid var(--color-primary);
+      border-radius: var(--radius-full);
+      font-size: var(--font-size-caption);
+      color: var(--color-primary);
+      margin-bottom: var(--space-lg);
+    }
+    
+    .hero-title {
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      font-weight: var(--font-weight-bold);
+      color: var(--color-text-primary);
+      line-height: var(--line-height-tight);
+      margin-bottom: var(--space-lg);
+    }
+    
+    .hero-title span {
+      background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .hero-subtitle {
+      font-size: var(--font-size-body-lg);
+      color: var(--color-text-secondary);
+      max-width: 600px;
+      margin: 0 auto var(--space-xl);
+      line-height: var(--line-height-relaxed);
+    }
+    
+    .hero-actions {
+      display: flex;
+      justify-content: center;
+      gap: var(--space-md);
+      flex-wrap: wrap;
+    }
+    
+    .section {
+      padding: var(--space-3xl) var(--space-lg);
+    }
+    
+    .section-header {
+      text-align: center;
+      margin-bottom: var(--space-2xl);
+    }
+    
+    .section-title {
+      font-size: var(--font-size-heading-lg);
+      font-weight: var(--font-weight-bold);
+      color: var(--color-text-primary);
+      margin-bottom: var(--space-sm);
+    }
+    
+    .section-subtitle {
+      font-size: var(--font-size-body-regular);
+      color: var(--color-text-secondary);
+    }
+    
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: var(--space-lg);
+      max-width: var(--container-max-width);
+      margin: 0 auto;
+    }
+    
+    .feature-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-xl);
+      padding: var(--space-xl);
+      transition: all var(--motion-fast) var(--ease-out);
+    }
+    
+    .feature-card:hover {
+      border-color: var(--color-primary);
+      transform: translateY(-4px);
+    }
+    
+    .feature-icon {
+      width: 56px;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+      border-radius: var(--radius-lg);
+      color: white;
+      font-size: 24px;
+      margin-bottom: var(--space-md);
+    }
+    
+    .feature-title {
+      font-size: var(--font-size-heading-sm);
+      font-weight: var(--font-weight-semibold);
+      color: var(--color-text-primary);
+      margin-bottom: var(--space-sm);
+    }
+    
+    .feature-desc {
+      font-size: var(--font-size-body-small);
+      color: var(--color-text-secondary);
+      line-height: var(--line-height-relaxed);
+    }
+    
+    .products-section {
+      background: var(--color-background);
+    }
+    
+    .cta-section {
+      background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+      text-align: center;
+    }
+    
+    .cta-title {
+      font-size: var(--font-size-heading-md);
+      font-weight: var(--font-weight-bold);
+      color: white;
+      margin-bottom: var(--space-md);
+    }
+    
+    .cta-text {
+      font-size: var(--font-size-body-regular);
+      color: rgba(255, 255, 255, 0.9);
+      margin-bottom: var(--space-lg);
+    }
+  </style>
+</head>
+<body>
+  <!-- Block/Header/MainNav -->
+  <header class="block-header-main-nav">
+    <div class="block-header-main-nav__container">
+      <a href="#" class="block-header-main-nav__logo">
+        <div class="block-header-main-nav__logo-icon">3D</div>
+        3D Commerce
+      </a>
+      <nav class="block-header-main-nav__nav">
+        <ul class="block-header-main-nav__nav-list">
+          <li><a href="#" class="block-header-main-nav__nav-link block-header-main-nav__nav-link--active">Home</a></li>
+          <li><a href="store.html" class="block-header-main-nav__nav-link">Store</a></li>
+          <li><a href="3d-upload.html" class="block-header-main-nav__nav-link">Upload 3D</a></li>
+          <li><a href="#" class="block-header-main-nav__nav-link">Blog</a></li>
+          <li><a href="#" class="block-header-main-nav__nav-link">About</a></li>
+        </ul>
+      </nav>
+      <div class="block-header-main-nav__actions">
+        <button class="btn btn--ghost btn--icon">🔍</button>
+        <button class="btn btn--ghost btn--icon">🛒</button>
+        <button class="btn btn--primary">Sign In</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero Section (Composed of token-driven elements) -->
+    <section class="hero-section">
+      <div class="hero-content animate-slide-up">
+        <div class="hero-badge">
+          ✨ AI-Powered 3D Manufacturing
+        </div>
+        <h1 class="hero-title">
+          Transform Your Ideas Into <span>Reality</span>
+        </h1>
+        <p class="hero-subtitle">
+          Upload your 3D models, customize materials and finishes, and get professional-grade prints delivered to your door. 
+          Powered by AI for optimal results.
+        </p>
+        <div class="hero-actions">
+          <a href="3d-upload.html" class="btn btn--gradient btn--lg">
+            📦 Start Printing
+          </a>
+          <a href="store.html" class="btn btn--secondary btn--lg">
+            Browse Store
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="section">
+      <div class="section-header">
+        <h2 class="section-title">Why Choose Us</h2>
+        <p class="section-subtitle">Professional 3D printing made simple and accessible</p>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">🚀</div>
+          <h3 class="feature-title">Instant Quotes</h3>
+          <p class="feature-desc">Upload your model and get accurate pricing in seconds. Our AI analyzes complexity and optimizes production.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🎨</div>
+          <h3 class="feature-title">Premium Materials</h3>
+          <p class="feature-desc">Choose from PLA, ABS, PETG, Resin, Nylon, and Metal. Each material tuned for durability and finish.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">⚡</div>
+          <h3 class="feature-title">Fast Turnaround</h3>
+          <p class="feature-desc">Most orders ship within 3-5 business days. Rush options available for time-critical projects.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🛡️</div>
+          <h3 class="feature-title">Quality Guaranteed</h3>
+          <p class="feature-desc">Every print is inspected for accuracy. Not satisfied? We'll reprint it free or refund your order.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Products Section - Block/Store/ProductGrid -->
+    <section class="section products-section">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">Featured Products</h2>
+          <p class="section-subtitle">Pre-designed models ready to print and ship</p>
+        </div>
+        
+        <div class="block-product-grid" style="max-width: var(--container-max-width); margin: 0 auto;">
+          <!-- Product cards would be dynamically generated -->
+          <article class="block-product-card">
+            <div class="block-product-card__image">
+              <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300' fill='%231e293b'%3E%3Crect width='400' height='300'/%3E%3Ctext x='50%25' y='50%25' fill='%2364748b' text-anchor='middle' dy='.3em' font-family='sans-serif'%3E3D Model%3C/text%3E%3C/svg%3E" alt="Product">
+              <span class="block-product-card__badge block-product-card__badge--new">New</span>
+            </div>
+            <div class="block-product-card__content">
+              <span class="block-product-card__category">Decorative</span>
+              <h3 class="block-product-card__title">Geometric Desk Organizer</h3>
+              <div class="block-product-card__footer">
+                <div class="block-product-card__price">
+                  <span class="block-product-card__price-current">$24.99</span>
+                </div>
+                <button class="block-product-card__add-btn">Add to Cart</button>
+              </div>
+            </div>
+          </article>
+          
+          <article class="block-product-card">
+            <div class="block-product-card__image">
+              <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300' fill='%231e293b'%3E%3Crect width='400' height='300'/%3E%3Ctext x='50%25' y='50%25' fill='%2364748b' text-anchor='middle' dy='.3em' font-family='sans-serif'%3E3D Model%3C/text%3E%3C/svg%3E" alt="Product">
+            </div>
+            <div class="block-product-card__content">
+              <span class="block-product-card__category">Functional</span>
+              <h3 class="block-product-card__title">Cable Management Clips (10-pack)</h3>
+              <div class="block-product-card__footer">
+                <div class="block-product-card__price">
+                  <span class="block-product-card__price-current">$12.99</span>
+                </div>
+                <button class="block-product-card__add-btn">Add to Cart</button>
+              </div>
+            </div>
+          </article>
+          
+          <article class="block-product-card">
+            <div class="block-product-card__image">
+              <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300' fill='%231e293b'%3E%3Crect width='400' height='300'/%3E%3Ctext x='50%25' y='50%25' fill='%2364748b' text-anchor='middle' dy='.3em' font-family='sans-serif'%3E3D Model%3C/text%3E%3C/svg%3E" alt="Product">
+              <span class="block-product-card__badge block-product-card__badge--sale">-20%</span>
+            </div>
+            <div class="block-product-card__content">
+              <span class="block-product-card__category">Art</span>
+              <h3 class="block-product-card__title">Abstract Wave Sculpture</h3>
+              <div class="block-product-card__footer">
+                <div class="block-product-card__price">
+                  <span class="block-product-card__price-current">$39.99</span>
+                  <span class="block-product-card__price-original">$49.99</span>
+                </div>
+                <button class="block-product-card__add-btn">Add to Cart</button>
+              </div>
+            </div>
+          </article>
+          
+          <article class="block-product-card">
+            <div class="block-product-card__image">
+              <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300' fill='%231e293b'%3E%3Crect width='400' height='300'/%3E%3Ctext x='50%25' y='50%25' fill='%2364748b' text-anchor='middle' dy='.3em' font-family='sans-serif'%3E3D Model%3C/text%3E%3C/svg%3E" alt="Product">
+            </div>
+            <div class="block-product-card__content">
+              <span class="block-product-card__category">Gadgets</span>
+              <h3 class="block-product-card__title">Smartphone Stand with Wireless Charger Mount</h3>
+              <div class="block-product-card__footer">
+                <div class="block-product-card__price">
+                  <span class="block-product-card__price-current">$18.99</span>
+                </div>
+                <button class="block-product-card__add-btn">Add to Cart</button>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="section cta-section">
+      <h2 class="cta-title">Ready to bring your designs to life?</h2>
+      <p class="cta-text">Join thousands of creators who trust us with their 3D printing needs.</p>
+      <a href="3d-upload.html" class="btn btn--lg" style="background: white; color: var(--color-primary);">
+        Get Started Free
+      </a>
+    </section>
+  </main>
+
+  <!-- Block/Footer/MainFooter -->
+  <footer class="block-footer-main">
+    <div class="block-footer-main__container">
+      <div class="block-footer-main__grid">
+        <div class="block-footer-main__brand">
+          <div class="block-footer-main__logo">
+            <div class="block-footer-main__logo-icon">3D</div>
+            3D Commerce
+          </div>
+          <p class="block-footer-main__description">
+            Professional 3D printing services for creators, makers, and businesses. Transform digital designs into physical reality.
+          </p>
+        </div>
+        <div class="block-footer-main__column">
+          <h4 class="block-footer-main__column-title">Products</h4>
+          <nav class="block-footer-main__links">
+            <a href="#" class="block-footer-main__link">3D Printing</a>
+            <a href="#" class="block-footer-main__link">Materials</a>
+            <a href="#" class="block-footer-main__link">Finishing</a>
+            <a href="#" class="block-footer-main__link">Store</a>
+          </nav>
+        </div>
+        <div class="block-footer-main__column">
+          <h4 class="block-footer-main__column-title">Resources</h4>
+          <nav class="block-footer-main__links">
+            <a href="#" class="block-footer-main__link">Design Guide</a>
+            <a href="#" class="block-footer-main__link">File Formats</a>
+            <a href="#" class="block-footer-main__link">API Docs</a>
+            <a href="#" class="block-footer-main__link">Blog</a>
+          </nav>
+        </div>
+        <div class="block-footer-main__column">
+          <h4 class="block-footer-main__column-title">Company</h4>
+          <nav class="block-footer-main__links">
+            <a href="#" class="block-footer-main__link">About Us</a>
+            <a href="#" class="block-footer-main__link">Careers</a>
+            <a href="#" class="block-footer-main__link">Contact</a>
+            <a href="#" class="block-footer-main__link">Press</a>
+          </nav>
+        </div>
+      </div>
+      <div class="block-footer-main__bottom">
+        <p class="block-footer-main__copyright">© 2026 3D Commerce. All rights reserved.</p>
+        <nav class="block-footer-main__legal">
+          <a href="#" class="block-footer-main__legal-link">Privacy</a>
+          <a href="#" class="block-footer-main__legal-link">Terms</a>
+          <a href="#" class="block-footer-main__legal-link">Cookies</a>
+        </nav>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

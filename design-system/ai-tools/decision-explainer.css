@@ -1,0 +1,277 @@
+/**
+ * AI Design Decision Explainer
+ * 
+ * Purpose: Explain AI-generated design decisions
+ * Features: Decision rationale, alternatives, impact analysis
+ */
+
+/* ============================================
+   DECISION EXPLAINER INTERFACE
+   ============================================ */
+
+.ai-decision-explainer {
+    background: var(--color-surface);
+    border-radius: var(--radius-xl);
+    border: 1px solid var(--color-border);
+    overflow: hidden;
+}
+
+.ai-decision-explainer__header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: var(--space-md) var(--space-lg);
+    background: var(--color-background);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.ai-decision-explainer__icon {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-warning) 100%);
+    border-radius: var(--radius-md);
+    font-size: 16px;
+}
+
+.ai-decision-explainer__title {
+    flex: 1;
+    font-size: var(--font-size-body-regular);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-primary);
+}
+
+.ai-decision-explainer__close {
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    color: var(--color-text-muted);
+    cursor: pointer;
+    border-radius: var(--radius-sm);
+    transition: all var(--motion-fast) var(--ease-out);
+}
+
+.ai-decision-explainer__close:hover {
+    background: var(--color-surface);
+    color: var(--color-text-primary);
+}
+
+.ai-decision-explainer__body {
+    padding: var(--space-lg);
+}
+
+/* Decision Card */
+.ai-decision-explainer__decision {
+    margin-bottom: var(--space-lg);
+}
+
+.ai-decision-explainer__decision-header {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-md);
+    margin-bottom: var(--space-md);
+}
+
+.ai-decision-explainer__decision-number {
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-primary);
+    border-radius: 50%;
+    font-size: var(--font-size-caption);
+    font-weight: var(--font-weight-bold);
+    color: white;
+    flex-shrink: 0;
+}
+
+.ai-decision-explainer__decision-content {
+    flex: 1;
+}
+
+.ai-decision-explainer__decision-title {
+    font-size: var(--font-size-body-regular);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-primary);
+    margin-bottom: var(--space-xs);
+}
+
+.ai-decision-explainer__decision-category {
+    display: inline-flex;
+    padding: 2px var(--space-sm);
+    background: rgba(99, 102, 241, 0.1);
+    border-radius: var(--radius-full);
+    font-size: 10px;
+    color: var(--color-primary);
+    text-transform: uppercase;
+}
+
+/* Rationale */
+.ai-decision-explainer__rationale {
+    padding: var(--space-md);
+    background: var(--color-background);
+    border-radius: var(--radius-lg);
+    border-left: 3px solid var(--color-primary);
+    margin-bottom: var(--space-md);
+}
+
+.ai-decision-explainer__rationale-label {
+    font-size: var(--font-size-caption);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-xs);
+}
+
+.ai-decision-explainer__rationale-text {
+    font-size: var(--font-size-body-small);
+    color: var(--color-text-secondary);
+    line-height: var(--line-height-relaxed);
+}
+
+/* Alternatives */
+.ai-decision-explainer__alternatives {
+    margin-bottom: var(--space-md);
+}
+
+.ai-decision-explainer__alternatives-label {
+    font-size: var(--font-size-caption);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-sm);
+}
+
+.ai-decision-explainer__alternative {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: var(--space-sm);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    margin-bottom: var(--space-xs);
+    cursor: pointer;
+    transition: all var(--motion-fast) var(--ease-out);
+}
+
+.ai-decision-explainer__alternative:hover {
+    border-color: var(--color-primary);
+}
+
+.ai-decision-explainer__alternative-icon {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-background);
+    border-radius: var(--radius-sm);
+    font-size: 12px;
+}
+
+.ai-decision-explainer__alternative-text {
+    flex: 1;
+    font-size: var(--font-size-body-small);
+    color: var(--color-text-secondary);
+}
+
+.ai-decision-explainer__alternative-action {
+    font-size: var(--font-size-caption);
+    color: var(--color-primary);
+}
+
+/* Impact Analysis */
+.ai-decision-explainer__impact {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-sm);
+}
+
+.ai-decision-explainer__impact-item {
+    padding: var(--space-sm);
+    background: var(--color-background);
+    border-radius: var(--radius-md);
+    text-align: center;
+}
+
+.ai-decision-explainer__impact-score {
+    font-size: var(--font-size-heading-sm);
+    font-weight: var(--font-weight-bold);
+    margin-bottom: 2px;
+}
+
+.ai-decision-explainer__impact-score--high {
+    color: var(--color-success);
+}
+
+.ai-decision-explainer__impact-score--medium {
+    color: var(--color-warning);
+}
+
+.ai-decision-explainer__impact-score--low {
+    color: var(--color-error);
+}
+
+.ai-decision-explainer__impact-label {
+    font-size: 10px;
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+}
+
+/* Divider */
+.ai-decision-explainer__divider {
+    height: 1px;
+    background: var(--color-border);
+    margin: var(--space-lg) 0;
+}
+
+/* Footer */
+.ai-decision-explainer__footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--space-md) var(--space-lg);
+    background: var(--color-background);
+    border-top: 1px solid var(--color-border);
+}
+
+.ai-decision-explainer__nav {
+    display: flex;
+    gap: var(--space-sm);
+}
+
+.ai-decision-explainer__nav-btn {
+    padding: var(--space-xs) var(--space-sm);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    font-size: var(--font-size-caption);
+    color: var(--color-text-secondary);
+    cursor: pointer;
+}
+
+.ai-decision-explainer__nav-btn:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+}
+
+.ai-decision-explainer__apply-btn {
+    padding: var(--space-sm) var(--space-md);
+    background: var(--color-success);
+    border: none;
+    border-radius: var(--radius-md);
+    font-size: var(--font-size-body-small);
+    font-weight: var(--font-weight-semibold);
+    color: white;
+    cursor: pointer;
+}
+
+.ai-decision-explainer__apply-btn:hover {
+    background: var(--color-success-dark);
+}

@@ -1,0 +1,149 @@
+/**
+ * Block: Nav/BottomTabs
+ * 
+ * Purpose: Bottom tab navigation for mobile apps
+ * Devices: iOS App, Android App, Mobile Browser
+ * Plugin Points: .bottom-tabs-slot
+ */
+
+.block-nav-bottom-tabs {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: var(--z-index-fixed);
+    background: var(--color-surface);
+    border-top: 1px solid var(--color-border);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+
+.block-nav-bottom-tabs__container {
+    display: flex;
+    align-items: stretch;
+    justify-content: space-around;
+    height: 56px;
+    max-width: 600px;
+    margin-inline: auto;
+}
+
+.block-nav-bottom-tabs__item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-xs);
+    padding: var(--space-sm) var(--space-xs);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all var(--motion-fast) var(--ease-out);
+    position: relative;
+}
+
+.block-nav-bottom-tabs__item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%) scaleX(0);
+    width: 40px;
+    height: 3px;
+    background: var(--color-primary);
+    border-radius: 0 0 var(--radius-full) var(--radius-full);
+    transition: transform var(--motion-fast) var(--ease-out);
+}
+
+.block-nav-bottom-tabs__item--active::before {
+    transform: translateX(-50%) scaleX(1);
+}
+
+.block-nav-bottom-tabs__icon {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-text-muted);
+    transition: all var(--motion-fast) var(--ease-out);
+}
+
+.block-nav-bottom-tabs__item:hover .block-nav-bottom-tabs__icon,
+.block-nav-bottom-tabs__item--active .block-nav-bottom-tabs__icon {
+    color: var(--color-primary);
+    transform: scale(1.1);
+}
+
+.block-nav-bottom-tabs__label {
+    font-size: var(--font-size-caption);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-muted);
+    transition: color var(--motion-fast) var(--ease-out);
+}
+
+.block-nav-bottom-tabs__item:hover .block-nav-bottom-tabs__label,
+.block-nav-bottom-tabs__item--active .block-nav-bottom-tabs__label {
+    color: var(--color-primary);
+}
+
+/* Badge for notifications */
+.block-nav-bottom-tabs__badge {
+    position: absolute;
+    top: 4px;
+    right: calc(50% - 16px);
+    min-width: 16px;
+    height: 16px;
+    padding: 0 var(--space-xs);
+    background: var(--color-error);
+    color: white;
+    font-size: 10px;
+    font-weight: var(--font-weight-bold);
+    border-radius: var(--radius-full);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Plugin slot for additional tabs */
+.block-nav-bottom-tabs__slot {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* iOS Safe Area */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+    .block-nav-bottom-tabs {
+        padding-bottom: env(safe-area-inset-bottom);
+    }
+
+    .block-nav-bottom-tabs__container {
+        height: calc(56px + env(safe-area-inset-bottom));
+        padding-bottom: env(safe-area-inset-bottom);
+    }
+}
+
+/* Hide on desktop */
+@media (min-width: 769px) {
+    .block-nav-bottom-tabs {
+        display: none;
+    }
+}
+
+/* Android Material-style ripple */
+.block-nav-bottom-tabs__item::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--color-primary);
+    opacity: 0;
+    transition: opacity var(--motion-fast) var(--ease-out);
+    border-radius: var(--radius-md);
+}
+
+.block-nav-bottom-tabs__item:active::after {
+    opacity: 0.1;
+}

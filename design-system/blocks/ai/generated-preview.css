@@ -1,0 +1,234 @@
+/**
+ * Block: AI/GeneratedPreview
+ * 
+ * Purpose: Preview of AI-generated layouts
+ * Devices: Web Desktop
+ * Plugin Points: .ai-preview-slot
+ */
+
+.block-ai-generated-preview {
+    background: var(--color-surface);
+    border-radius: var(--radius-xl);
+    border: 1px solid var(--color-border);
+    overflow: hidden;
+}
+
+.block-ai-generated-preview__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-md) var(--space-lg);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.block-ai-generated-preview__title {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    font-size: var(--font-size-body-small);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-primary);
+}
+
+.block-ai-generated-preview__ai-badge {
+    padding: var(--space-xs) var(--space-sm);
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%);
+    border-radius: var(--radius-full);
+    font-size: 10px;
+    font-weight: var(--font-weight-semibold);
+    color: white;
+    text-transform: uppercase;
+}
+
+.block-ai-generated-preview__actions {
+    display: flex;
+    gap: var(--space-xs);
+}
+
+.block-ai-generated-preview__action-btn {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    transition: all var(--motion-fast) var(--ease-out);
+}
+
+.block-ai-generated-preview__action-btn:hover {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    color: white;
+}
+
+/* Device switcher */
+.block-ai-generated-preview__devices {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-sm);
+    padding: var(--space-md);
+    background: var(--color-background);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.block-ai-generated-preview__device-btn {
+    padding: var(--space-xs) var(--space-md);
+    background: transparent;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    font-size: var(--font-size-caption);
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    transition: all var(--motion-fast) var(--ease-out);
+}
+
+.block-ai-generated-preview__device-btn:hover,
+.block-ai-generated-preview__device-btn--active {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    color: white;
+}
+
+/* Preview viewport */
+.block-ai-generated-preview__viewport {
+    padding: var(--space-lg);
+    display: flex;
+    justify-content: center;
+    min-height: 400px;
+    background: var(--color-background);
+}
+
+.block-ai-generated-preview__frame {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    transition: all var(--motion-normal) var(--ease-out);
+    box-shadow: var(--elevation-lg);
+}
+
+.block-ai-generated-preview__frame--desktop {
+    width: 100%;
+    max-width: 900px;
+}
+
+.block-ai-generated-preview__frame--tablet {
+    width: 768px;
+}
+
+.block-ai-generated-preview__frame--mobile {
+    width: 375px;
+}
+
+.block-ai-generated-preview__frame-content {
+    min-height: 300px;
+    padding: var(--space-md);
+}
+
+/* Wireframe placeholder blocks */
+.block-ai-generated-preview__wireframe-block {
+    background: var(--color-background);
+    border: 1px dashed var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-md);
+    margin-bottom: var(--space-md);
+}
+
+.block-ai-generated-preview__wireframe-block:last-child {
+    margin-bottom: 0;
+}
+
+.block-ai-generated-preview__wireframe-label {
+    font-size: var(--font-size-caption);
+    color: var(--color-text-muted);
+    text-align: center;
+}
+
+/* Diff overlay */
+.block-ai-generated-preview__diff {
+    display: flex;
+    gap: var(--space-sm);
+    padding: var(--space-md);
+    background: var(--color-background);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.block-ai-generated-preview__diff-toggle {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    padding: var(--space-xs) var(--space-sm);
+    background: transparent;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-full);
+    font-size: var(--font-size-caption);
+    color: var(--color-text-secondary);
+    cursor: pointer;
+}
+
+.block-ai-generated-preview__diff-toggle--active {
+    background: rgba(34, 197, 94, 0.1);
+    border-color: var(--color-success);
+    color: var(--color-success);
+}
+
+/* Apply/Reject actions */
+.block-ai-generated-preview__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-md) var(--space-lg);
+    border-top: 1px solid var(--color-border);
+}
+
+.block-ai-generated-preview__info {
+    font-size: var(--font-size-caption);
+    color: var(--color-text-muted);
+}
+
+.block-ai-generated-preview__cta {
+    display: flex;
+    gap: var(--space-sm);
+}
+
+.block-ai-generated-preview__reject-btn {
+    padding: var(--space-sm) var(--space-md);
+    background: transparent;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    font-size: var(--font-size-body-small);
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    transition: all var(--motion-fast) var(--ease-out);
+}
+
+.block-ai-generated-preview__reject-btn:hover {
+    border-color: var(--color-error);
+    color: var(--color-error);
+}
+
+.block-ai-generated-preview__apply-btn {
+    padding: var(--space-sm) var(--space-lg);
+    background: var(--color-success);
+    color: white;
+    border: none;
+    border-radius: var(--radius-md);
+    font-size: var(--font-size-body-small);
+    font-weight: var(--font-weight-semibold);
+    cursor: pointer;
+    transition: all var(--motion-fast) var(--ease-out);
+}
+
+.block-ai-generated-preview__apply-btn:hover {
+    background: var(--color-success-dark);
+}
+
+/* Plugin slot */
+.block-ai-generated-preview__slot {
+    padding: var(--space-md) var(--space-lg);
+    border-top: 1px solid var(--color-border);
+}

@@ -1,0 +1,141 @@
+{
+    "name": "3d-commerce-design-system",
+    "version": "1.0.0",
+    "description": "Token-driven, block-based UI design system for 3D commerce platforms",
+    "validation": {
+        "rules": {
+            "token-usage": {
+                "description": "All color, spacing, typography values must use design tokens",
+                "severity": "error",
+                "pattern": "var(--color-*)|var(--space-*)|var(--font-*)"
+            },
+            "block-naming": {
+                "description": "All blocks must follow .block-{category}-{name} convention",
+                "severity": "error",
+                "pattern": "^.block-[a-z]+-[a-z-]+$"
+            },
+            "responsive-breakpoints": {
+                "description": "Use standard breakpoints: 768px, 1024px, 1280px",
+                "severity": "warning",
+                "allowed": [
+                    "768px",
+                    "1024px",
+                    "1280px"
+                ]
+            },
+            "plugin-slots": {
+                "description": "All injectable blocks must have .plugin-slot elements",
+                "severity": "info",
+                "required": true
+            },
+            "animation-performance": {
+                "description": "Only animate transform and opacity for performance",
+                "severity": "warning",
+                "allowed": [
+                    "transform",
+                    "opacity"
+                ]
+            },
+            "color-contrast": {
+                "description": "WCAG AA minimum 4.5:1 for text, 3:1 for large text",
+                "severity": "error",
+                "minRatio": 4.5
+            },
+            "touch-targets": {
+                "description": "Interactive elements must be at least 44x44px",
+                "severity": "warning",
+                "minSize": "44px"
+            }
+        },
+        "categories": [
+            {
+                "name": "Token Compliance",
+                "checks": [
+                    "token-usage",
+                    "color-contrast"
+                ]
+            },
+            {
+                "name": "Block Structure",
+                "checks": [
+                    "block-naming",
+                    "plugin-slots"
+                ]
+            },
+            {
+                "name": "Responsiveness",
+                "checks": [
+                    "responsive-breakpoints",
+                    "touch-targets"
+                ]
+            },
+            {
+                "name": "Performance",
+                "checks": [
+                    "animation-performance"
+                ]
+            }
+        ]
+    },
+    "ai-review": {
+        "prompts": {
+            "layout-review": "Review this layout for visual hierarchy, spacing consistency, and alignment with design tokens. Check for accessibility issues and suggest improvements.",
+            "block-review": "Evaluate this block's compliance with the design system. Verify token usage, plugin slot availability, and device responsiveness.",
+            "theme-review": "Analyze this theme for color harmony, contrast ratios, and brand consistency. Suggest improvements for accessibility.",
+            "accessibility-review": "Conduct a WCAG 2.1 AA compliance check. Identify color contrast issues, focus management problems, and missing ARIA attributes."
+        },
+        "criteria": [
+            {
+                "name": "Token Compliance",
+                "weight": 0.25,
+                "description": "All values use design tokens"
+            },
+            {
+                "name": "Visual Consistency",
+                "weight": 0.20,
+                "description": "Consistent spacing, alignment, typography"
+            },
+            {
+                "name": "Accessibility",
+                "weight": 0.25,
+                "description": "WCAG AA compliance"
+            },
+            {
+                "name": "Responsiveness",
+                "weight": 0.15,
+                "description": "Works across all target devices"
+            },
+            {
+                "name": "Plugin Extensibility",
+                "weight": 0.15,
+                "description": "Proper slot implementation"
+            }
+        ]
+    },
+    "governance": {
+        "required-reviews": {
+            "new-block": [
+                "ai-review",
+                "human-review"
+            ],
+            "theme-change": [
+                "ai-review",
+                "accessibility-check"
+            ],
+            "breaking-change": [
+                "ai-review",
+                "human-review",
+                "stakeholder-approval"
+            ]
+        },
+        "approval-workflow": {
+            "stages": [
+                "draft",
+                "ai-reviewed",
+                "human-reviewed",
+                "approved",
+                "published"
+            ]
+        }
+    }
+}

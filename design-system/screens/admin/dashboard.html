@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - 3D Commerce</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../tokens/base.css">
+    <link rel="stylesheet" href="../../blocks/shared/components.css">
+    <link rel="stylesheet" href="../../blocks/admin/kpi-grid.css">
+    <link rel="stylesheet" href="../../blocks/admin/order-queue.css">
+    <link rel="stylesheet" href="../../blocks/admin/printer-status.css">
+    <link rel="stylesheet" href="../../blocks/ai/prompt-box.css">
+    <link rel="stylesheet" href="../../layouts/device-rules.css">
+    <style>
+        .admin-layout {
+            display: grid;
+            grid-template-columns: 260px 1fr;
+            min-height: 100vh;
+        }
+
+        .admin-sidebar {
+            background: var(--color-surface);
+            border-right: 1px solid var(--color-border);
+            padding: var(--space-lg);
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .admin-sidebar__logo {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            font-size: var(--font-size-heading-sm);
+            font-weight: var(--font-weight-bold);
+            color: var(--color-text-primary);
+            margin-bottom: var(--space-xl);
+        }
+
+        .admin-sidebar__logo-icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .admin-nav {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-xs);
+        }
+
+        .admin-nav__section {
+            margin-top: var(--space-lg);
+        }
+
+        .admin-nav__section-title {
+            font-size: var(--font-size-caption);
+            font-weight: var(--font-weight-semibold);
+            color: var(--color-text-muted);
+            text-transform: uppercase;
+            letter-spacing: var(--letter-spacing-wide);
+            padding: var(--space-sm);
+        }
+
+        .admin-nav__item {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            padding: var(--space-sm) var(--space-md);
+            border-radius: var(--radius-md);
+            font-size: var(--font-size-body-small);
+            color: var(--color-text-secondary);
+            text-decoration: none;
+            transition: all var(--motion-fast) var(--ease-out);
+        }
+
+        .admin-nav__item:hover {
+            background: var(--color-surface-hover);
+            color: var(--color-text-primary);
+        }
+
+        .admin-nav__item--active {
+            background: rgba(99, 102, 241, 0.1);
+            color: var(--color-primary);
+        }
+
+        .admin-nav__icon {
+            width: 20px;
+            text-align: center;
+        }
+
+        .admin-nav__badge {
+            margin-left: auto;
+            padding: 2px var(--space-sm);
+            background: var(--color-error);
+            color: white;
+            font-size: 10px;
+            font-weight: var(--font-weight-bold);
+            border-radius: var(--radius-full);
+        }
+
+        .admin-main {
+            background: var(--color-background);
+            padding: var(--space-xl);
+        }
+
+        .admin-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: var(--space-xl);
+        }
+
+        .admin-header__title {
+            font-size: var(--font-size-heading-md);
+            font-weight: var(--font-weight-bold);
+            color: var(--color-text-primary);
+        }
+
+        .admin-header__actions {
+            display: flex;
+            gap: var(--space-sm);
+        }
+
+        .admin-section {
+            margin-bottom: var(--space-xl);
+        }
+
+        .admin-section__header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: var(--space-md);
+        }
+
+        .admin-section__title {
+            font-size: var(--font-size-heading-sm);
+            font-weight: var(--font-weight-semibold);
+            color: var(--color-text-primary);
+        }
+
+        @media (max-width: 1024px) {
+            .admin-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .admin-sidebar {
+                position: fixed;
+                left: -260px;
+                z-index: var(--z-index-modal);
+                transition: left var(--motion-normal) var(--ease-out);
+            }
+
+            .admin-sidebar--open {
+                left: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="admin-layout">
+        <!-- Admin Sidebar (Block/Header/AdminNav) -->
+        <aside class="admin-sidebar">
+            <div class="admin-sidebar__logo">
+                <div class="admin-sidebar__logo-icon">3D</div>
+                Admin
+            </div>
+
+            <nav class="admin-nav">
+                <a href="#" class="admin-nav__item admin-nav__item--active">
+                    <span class="admin-nav__icon">📊</span>
+                    Dashboard
+                </a>
+                <a href="#" class="admin-nav__item">
+                    <span class="admin-nav__icon">📦</span>
+                    Orders
+                    <span class="admin-nav__badge">12</span>
+                </a>
+                <a href="#" class="admin-nav__item">
+                    <span class="admin-nav__icon">🖨️</span>
+                    Printers
+                </a>
+                <a href="#" class="admin-nav__item">
+                    <span class="admin-nav__icon">👥</span>
+                    Customers
+                </a>
+                <a href="#" class="admin-nav__item">
+                    <span class="admin-nav__icon">🛍️</span>
+                    Products
+                </a>
+
+                <div class="admin-nav__section">
+                    <p class="admin-nav__section-title">Platform</p>
+                    <a href="#" class="admin-nav__item">
+                        <span class="admin-nav__icon">🧩</span>
+                        Plugins
+                    </a>
+                    <a href="#" class="admin-nav__item">
+                        <span class="admin-nav__icon">🎨</span>
+                        Theme
+                    </a>
+                    <a href="#" class="admin-nav__item">
+                        <span class="admin-nav__icon">🤖</span>
+                        AI Builder
+                    </a>
+                    <a href="#" class="admin-nav__item">
+                        <span class="admin-nav__icon">🔑</span>
+                        API Keys
+                    </a>
+                </div>
+
+                <div class="admin-nav__section">
+                    <p class="admin-nav__section-title">System</p>
+                    <a href="#" class="admin-nav__item">
+                        <span class="admin-nav__icon">📋</span>
+                        Audit Logs
+                    </a>
+                    <a href="#" class="admin-nav__item">
+                        <span class="admin-nav__icon">⚙️</span>
+                        Settings
+                    </a>
+                </div>
+            </nav>
+        </aside>
+
+        <main class="admin-main">
+            <header class="admin-header">
+                <h1 class="admin-header__title">Dashboard</h1>
+                <div class="admin-header__actions">
+                    <button class="btn btn--secondary">Export</button>
+                    <button class="btn btn--primary">+ New Order</button>
+                </div>
+            </header>
+
+            <!-- Block/Admin/KPIGrid -->
+            <section class="admin-section">
+                <div class="block-admin-kpi-grid">
+                    <div class="block-admin-kpi-card">
+                        <div class="block-admin-kpi-card__icon block-admin-kpi-card__icon--revenue">💰</div>
+                        <p class="block-admin-kpi-card__label">Total Revenue</p>
+                        <p class="block-admin-kpi-card__value">$24,580</p>
+                        <span class="block-admin-kpi-card__change block-admin-kpi-card__change--up">↑ 12.5%</span>
+                    </div>
+                    <div class="block-admin-kpi-card">
+                        <div class="block-admin-kpi-card__icon block-admin-kpi-card__icon--orders">📦</div>
+                        <p class="block-admin-kpi-card__label">Orders</p>
+                        <p class="block-admin-kpi-card__value">342</p>
+                        <span class="block-admin-kpi-card__change block-admin-kpi-card__change--up">↑ 8.2%</span>
+                    </div>
+                    <div class="block-admin-kpi-card">
+                        <div class="block-admin-kpi-card__icon block-admin-kpi-card__icon--users">👥</div>
+                        <p class="block-admin-kpi-card__label">Active Users</p>
+                        <p class="block-admin-kpi-card__value">1,284</p>
+                        <span class="block-admin-kpi-card__change block-admin-kpi-card__change--up">↑ 3.1%</span>
+                    </div>
+                    <div class="block-admin-kpi-card">
+                        <div class="block-admin-kpi-card__icon block-admin-kpi-card__icon--prints">🖨️</div>
+                        <p class="block-admin-kpi-card__label">Print Hours</p>
+                        <p class="block-admin-kpi-card__value">892h</p>
+                        <span class="block-admin-kpi-card__change block-admin-kpi-card__change--down">↓ 2.4%</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Block/Admin/PrinterStatus -->
+            <section class="admin-section">
+                <div class="admin-section__header">
+                    <h2 class="admin-section__title">Printer Fleet</h2>
+                    <button class="btn btn--ghost">View All</button>
+                </div>
+                <div class="block-admin-printer-status">
+                    <div class="block-admin-printer-status__header">
+                        <h3 class="block-admin-printer-status__title">Active Printers</h3>
+                        <div class="block-admin-printer-status__summary">
+                            <span class="block-admin-printer-status__summary-item">
+                                <span
+                                    class="block-admin-printer-status__summary-dot block-admin-printer-status__summary-dot--active"></span>
+                                4 Active
+                            </span>
+                            <span class="block-admin-printer-status__summary-item">
+                                <span
+                                    class="block-admin-printer-status__summary-dot block-admin-printer-status__summary-dot--idle"></span>
+                                2 Idle
+                            </span>
+                            <span class="block-admin-printer-status__summary-item">
+                                <span
+                                    class="block-admin-printer-status__summary-dot block-admin-printer-status__summary-dot--offline"></span>
+                                1 Offline
+                            </span>
+                        </div>
+                    </div>
+                    <div class="block-admin-printer-status__grid">
+                        <div class="block-admin-printer-status__card block-admin-printer-status__card--active">
+                            <div class="block-admin-printer-status__card-header">
+                                <span class="block-admin-printer-status__card-name">Printer A1</span>
+                                <span
+                                    class="block-admin-printer-status__card-status block-admin-printer-status__card-status--active"></span>
+                            </div>
+                            <div class="block-admin-printer-status__progress">
+                                <div class="block-admin-printer-status__progress-bar">
+                                    <div class="block-admin-printer-status__progress-fill" style="width: 67%;"></div>
+                                </div>
+                                <div class="block-admin-printer-status__progress-info">
+                                    <span>67%</span>
+                                    <span>~2h remaining</span>
+                                </div>
+                            </div>
+                            <p class="block-admin-printer-status__job">
+                                Printing: <span class="block-admin-printer-status__job-name">ORD-2024-0341</span>
+                            </p>
+                            <div class="block-admin-printer-status__metrics">
+                                <div class="block-admin-printer-status__metric">
+                                    <span class="block-admin-printer-status__metric-label">Temp</span>
+                                    <span class="block-admin-printer-status__metric-value">205°C</span>
+                                </div>
+                                <div class="block-admin-printer-status__metric">
+                                    <span class="block-admin-printer-status__metric-label">Speed</span>
+                                    <span class="block-admin-printer-status__metric-value">60mm/s</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="block-admin-printer-status__card block-admin-printer-status__card--active">
+                            <div class="block-admin-printer-status__card-header">
+                                <span class="block-admin-printer-status__card-name">Printer A2</span>
+                                <span
+                                    class="block-admin-printer-status__card-status block-admin-printer-status__card-status--active"></span>
+                            </div>
+                            <div class="block-admin-printer-status__progress">
+                                <div class="block-admin-printer-status__progress-bar">
+                                    <div class="block-admin-printer-status__progress-fill" style="width: 23%;"></div>
+                                </div>
+                                <div class="block-admin-printer-status__progress-info">
+                                    <span>23%</span>
+                                    <span>~5h remaining</span>
+                                </div>
+                            </div>
+                            <p class="block-admin-printer-status__job">
+                                Printing: <span class="block-admin-printer-status__job-name">ORD-2024-0339</span>
+                            </p>
+                            <div class="block-admin-printer-status__metrics">
+                                <div class="block-admin-printer-status__metric">
+                                    <span class="block-admin-printer-status__metric-label">Temp</span>
+                                    <span class="block-admin-printer-status__metric-value">210°C</span>
+                                </div>
+                                <div class="block-admin-printer-status__metric">
+                                    <span class="block-admin-printer-status__metric-label">Speed</span>
+                                    <span class="block-admin-printer-status__metric-value">50mm/s</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="block-admin-printer-status__card">
+                            <div class="block-admin-printer-status__card-header">
+                                <span class="block-admin-printer-status__card-name">Printer B1</span>
+                                <span
+                                    class="block-admin-printer-status__card-status block-admin-printer-status__card-status--idle"></span>
+                            </div>
+                            <p class="block-admin-printer-status__job" style="margin-top: var(--space-md);">
+                                Status: <span class="block-admin-printer-status__job-name">Idle - Ready</span>
+                            </p>
+                            <div class="block-admin-printer-status__controls">
+                                <button class="block-admin-printer-status__control-btn">Assign Job</button>
+                                <button class="block-admin-printer-status__control-btn">Calibrate</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Block/Admin/OrderQueue -->
+            <section class="admin-section">
+                <div class="admin-section__header">
+                    <h2 class="admin-section__title">Order Queue</h2>
+                    <button class="btn btn--ghost">View All Orders</button>
+                </div>
+                <div class="block-admin-order-queue">
+                    <div class="block-admin-order-queue__header">
+                        <h3 class="block-admin-order-queue__title">Recent Orders</h3>
+                        <div class="block-admin-order-queue__filters">
+                            <button
+                                class="block-admin-order-queue__filter block-admin-order-queue__filter--active">All</button>
+                            <button class="block-admin-order-queue__filter">Pending</button>
+                            <button class="block-admin-order-queue__filter">Processing</button>
+                            <button class="block-admin-order-queue__filter">Ready</button>
+                        </div>
+                    </div>
+                    <table class="block-admin-order-queue__table">
+                        <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Customer</th>
+                                <th>Status</th>
+                                <th>Priority</th>
+                                <th>Total</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="block-admin-order-queue__order-id">ORD-2024-0342</span></td>
+                                <td>
+                                    <div class="block-admin-order-queue__customer">
+                                        <div class="block-admin-order-queue__customer-avatar">JD</div>
+                                        <span class="block-admin-order-queue__customer-name">John Doe</span>
+                                    </div>
+                                </td>
+                                <td><span
+                                        class="block-admin-order-queue__status block-admin-order-queue__status--pending">⏳
+                                        Pending</span></td>
+                                <td><span
+                                        class="block-admin-order-queue__priority block-admin-order-queue__priority--high">High</span>
+                                </td>
+                                <td>$89.99</td>
+                                <td>
+                                    <div class="block-admin-order-queue__actions">
+                                        <button class="block-admin-order-queue__action-btn">👁️</button>
+                                        <button class="block-admin-order-queue__action-btn">▶️</button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><span class="block-admin-order-queue__order-id">ORD-2024-0341</span></td>
+                                <td>
+                                    <div class="block-admin-order-queue__customer">
+                                        <div class="block-admin-order-queue__customer-avatar">AS</div>
+                                        <span class="block-admin-order-queue__customer-name">Alice Smith</span>
+                                    </div>
+                                </td>
+                                <td><span
+                                        class="block-admin-order-queue__status block-admin-order-queue__status--processing">🔄
+                                        Processing</span></td>
+                                <td><span
+                                        class="block-admin-order-queue__priority block-admin-order-queue__priority--normal">Normal</span>
+                                </td>
+                                <td>$156.50</td>
+                                <td>
+                                    <div class="block-admin-order-queue__actions">
+                                        <button class="block-admin-order-queue__action-btn">👁️</button>
+                                        <button class="block-admin-order-queue__action-btn">⏸️</button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><span class="block-admin-order-queue__order-id">ORD-2024-0340</span></td>
+                                <td>
+                                    <div class="block-admin-order-queue__customer">
+                                        <div class="block-admin-order-queue__customer-avatar">BJ</div>
+                                        <span class="block-admin-order-queue__customer-name">Bob Johnson</span>
+                                    </div>
+                                </td>
+                                <td><span
+                                        class="block-admin-order-queue__status block-admin-order-queue__status--ready">✅
+                                        Ready</span></td>
+                                <td><span
+                                        class="block-admin-order-queue__priority block-admin-order-queue__priority--low">Low</span>
+                                </td>
+                                <td>$42.00</td>
+                                <td>
+                                    <div class="block-admin-order-queue__actions">
+                                        <button class="block-admin-order-queue__action-btn">👁️</button>
+                                        <button class="block-admin-order-queue__action-btn">📦</button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="block-admin-order-queue__pagination">
+                        <span class="block-admin-order-queue__page-info">Showing 1-10 of 42 orders</span>
+                        <div class="block-admin-order-queue__page-controls">
+                            <button class="block-admin-order-queue__page-btn">←</button>
+                            <button
+                                class="block-admin-order-queue__page-btn block-admin-order-queue__page-btn--active">1</button>
+                            <button class="block-admin-order-queue__page-btn">2</button>
+                            <button class="block-admin-order-queue__page-btn">3</button>
+                            <button class="block-admin-order-queue__page-btn">→</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Block/AI/PromptBox -->
+            <section class="admin-section">
+                <div class="admin-section__header">
+                    <h2 class="admin-section__title">AI Assistant</h2>
+                </div>
+                <div class="block-ai-prompt-box">
+                    <div class="block-ai-prompt-box__header">
+                        <div class="block-ai-prompt-box__icon">🤖</div>
+                        <span class="block-ai-prompt-box__title">Generate Admin Layout</span>
+                    </div>
+                    <div class="block-ai-prompt-box__body">
+                        <div class="block-ai-prompt-box__input-wrapper">
+                            <textarea class="block-ai-prompt-box__input"
+                                placeholder="Describe the layout you want to generate... e.g., 'Create a minimalist order tracking page optimized for mobile'"></textarea>
+                            <span class="block-ai-prompt-box__char-count">0/500</span>
+                        </div>
+                        <div class="block-ai-prompt-box__quick-prompts">
+                            <button class="block-ai-prompt-box__quick-prompt">📊 Analytics Dashboard</button>
+                            <button class="block-ai-prompt-box__quick-prompt">📦 Order Summary</button>
+                            <button class="block-ai-prompt-box__quick-prompt">🖨️ Printer Overview</button>
+                            <button class="block-ai-prompt-box__quick-prompt">👥 User Management</button>
+                        </div>
+                        <div class="block-ai-prompt-box__actions">
+                            <div class="block-ai-prompt-box__options">
+                                <label class="block-ai-prompt-box__option block-ai-prompt-box__option--checked">
+                                    <span class="block-ai-prompt-box__option-checkbox">✓</span>
+                                    Use existing blocks only
+                                </label>
+                            </div>
+                            <button class="block-ai-prompt-box__generate-btn">
+                                ✨ Generate
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+</body>
+
+</html>

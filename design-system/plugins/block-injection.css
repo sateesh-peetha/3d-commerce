@@ -1,0 +1,313 @@
+/**
+ * Block Injection System
+ * 
+ * Purpose: Inject plugin content into designated block slots
+ * Features: Slot visualization, priority ordering, conflict resolution
+ */
+
+/* ============================================
+   SLOT SYSTEM
+   ============================================ */
+
+/* Plugin Slot Container */
+.plugin-slot {
+    position: relative;
+    min-height: 20px;
+}
+
+.plugin-slot--empty {
+    border: 2px dashed var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-md);
+    background: repeating-linear-gradient(45deg,
+            transparent,
+            transparent 10px,
+            rgba(99, 102, 241, 0.02) 10px,
+            rgba(99, 102, 241, 0.02) 20px);
+}
+
+.plugin-slot--empty::after {
+    content: attr(data-slot-name);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--font-size-caption);
+    font-family: var(--font-family-mono);
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+}
+
+/* Slot Highlight (Dev Mode) */
+.plugin-slot--dev {
+    outline: 2px dashed var(--color-primary);
+    outline-offset: 2px;
+}
+
+.plugin-slot--dev::before {
+    content: attr(data-slot-id);
+    position: absolute;
+    top: -20px;
+    left: 0;
+    padding: 2px var(--space-sm);
+    background: var(--color-primary);
+    border-radius: var(--radius-sm);
+    font-size: 10px;
+    font-family: var(--font-family-mono);
+    color: white;
+    z-index: var(--z-index-popover);
+}
+
+/* ============================================
+   INJECTION MANAGER INTERFACE
+   ============================================ */
+
+.injection-manager {
+    background: var(--color-surface);
+    border-radius: var(--radius-xl);
+    border: 1px solid var(--color-border);
+    overflow: hidden;
+}
+
+.injection-manager__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-md) var(--space-lg);
+    background: var(--color-background);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.injection-manager__title {
+    font-size: var(--font-size-body-regular);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-primary);
+}
+
+.injection-manager__dev-toggle {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    font-size: var(--font-size-caption);
+    color: var(--color-text-secondary);
+}
+
+.injection-manager__dev-switch {
+    width: 36px;
+    height: 20px;
+    background: var(--color-border);
+    border-radius: var(--radius-full);
+    position: relative;
+    cursor: pointer;
+}
+
+.injection-manager__dev-switch--on {
+    background: var(--color-primary);
+}
+
+.injection-manager__dev-switch-knob {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 16px;
+    height: 16px;
+    background: white;
+    border-radius: 50%;
+    transition: transform var(--motion-fast) var(--ease-out);
+}
+
+.injection-manager__dev-switch--on .injection-manager__dev-switch-knob {
+    transform: translateX(16px);
+}
+
+/* Slot List */
+.injection-manager__slots {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.injection-manager__slot {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    padding: var(--space-md) var(--space-lg);
+    border-bottom: 1px solid var(--color-border);
+    transition: background var(--motion-fast) var(--ease-out);
+}
+
+.injection-manager__slot:hover {
+    background: var(--color-background);
+}
+
+.injection-manager__slot:last-child {
+    border-bottom: none;
+}
+
+.injection-manager__slot-icon {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-background);
+    border-radius: var(--radius-md);
+    font-size: 14px;
+    flex-shrink: 0;
+}
+
+.injection-manager__slot-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.injection-manager__slot-name {
+    font-size: var(--font-size-body-small);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-primary);
+    font-family: var(--font-family-mono);
+}
+
+.injection-manager__slot-location {
+    font-size: var(--font-size-caption);
+    color: var(--color-text-muted);
+}
+
+.injection-manager__slot-count {
+    padding: 2px var(--space-sm);
+    background: var(--color-background);
+    border-radius: var(--radius-full);
+    font-size: 10px;
+    color: var(--color-text-muted);
+}
+
+.injection-manager__slot-actions {
+    display: flex;
+    gap: var(--space-xs);
+}
+
+.injection-manager__slot-btn {
+    padding: var(--space-xs) var(--space-sm);
+    background: transparent;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    font-size: var(--font-size-caption);
+    color: var(--color-text-secondary);
+    cursor: pointer;
+}
+
+.injection-manager__slot-btn:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+}
+
+/* Priority Ordering */
+.injection-manager__priority {
+    padding: var(--space-lg);
+    background: var(--color-background);
+    border-top: 1px solid var(--color-border);
+}
+
+.injection-manager__priority-title {
+    font-size: var(--font-size-body-small);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-primary);
+    margin-bottom: var(--space-md);
+}
+
+.injection-manager__priority-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+}
+
+.injection-manager__priority-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: var(--space-sm);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    cursor: grab;
+}
+
+.injection-manager__priority-handle {
+    color: var(--color-text-muted);
+    cursor: grab;
+}
+
+.injection-manager__priority-rank {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-primary);
+    border-radius: var(--radius-sm);
+    font-size: 11px;
+    font-weight: var(--font-weight-bold);
+    color: white;
+}
+
+.injection-manager__priority-name {
+    flex: 1;
+    font-size: var(--font-size-body-small);
+    color: var(--color-text-secondary);
+}
+
+.injection-manager__priority-plugin {
+    font-size: var(--font-size-caption);
+    color: var(--color-text-muted);
+}
+
+/* Conflict Resolution */
+.injection-manager__conflict {
+    margin-top: var(--space-lg);
+    padding: var(--space-md);
+    background: rgba(245, 158, 11, 0.1);
+    border: 1px solid var(--color-warning);
+    border-radius: var(--radius-lg);
+}
+
+.injection-manager__conflict-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-sm);
+}
+
+.injection-manager__conflict-icon {
+    color: var(--color-warning);
+}
+
+.injection-manager__conflict-title {
+    font-size: var(--font-size-body-small);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-warning);
+}
+
+.injection-manager__conflict-desc {
+    font-size: var(--font-size-caption);
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-sm);
+}
+
+.injection-manager__conflict-actions {
+    display: flex;
+    gap: var(--space-sm);
+}
+
+.injection-manager__conflict-btn {
+    padding: var(--space-xs) var(--space-sm);
+    background: white;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    font-size: var(--font-size-caption);
+    color: var(--color-text-secondary);
+    cursor: pointer;
+}
+
+.injection-manager__conflict-btn--resolve {
+    background: var(--color-warning);
+    border-color: var(--color-warning);
+    color: white;
+}

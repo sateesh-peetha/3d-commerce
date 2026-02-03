@@ -1,0 +1,326 @@
+/**
+ * AI Layout Variant Generator
+ * 
+ * Purpose: Generate layout variations from existing screens
+ * Features: Layout presets, component density, spacing variants
+ */
+
+/* ============================================
+   LAYOUT GENERATOR INTERFACE
+   ============================================ */
+
+.ai-layout-generator {
+    background: var(--color-surface);
+    border-radius: var(--radius-xl);
+    border: 1px solid var(--color-border);
+    overflow: hidden;
+}
+
+.ai-layout-generator__header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    padding: var(--space-lg);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.ai-layout-generator__icon {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, var(--color-secondary) 0%, var(--color-primary) 100%);
+    border-radius: var(--radius-lg);
+    font-size: 24px;
+}
+
+.ai-layout-generator__title-group {
+    flex: 1;
+}
+
+.ai-layout-generator__title {
+    font-size: var(--font-size-heading-sm);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-primary);
+}
+
+.ai-layout-generator__subtitle {
+    font-size: var(--font-size-caption);
+    color: var(--color-text-muted);
+}
+
+.ai-layout-generator__body {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    min-height: 500px;
+}
+
+/* Sidebar Controls */
+.ai-layout-generator__controls {
+    padding: var(--space-lg);
+    border-right: 1px solid var(--color-border);
+    background: var(--color-background);
+}
+
+.ai-layout-generator__control-group {
+    margin-bottom: var(--space-xl);
+}
+
+.ai-layout-generator__control-label {
+    display: block;
+    font-size: var(--font-size-body-small);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-primary);
+    margin-bottom: var(--space-sm);
+}
+
+.ai-layout-generator__control-hint {
+    font-size: var(--font-size-caption);
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-md);
+}
+
+/* Preset Buttons */
+.ai-layout-generator__presets {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+}
+
+.ai-layout-generator__preset {
+    flex: 1;
+    min-width: 80px;
+    padding: var(--space-sm);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    text-align: center;
+    cursor: pointer;
+    transition: all var(--motion-fast) var(--ease-out);
+}
+
+.ai-layout-generator__preset:hover {
+    border-color: var(--color-primary);
+}
+
+.ai-layout-generator__preset--selected {
+    background: rgba(99, 102, 241, 0.1);
+    border-color: var(--color-primary);
+}
+
+.ai-layout-generator__preset-icon {
+    font-size: 20px;
+    margin-bottom: var(--space-xs);
+}
+
+.ai-layout-generator__preset-name {
+    font-size: var(--font-size-caption);
+    color: var(--color-text-secondary);
+}
+
+/* Slider Control */
+.ai-layout-generator__slider {
+    width: 100%;
+}
+
+.ai-layout-generator__slider-track {
+    position: relative;
+    height: 8px;
+    background: var(--color-surface);
+    border-radius: var(--radius-full);
+    margin-bottom: var(--space-sm);
+}
+
+.ai-layout-generator__slider-fill {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    background: linear-gradient(90deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+    border-radius: var(--radius-full);
+}
+
+.ai-layout-generator__slider-thumb {
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 20px;
+    height: 20px;
+    background: white;
+    border: 3px solid var(--color-primary);
+    border-radius: 50%;
+    cursor: grab;
+    box-shadow: var(--elevation-sm);
+}
+
+.ai-layout-generator__slider-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: var(--font-size-caption);
+    color: var(--color-text-muted);
+}
+
+/* Toggle Options */
+.ai-layout-generator__toggles {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+}
+
+.ai-layout-generator__toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-sm);
+    background: var(--color-surface);
+    border-radius: var(--radius-md);
+}
+
+.ai-layout-generator__toggle-label {
+    font-size: var(--font-size-body-small);
+    color: var(--color-text-secondary);
+}
+
+.ai-layout-generator__toggle-switch {
+    width: 40px;
+    height: 22px;
+    background: var(--color-border);
+    border-radius: var(--radius-full);
+    position: relative;
+    cursor: pointer;
+    transition: background var(--motion-fast) var(--ease-out);
+}
+
+.ai-layout-generator__toggle-switch--on {
+    background: var(--color-primary);
+}
+
+.ai-layout-generator__toggle-knob {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 16px;
+    height: 16px;
+    background: white;
+    border-radius: 50%;
+    transition: transform var(--motion-fast) var(--ease-out);
+}
+
+.ai-layout-generator__toggle-switch--on .ai-layout-generator__toggle-knob {
+    transform: translateX(18px);
+}
+
+/* Preview Panel */
+.ai-layout-generator__preview {
+    padding: var(--space-lg);
+    display: flex;
+    flex-direction: column;
+}
+
+.ai-layout-generator__preview-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--space-md);
+}
+
+.ai-layout-generator__preview-title {
+    font-size: var(--font-size-body-small);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-primary);
+}
+
+.ai-layout-generator__preview-actions {
+    display: flex;
+    gap: var(--space-sm);
+}
+
+.ai-layout-generator__preview-btn {
+    padding: var(--space-xs) var(--space-sm);
+    background: transparent;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    font-size: var(--font-size-caption);
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    transition: all var(--motion-fast) var(--ease-out);
+}
+
+.ai-layout-generator__preview-btn:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+}
+
+.ai-layout-generator__preview-canvas {
+    flex: 1;
+    background: var(--color-background);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ai-layout-generator__wireframe {
+    width: 100%;
+    max-width: 600px;
+    background: white;
+    border-radius: var(--radius-md);
+    box-shadow: var(--elevation-lg);
+    overflow: hidden;
+}
+
+.ai-layout-generator__wireframe-section {
+    padding: var(--space-md);
+    border-bottom: 1px dashed var(--color-border);
+}
+
+.ai-layout-generator__wireframe-section:last-child {
+    border-bottom: none;
+}
+
+.ai-layout-generator__wireframe-block {
+    background: var(--color-background);
+    border: 1px dashed var(--color-border);
+    border-radius: var(--radius-sm);
+    padding: var(--space-sm);
+    text-align: center;
+    font-size: var(--font-size-caption);
+    color: var(--color-text-muted);
+}
+
+/* Footer Actions */
+.ai-layout-generator__footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--space-lg);
+    border-top: 1px solid var(--color-border);
+}
+
+.ai-layout-generator__stats {
+    display: flex;
+    gap: var(--space-lg);
+}
+
+.ai-layout-generator__stat {
+    text-align: center;
+}
+
+.ai-layout-generator__stat-value {
+    font-size: var(--font-size-heading-sm);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-primary);
+}
+
+.ai-layout-generator__stat-label {
+    font-size: var(--font-size-caption);
+    color: var(--color-text-muted);
+}
+
+.ai-layout-generator__cta {
+    display: flex;
+    gap: var(--space-sm);
+}

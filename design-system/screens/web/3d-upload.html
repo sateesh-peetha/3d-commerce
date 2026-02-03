@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Upload & Configure - 3D Commerce</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../tokens/base.css">
+    <link rel="stylesheet" href="../../blocks/shared/components.css">
+    <link rel="stylesheet" href="../../blocks/navigation/header-main-nav.css">
+    <link rel="stylesheet" href="../../blocks/navigation/footer-main.css">
+    <link rel="stylesheet" href="../../blocks/3d-printing/file-upload.css">
+    <link rel="stylesheet" href="../../blocks/3d-printing/model-viewer.css">
+    <link rel="stylesheet" href="../../blocks/3d-printing/config-panel.css">
+    <link rel="stylesheet" href="../../blocks/3d-printing/material-selector.css">
+    <link rel="stylesheet" href="../../blocks/3d-printing/pricing-box.css">
+    <link rel="stylesheet" href="../../layouts/device-rules.css">
+    <style>
+        .upload-page {
+            min-height: 100vh;
+            background: var(--color-background);
+        }
+
+        .upload-hero {
+            text-align: center;
+            padding: var(--space-2xl) var(--space-lg);
+            background: linear-gradient(180deg, var(--color-surface) 0%, var(--color-background) 100%);
+        }
+
+        .upload-hero__title {
+            font-size: var(--font-size-heading-lg);
+            font-weight: var(--font-weight-bold);
+            color: var(--color-text-primary);
+            margin-bottom: var(--space-sm);
+        }
+
+        .upload-hero__subtitle {
+            font-size: var(--font-size-body-regular);
+            color: var(--color-text-secondary);
+        }
+
+        .upload-content {
+            max-width: var(--container-max-width);
+            margin: 0 auto;
+            padding: 0 var(--space-lg) var(--space-3xl);
+        }
+
+        .upload-layout {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: var(--space-xl);
+        }
+
+        .upload-main {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-xl);
+        }
+
+        .upload-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-xl);
+        }
+
+        .section-title {
+            font-size: var(--font-size-heading-sm);
+            font-weight: var(--font-weight-semibold);
+            color: var(--color-text-primary);
+            margin-bottom: var(--space-md);
+        }
+
+        /* Stepper */
+        .upload-stepper {
+            display: flex;
+            justify-content: center;
+            gap: var(--space-sm);
+            padding: var(--space-lg);
+            background: var(--color-surface);
+            border-radius: var(--radius-xl);
+            margin-bottom: var(--space-xl);
+        }
+
+        .upload-stepper__step {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+        }
+
+        .upload-stepper__number {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            font-size: var(--font-size-body-small);
+            font-weight: var(--font-weight-semibold);
+            background: var(--color-background);
+            color: var(--color-text-muted);
+            border: 2px solid var(--color-border);
+        }
+
+        .upload-stepper__step--active .upload-stepper__number {
+            background: var(--color-primary);
+            border-color: var(--color-primary);
+            color: white;
+        }
+
+        .upload-stepper__step--complete .upload-stepper__number {
+            background: var(--color-success);
+            border-color: var(--color-success);
+            color: white;
+        }
+
+        .upload-stepper__label {
+            font-size: var(--font-size-body-small);
+            color: var(--color-text-muted);
+        }
+
+        .upload-stepper__step--active .upload-stepper__label {
+            color: var(--color-text-primary);
+            font-weight: var(--font-weight-medium);
+        }
+
+        .upload-stepper__connector {
+            width: 48px;
+            height: 2px;
+            background: var(--color-border);
+            margin: 0 var(--space-sm);
+        }
+
+        .upload-stepper__step--complete+.upload-stepper__connector {
+            background: var(--color-success);
+        }
+
+        @media (max-width: 1024px) {
+            .upload-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .upload-stepper {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .upload-stepper__connector {
+                width: 2px;
+                height: 24px;
+                margin: var(--space-xs) 0 var(--space-xs) 15px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Block/Header/MainNav -->
+    <header class="block-header-main-nav">
+        <div class="block-header-main-nav__container">
+            <a href="homepage.html" class="block-header-main-nav__logo">
+                <div class="block-header-main-nav__logo-icon">3D</div>
+                3D Commerce
+            </a>
+            <nav class="block-header-main-nav__nav">
+                <ul class="block-header-main-nav__nav-list">
+                    <li><a href="homepage.html" class="block-header-main-nav__nav-link">Home</a></li>
+                    <li><a href="store.html" class="block-header-main-nav__nav-link">Store</a></li>
+                    <li><a href="#"
+                            class="block-header-main-nav__nav-link block-header-main-nav__nav-link--active">Upload
+                            3D</a></li>
+                    <li><a href="#" class="block-header-main-nav__nav-link">Blog</a></li>
+                </ul>
+            </nav>
+            <div class="block-header-main-nav__actions">
+                <button class="btn btn--ghost btn--icon">🛒</button>
+                <button class="btn btn--primary">Sign In</button>
+            </div>
+        </div>
+    </header>
+
+    <main class="upload-page">
+        <div class="upload-hero">
+            <h1 class="upload-hero__title">Upload & Configure Your 3D Model</h1>
+            <p class="upload-hero__subtitle">Get instant pricing and customize your print specifications</p>
+        </div>
+
+        <div class="upload-content">
+            <!-- Block/3D/ConfigStepper -->
+            <nav class="upload-stepper">
+                <div class="upload-stepper__step upload-stepper__step--complete">
+                    <span class="upload-stepper__number">✓</span>
+                    <span class="upload-stepper__label">Upload</span>
+                </div>
+                <div class="upload-stepper__connector"></div>
+                <div class="upload-stepper__step upload-stepper__step--active">
+                    <span class="upload-stepper__number">2</span>
+                    <span class="upload-stepper__label">Configure</span>
+                </div>
+                <div class="upload-stepper__connector"></div>
+                <div class="upload-stepper__step">
+                    <span class="upload-stepper__number">3</span>
+                    <span class="upload-stepper__label">Review</span>
+                </div>
+                <div class="upload-stepper__connector"></div>
+                <div class="upload-stepper__step">
+                    <span class="upload-stepper__number">4</span>
+                    <span class="upload-stepper__label">Checkout</span>
+                </div>
+            </nav>
+
+            <div class="upload-layout">
+                <div class="upload-main">
+                    <!-- Block/3D/ModelViewer -->
+                    <section class="block-3d-model-viewer">
+                        <div class="block-3d-model-viewer__canvas">
+                            <div class="block-3d-model-viewer__grid"></div>
+                            <div class="block-3d-model-viewer__placeholder">
+                                <div class="block-3d-model-viewer__cube">
+                                    <div
+                                        class="block-3d-model-viewer__cube-face block-3d-model-viewer__cube-face--front">
+                                    </div>
+                                    <div
+                                        class="block-3d-model-viewer__cube-face block-3d-model-viewer__cube-face--back">
+                                    </div>
+                                    <div
+                                        class="block-3d-model-viewer__cube-face block-3d-model-viewer__cube-face--right">
+                                    </div>
+                                    <div
+                                        class="block-3d-model-viewer__cube-face block-3d-model-viewer__cube-face--left">
+                                    </div>
+                                    <div class="block-3d-model-viewer__cube-face block-3d-model-viewer__cube-face--top">
+                                    </div>
+                                    <div
+                                        class="block-3d-model-viewer__cube-face block-3d-model-viewer__cube-face--bottom">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="block-3d-model-viewer__info">
+                            <div class="block-3d-model-viewer__info-item">
+                                Dimensions: <span class="block-3d-model-viewer__info-value">120 × 80 × 45 mm</span>
+                            </div>
+                            <div class="block-3d-model-viewer__info-item">
+                                Volume: <span class="block-3d-model-viewer__info-value">124.5 cm³</span>
+                            </div>
+                            <div class="block-3d-model-viewer__info-item">
+                                Triangles: <span class="block-3d-model-viewer__info-value">48,320</span>
+                            </div>
+                        </div>
+                        <div class="block-3d-model-viewer__views">
+                            <button class="block-3d-model-viewer__view-btn">Top</button>
+                            <button class="block-3d-model-viewer__view-btn">Front</button>
+                            <button class="block-3d-model-viewer__view-btn">Side</button>
+                            <button class="block-3d-model-viewer__view-btn">Iso</button>
+                        </div>
+                        <div class="block-3d-model-viewer__toolbar">
+                            <button
+                                class="block-3d-model-viewer__tool-btn block-3d-model-viewer__tool-btn--active">🔄</button>
+                            <button class="block-3d-model-viewer__tool-btn">✋</button>
+                            <button class="block-3d-model-viewer__tool-btn">📐</button>
+                            <div class="block-3d-model-viewer__tool-divider"></div>
+                            <button class="block-3d-model-viewer__tool-btn">⬛</button>
+                            <button class="block-3d-model-viewer__tool-btn">🌐</button>
+                            <button class="block-3d-model-viewer__tool-btn">📷</button>
+                        </div>
+                    </section>
+
+                    <!-- Block/3D/MaterialSelector -->
+                    <section class="block-3d-material-selector">
+                        <h3 class="block-3d-material-selector__title">Select Material</h3>
+                        <div class="block-3d-material-selector__grid">
+                            <div class="block-3d-material-selector__card block-3d-material-selector__card--selected">
+                                <div class="block-3d-material-selector__card-header">
+                                    <div
+                                        class="block-3d-material-selector__card-swatch block-3d-material-selector__card-swatch--pla">
+                                    </div>
+                                    <span class="block-3d-material-selector__card-name">PLA</span>
+                                </div>
+                                <p class="block-3d-material-selector__card-desc">Eco-friendly, good for prototypes</p>
+                                <div class="block-3d-material-selector__card-footer">
+                                    <span class="block-3d-material-selector__card-price">From $0.05/g</span>
+                                    <span class="block-3d-material-selector__card-badge">Popular</span>
+                                </div>
+                            </div>
+                            <div class="block-3d-material-selector__card">
+                                <div class="block-3d-material-selector__card-header">
+                                    <div
+                                        class="block-3d-material-selector__card-swatch block-3d-material-selector__card-swatch--abs">
+                                    </div>
+                                    <span class="block-3d-material-selector__card-name">ABS</span>
+                                </div>
+                                <p class="block-3d-material-selector__card-desc">Strong, heat resistant</p>
+                                <div class="block-3d-material-selector__card-footer">
+                                    <span class="block-3d-material-selector__card-price">From $0.06/g</span>
+                                </div>
+                            </div>
+                            <div class="block-3d-material-selector__card">
+                                <div class="block-3d-material-selector__card-header">
+                                    <div
+                                        class="block-3d-material-selector__card-swatch block-3d-material-selector__card-swatch--resin">
+                                    </div>
+                                    <span class="block-3d-material-selector__card-name">Resin</span>
+                                </div>
+                                <p class="block-3d-material-selector__card-desc">High detail, smooth finish</p>
+                                <div class="block-3d-material-selector__card-footer">
+                                    <span class="block-3d-material-selector__card-price">From $0.12/g</span>
+                                </div>
+                            </div>
+                            <div class="block-3d-material-selector__card">
+                                <div class="block-3d-material-selector__card-header">
+                                    <div
+                                        class="block-3d-material-selector__card-swatch block-3d-material-selector__card-swatch--nylon">
+                                    </div>
+                                    <span class="block-3d-material-selector__card-name">Nylon</span>
+                                </div>
+                                <p class="block-3d-material-selector__card-desc">Flexible, industrial grade</p>
+                                <div class="block-3d-material-selector__card-footer">
+                                    <span class="block-3d-material-selector__card-price">From $0.15/g</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="block-3d-material-selector__colors">
+                            <h4 class="block-3d-material-selector__colors-title">Color Options</h4>
+                            <div class="block-3d-material-selector__color-grid">
+                                <div class="block-3d-material-selector__color block-3d-material-selector__color--selected"
+                                    style="background: #ffffff;"></div>
+                                <div class="block-3d-material-selector__color" style="background: #1f1f1f;"></div>
+                                <div class="block-3d-material-selector__color" style="background: #6366f1;"></div>
+                                <div class="block-3d-material-selector__color" style="background: #ef4444;"></div>
+                                <div class="block-3d-material-selector__color" style="background: #22c55e;"></div>
+                                <div class="block-3d-material-selector__color" style="background: #f59e0b;"></div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Block/3D/ConfigPanel -->
+                    <section class="block-3d-config-panel">
+                        <div class="block-3d-config-panel__header">
+                            <h3 class="block-3d-config-panel__title">Print Settings</h3>
+                            <button class="block-3d-config-panel__reset">Reset to defaults</button>
+                        </div>
+                        <div class="block-3d-config-panel__body">
+                            <div class="block-3d-config-panel__section">
+                                <label class="block-3d-config-panel__label">
+                                    Layer Height
+                                    <span class="block-3d-config-panel__value">0.2mm</span>
+                                </label>
+                                <div class="block-3d-config-panel__options">
+                                    <button class="block-3d-config-panel__option">0.1mm</button>
+                                    <button
+                                        class="block-3d-config-panel__option block-3d-config-panel__option--selected">0.2mm</button>
+                                    <button class="block-3d-config-panel__option">0.3mm</button>
+                                </div>
+                            </div>
+
+                            <div class="block-3d-config-panel__section">
+                                <label class="block-3d-config-panel__label">
+                                    Infill Density
+                                    <span class="block-3d-config-panel__value">20%</span>
+                                </label>
+                                <div class="block-3d-config-panel__slider">
+                                    <div class="block-3d-config-panel__slider-track">
+                                        <div class="block-3d-config-panel__slider-fill" style="width: 20%;"></div>
+                                        <div class="block-3d-config-panel__slider-thumb" style="left: 20%;"></div>
+                                    </div>
+                                    <div class="block-3d-config-panel__slider-marks">
+                                        <span class="block-3d-config-panel__slider-mark">0%</span>
+                                        <span class="block-3d-config-panel__slider-mark">50%</span>
+                                        <span class="block-3d-config-panel__slider-mark">100%</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="block-3d-config-panel__section">
+                                <label class="block-3d-config-panel__label">Scale</label>
+                                <div class="block-3d-config-panel__dimensions">
+                                    <div class="block-3d-config-panel__dimension">
+                                        <span
+                                            class="block-3d-config-panel__dimension-label block-3d-config-panel__dimension-label--x">X</span>
+                                        <input type="text" class="block-3d-config-panel__input" value="120">
+                                    </div>
+                                    <div class="block-3d-config-panel__dimension">
+                                        <span
+                                            class="block-3d-config-panel__dimension-label block-3d-config-panel__dimension-label--y">Y</span>
+                                        <input type="text" class="block-3d-config-panel__input" value="80">
+                                    </div>
+                                    <div class="block-3d-config-panel__dimension">
+                                        <span
+                                            class="block-3d-config-panel__dimension-label block-3d-config-panel__dimension-label--z">Z</span>
+                                        <input type="text" class="block-3d-config-panel__input" value="45">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="block-3d-config-panel__toggle">
+                                <span class="block-3d-config-panel__label">Support Structures</span>
+                                <div
+                                    class="block-3d-config-panel__toggle-switch block-3d-config-panel__toggle-switch--on">
+                                    <div class="block-3d-config-panel__toggle-knob"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+                <aside class="upload-sidebar">
+                    <!-- Block/3D/PricingBox -->
+                    <section class="block-3d-pricing-box">
+                        <div class="block-3d-pricing-box__header">
+                            <span class="block-3d-pricing-box__label">Estimated Total</span>
+                            <div class="block-3d-pricing-box__price">
+                                <span class="block-3d-pricing-box__currency">$</span>
+                                <span class="block-3d-pricing-box__amount">32</span>
+                                <span class="block-3d-pricing-box__cents">.99</span>
+                            </div>
+                        </div>
+                        <div class="block-3d-pricing-box__breakdown">
+                            <div class="block-3d-pricing-box__row">
+                                <span class="block-3d-pricing-box__row-label">
+                                    <span class="block-3d-pricing-box__row-icon">📦</span>
+                                    Material (PLA)
+                                </span>
+                                <span class="block-3d-pricing-box__row-value">$18.99</span>
+                            </div>
+                            <div class="block-3d-pricing-box__row">
+                                <span class="block-3d-pricing-box__row-label">
+                                    <span class="block-3d-pricing-box__row-icon">⚙️</span>
+                                    Print Time (4.5h)
+                                </span>
+                                <span class="block-3d-pricing-box__row-value">$9.00</span>
+                            </div>
+                            <div class="block-3d-pricing-box__row">
+                                <span class="block-3d-pricing-box__row-label">
+                                    <span class="block-3d-pricing-box__row-icon">✨</span>
+                                    Finishing
+                                </span>
+                                <span class="block-3d-pricing-box__row-value">$5.00</span>
+                            </div>
+                        </div>
+                        <div class="block-3d-pricing-box__time">
+                            <span class="block-3d-pricing-box__time-icon">⏱️</span>
+                            <span class="block-3d-pricing-box__time-label">Est. Delivery:</span>
+                            <span class="block-3d-pricing-box__time-value">3-5 business days</span>
+                        </div>
+                        <div class="block-3d-pricing-box__quantity">
+                            <p class="block-3d-pricing-box__quantity-label">Quantity</p>
+                            <div class="block-3d-pricing-box__quantity-controls">
+                                <button class="block-3d-pricing-box__quantity-btn">−</button>
+                                <span class="block-3d-pricing-box__quantity-value">1</span>
+                                <button class="block-3d-pricing-box__quantity-btn">+</button>
+                            </div>
+                            <div class="block-3d-pricing-box__discount-banner">
+                                <span class="block-3d-pricing-box__discount-icon">💰</span>
+                                <span class="block-3d-pricing-box__discount-text">Order 5+ for 10% off!</span>
+                            </div>
+                        </div>
+                        <div class="block-3d-pricing-box__actions">
+                            <button class="block-3d-pricing-box__add-btn">
+                                🛒 Add to Cart
+                            </button>
+                            <button class="block-3d-pricing-box__quote-btn">Request Custom Quote</button>
+                        </div>
+                        <div class="block-3d-pricing-box__trust">
+                            <div class="block-3d-pricing-box__trust-item">
+                                <span class="block-3d-pricing-box__trust-icon">✓</span>
+                                Secure
+                            </div>
+                            <div class="block-3d-pricing-box__trust-item">
+                                <span class="block-3d-pricing-box__trust-icon">✓</span>
+                                Quality
+                            </div>
+                            <div class="block-3d-pricing-box__trust-item">
+                                <span class="block-3d-pricing-box__trust-icon">✓</span>
+                                Fast
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- File info card -->
+                    <div class="card">
+                        <div class="card__body">
+                            <h4 class="section-title" style="margin-bottom: var(--space-sm);">Uploaded File</h4>
+                            <div
+                                style="display: flex; align-items: center; gap: var(--space-md); padding: var(--space-md); background: var(--color-background); border-radius: var(--radius-md);">
+                                <div
+                                    style="width: 48px; height: 48px; background: var(--color-primary); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; color: white; font-size: 20px;">
+                                    📄
+                                </div>
+                                <div>
+                                    <p
+                                        style="font-weight: var(--font-weight-medium); color: var(--color-text-primary);">
+                                        my_model.stl</p>
+                                    <p style="font-size: var(--font-size-caption); color: var(--color-text-muted);">2.4
+                                        MB • Uploaded just now</p>
+                                </div>
+                            </div>
+                            <button class="btn btn--secondary" style="width: 100%; margin-top: var(--space-md);">
+                                Upload Different File
+                            </button>
+                        </div>
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </main>
+
+    <!-- Block/Footer/MainFooter (simplified) -->
+    <footer class="block-footer-main">
+        <div class="block-footer-main__container">
+            <div class="block-footer-main__bottom" style="margin-top: 0; border-top: none; padding-top: 0;">
+                <p class="block-footer-main__copyright">© 2026 3D Commerce. All rights reserved.</p>
+                <nav class="block-footer-main__legal">
+                    <a href="#" class="block-footer-main__legal-link">Privacy</a>
+                    <a href="#" class="block-footer-main__legal-link">Terms</a>
+                </nav>
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>

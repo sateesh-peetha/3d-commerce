@@ -1,0 +1,269 @@
+/**
+ * Block: 3D/ConfigPanel
+ * 
+ * Purpose: 3D print configuration options panel
+ * Devices: All
+ * Plugin Points: .config-panel-slot
+ */
+
+.block-3d-config-panel {
+    background: var(--color-surface);
+    border-radius: var(--radius-xl);
+    border: 1px solid var(--color-border);
+    overflow: hidden;
+}
+
+.block-3d-config-panel__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-lg);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.block-3d-config-panel__title {
+    font-size: var(--font-size-heading-sm);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-primary);
+}
+
+.block-3d-config-panel__reset {
+    font-size: var(--font-size-body-small);
+    color: var(--color-text-muted);
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: color var(--motion-fast) var(--ease-out);
+}
+
+.block-3d-config-panel__reset:hover {
+    color: var(--color-primary);
+}
+
+.block-3d-config-panel__body {
+    padding: var(--space-lg);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+}
+
+/* Configuration section */
+.block-3d-config-panel__section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+}
+
+.block-3d-config-panel__label {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: var(--font-size-body-small);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-primary);
+}
+
+.block-3d-config-panel__value {
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-primary);
+}
+
+/* Button group selector */
+.block-3d-config-panel__options {
+    display: flex;
+    gap: var(--space-sm);
+}
+
+.block-3d-config-panel__option {
+    flex: 1;
+    padding: var(--space-sm) var(--space-md);
+    background: var(--color-background);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    font-size: var(--font-size-body-small);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    text-align: center;
+    transition: all var(--motion-fast) var(--ease-out);
+}
+
+.block-3d-config-panel__option:hover {
+    border-color: var(--color-primary);
+    color: var(--color-text-primary);
+}
+
+.block-3d-config-panel__option--selected {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    color: white;
+}
+
+/* Slider input */
+.block-3d-config-panel__slider {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+}
+
+.block-3d-config-panel__slider-track {
+    height: 8px;
+    background: var(--color-background);
+    border-radius: var(--radius-full);
+    position: relative;
+    cursor: pointer;
+}
+
+.block-3d-config-panel__slider-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--color-primary) 0%, var(--color-accent) 100%);
+    border-radius: var(--radius-full);
+}
+
+.block-3d-config-panel__slider-thumb {
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 20px;
+    height: 20px;
+    background: white;
+    border: 2px solid var(--color-primary);
+    border-radius: 50%;
+    box-shadow: var(--elevation-sm);
+    cursor: grab;
+}
+
+.block-3d-config-panel__slider-thumb:active {
+    cursor: grabbing;
+    transform: translate(-50%, -50%) scale(1.1);
+}
+
+.block-3d-config-panel__slider-marks {
+    display: flex;
+    justify-content: space-between;
+}
+
+.block-3d-config-panel__slider-mark {
+    font-size: var(--font-size-caption);
+    color: var(--color-text-muted);
+}
+
+/* Number input */
+.block-3d-config-panel__input-group {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+}
+
+.block-3d-config-panel__input {
+    flex: 1;
+    padding: var(--space-sm) var(--space-md);
+    background: var(--color-background);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    color: var(--color-text-primary);
+    font-size: var(--font-size-body-small);
+    text-align: center;
+}
+
+.block-3d-config-panel__input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+}
+
+.block-3d-config-panel__input-unit {
+    font-size: var(--font-size-body-small);
+    color: var(--color-text-muted);
+    min-width: 32px;
+}
+
+/* Dimension inputs (X, Y, Z) */
+.block-3d-config-panel__dimensions {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-sm);
+}
+
+.block-3d-config-panel__dimension {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+}
+
+.block-3d-config-panel__dimension-label {
+    font-size: var(--font-size-caption);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-muted);
+    text-align: center;
+}
+
+.block-3d-config-panel__dimension-label--x {
+    color: var(--color-error);
+}
+
+.block-3d-config-panel__dimension-label--y {
+    color: var(--color-success);
+}
+
+.block-3d-config-panel__dimension-label--z {
+    color: var(--color-secondary);
+}
+
+/* Toggle switch */
+.block-3d-config-panel__toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-sm) 0;
+}
+
+.block-3d-config-panel__toggle-switch {
+    width: 48px;
+    height: 24px;
+    background: var(--color-border);
+    border-radius: var(--radius-full);
+    position: relative;
+    cursor: pointer;
+    transition: background var(--motion-fast) var(--ease-out);
+}
+
+.block-3d-config-panel__toggle-switch--on {
+    background: var(--color-primary);
+}
+
+.block-3d-config-panel__toggle-knob {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 20px;
+    height: 20px;
+    background: white;
+    border-radius: 50%;
+    box-shadow: var(--elevation-sm);
+    transition: transform var(--motion-fast) var(--ease-out);
+}
+
+.block-3d-config-panel__toggle-switch--on .block-3d-config-panel__toggle-knob {
+    transform: translateX(24px);
+}
+
+/* Info tooltip */
+.block-3d-config-panel__info {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    background: var(--color-border);
+    border-radius: 50%;
+    font-size: 10px;
+    color: var(--color-text-muted);
+    cursor: help;
+    margin-left: var(--space-xs);
+}
+
+/* Plugin slot */
+.block-3d-config-panel__slot {
+    padding: var(--space-lg);
+    border-top: 1px solid var(--color-border);
+}

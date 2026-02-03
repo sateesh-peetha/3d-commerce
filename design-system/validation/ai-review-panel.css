@@ -1,0 +1,347 @@
+/**
+ * AI Review Prompts System
+ * 
+ * Purpose: Structured prompts for AI-assisted design review
+ * Features: Review templates, feedback collection, approval workflow
+ */
+
+/* ============================================
+   AI REVIEW PANEL
+   ============================================ */
+
+.ai-review-panel {
+    background: var(--color-surface);
+    border-radius: var(--radius-xl);
+    border: 1px solid var(--color-border);
+    overflow: hidden;
+}
+
+.ai-review-panel__header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    padding: var(--space-lg);
+    background: linear-gradient(135deg, #8b5cf6 0%, var(--color-primary) 100%);
+}
+
+.ai-review-panel__icon {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: var(--radius-lg);
+    font-size: 24px;
+}
+
+.ai-review-panel__title-group {
+    flex: 1;
+}
+
+.ai-review-panel__title {
+    font-size: var(--font-size-heading-sm);
+    font-weight: var(--font-weight-semibold);
+    color: white;
+}
+
+.ai-review-panel__subtitle {
+    font-size: var(--font-size-caption);
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.ai-review-panel__status {
+    padding: var(--space-xs) var(--space-md);
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: var(--radius-full);
+    font-size: var(--font-size-caption);
+    color: white;
+}
+
+/* Review Subject */
+.ai-review-panel__subject {
+    padding: var(--space-lg);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.ai-review-panel__subject-label {
+    font-size: var(--font-size-caption);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    margin-bottom: var(--space-sm);
+}
+
+.ai-review-panel__subject-card {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    padding: var(--space-md);
+    background: var(--color-background);
+    border-radius: var(--radius-lg);
+}
+
+.ai-review-panel__subject-preview {
+    width: 80px;
+    height: 60px;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+}
+
+.ai-review-panel__subject-info {
+    flex: 1;
+}
+
+.ai-review-panel__subject-name {
+    font-size: var(--font-size-body-regular);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-primary);
+}
+
+.ai-review-panel__subject-meta {
+    font-size: var(--font-size-caption);
+    color: var(--color-text-muted);
+}
+
+/* Review Criteria */
+.ai-review-panel__criteria {
+    padding: var(--space-lg);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.ai-review-panel__criteria-title {
+    font-size: var(--font-size-body-small);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-primary);
+    margin-bottom: var(--space-md);
+}
+
+.ai-review-panel__criterion {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    padding: var(--space-sm);
+    background: var(--color-background);
+    border-radius: var(--radius-md);
+    margin-bottom: var(--space-sm);
+}
+
+.ai-review-panel__criterion:last-child {
+    margin-bottom: 0;
+}
+
+.ai-review-panel__criterion-status {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-size: 12px;
+}
+
+.ai-review-panel__criterion-status--pass {
+    background: rgba(34, 197, 94, 0.1);
+    color: var(--color-success);
+}
+
+.ai-review-panel__criterion-status--warn {
+    background: rgba(245, 158, 11, 0.1);
+    color: var(--color-warning);
+}
+
+.ai-review-panel__criterion-status--fail {
+    background: rgba(239, 68, 68, 0.1);
+    color: var(--color-error);
+}
+
+.ai-review-panel__criterion-status--pending {
+    background: var(--color-surface);
+    color: var(--color-text-muted);
+}
+
+.ai-review-panel__criterion-text {
+    flex: 1;
+    font-size: var(--font-size-body-small);
+    color: var(--color-text-secondary);
+}
+
+.ai-review-panel__criterion-score {
+    font-size: var(--font-size-body-small);
+    font-weight: var(--font-weight-semibold);
+}
+
+/* AI Feedback */
+.ai-review-panel__feedback {
+    padding: var(--space-lg);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.ai-review-panel__feedback-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-md);
+}
+
+.ai-review-panel__feedback-icon {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #8b5cf6 0%, var(--color-primary) 100%);
+    border-radius: var(--radius-sm);
+    font-size: 12px;
+}
+
+.ai-review-panel__feedback-title {
+    font-size: var(--font-size-body-small);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-primary);
+}
+
+.ai-review-panel__feedback-content {
+    padding: var(--space-md);
+    background: var(--color-background);
+    border-radius: var(--radius-lg);
+    border-left: 3px solid #8b5cf6;
+}
+
+.ai-review-panel__feedback-text {
+    font-size: var(--font-size-body-small);
+    color: var(--color-text-secondary);
+    line-height: var(--line-height-relaxed);
+    margin-bottom: var(--space-md);
+}
+
+.ai-review-panel__suggestions {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+}
+
+.ai-review-panel__suggestion {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-sm);
+    padding: var(--space-sm);
+    background: var(--color-surface);
+    border-radius: var(--radius-md);
+}
+
+.ai-review-panel__suggestion-icon {
+    color: var(--color-primary);
+    flex-shrink: 0;
+}
+
+.ai-review-panel__suggestion-text {
+    font-size: var(--font-size-caption);
+    color: var(--color-text-secondary);
+}
+
+.ai-review-panel__suggestion-apply {
+    margin-left: auto;
+    padding: 2px var(--space-sm);
+    background: var(--color-primary);
+    border: none;
+    border-radius: var(--radius-sm);
+    font-size: 10px;
+    color: white;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+/* Human Review */
+.ai-review-panel__human-review {
+    padding: var(--space-lg);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.ai-review-panel__human-review-title {
+    font-size: var(--font-size-body-small);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-primary);
+    margin-bottom: var(--space-md);
+}
+
+.ai-review-panel__comment-input {
+    width: 100%;
+    min-height: 80px;
+    padding: var(--space-md);
+    background: var(--color-background);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    font-family: var(--font-family-body);
+    font-size: var(--font-size-body-small);
+    color: var(--color-text-primary);
+    resize: vertical;
+}
+
+.ai-review-panel__comment-input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+}
+
+/* Footer Actions */
+.ai-review-panel__footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--space-lg);
+    background: var(--color-background);
+}
+
+.ai-review-panel__footer-info {
+    font-size: var(--font-size-caption);
+    color: var(--color-text-muted);
+}
+
+.ai-review-panel__footer-actions {
+    display: flex;
+    gap: var(--space-sm);
+}
+
+.ai-review-panel__btn {
+    padding: var(--space-sm) var(--space-lg);
+    border-radius: var(--radius-md);
+    font-size: var(--font-size-body-small);
+    font-weight: var(--font-weight-semibold);
+    cursor: pointer;
+    transition: all var(--motion-fast) var(--ease-out);
+}
+
+.ai-review-panel__btn--reject {
+    background: transparent;
+    border: 1px solid var(--color-error);
+    color: var(--color-error);
+}
+
+.ai-review-panel__btn--reject:hover {
+    background: rgba(239, 68, 68, 0.1);
+}
+
+.ai-review-panel__btn--request-changes {
+    background: transparent;
+    border: 1px solid var(--color-warning);
+    color: var(--color-warning);
+}
+
+.ai-review-panel__btn--request-changes:hover {
+    background: rgba(245, 158, 11, 0.1);
+}
+
+.ai-review-panel__btn--approve {
+    background: var(--color-success);
+    border: none;
+    color: white;
+}
+
+.ai-review-panel__btn--approve:hover {
+    background: #16a34a;
+}

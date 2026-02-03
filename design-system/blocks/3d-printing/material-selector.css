@@ -1,0 +1,245 @@
+/**
+ * Block: 3D/MaterialSelector
+ * 
+ * Purpose: Material and finish selection for 3D prints
+ * Devices: All
+ * Plugin Points: .material-selector-slot
+ */
+
+.block-3d-material-selector {
+    background: var(--color-surface);
+    border-radius: var(--radius-xl);
+    border: 1px solid var(--color-border);
+    padding: var(--space-lg);
+}
+
+.block-3d-material-selector__title {
+    font-size: var(--font-size-body-regular);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-primary);
+    margin-bottom: var(--space-md);
+}
+
+/* Material cards grid */
+.block-3d-material-selector__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-md);
+}
+
+.block-3d-material-selector__card {
+    background: var(--color-background);
+    border: 2px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-md);
+    cursor: pointer;
+    transition: all var(--motion-fast) var(--ease-out);
+}
+
+.block-3d-material-selector__card:hover {
+    border-color: var(--color-primary);
+    transform: translateY(-2px);
+}
+
+.block-3d-material-selector__card--selected {
+    border-color: var(--color-primary);
+    background: rgba(99, 102, 241, 0.1);
+}
+
+.block-3d-material-selector__card-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-sm);
+}
+
+.block-3d-material-selector__card-swatch {
+    width: 32px;
+    height: 32px;
+    border-radius: var(--radius-md);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.block-3d-material-selector__card-swatch--pla {
+    background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
+}
+
+.block-3d-material-selector__card-swatch--abs {
+    background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+}
+
+.block-3d-material-selector__card-swatch--petg {
+    background: linear-gradient(135deg, #a855f7 0%, #7c3aed 100%);
+}
+
+.block-3d-material-selector__card-swatch--resin {
+    background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);
+}
+
+.block-3d-material-selector__card-swatch--nylon {
+    background: linear-gradient(135deg, #64748b 0%, #475569 100%);
+}
+
+.block-3d-material-selector__card-swatch--metal {
+    background: linear-gradient(135deg, #94a3b8 0%, #64748b 100%);
+}
+
+.block-3d-material-selector__card-name {
+    font-size: var(--font-size-body-small);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-primary);
+}
+
+.block-3d-material-selector__card-desc {
+    font-size: var(--font-size-caption);
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-sm);
+}
+
+.block-3d-material-selector__card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.block-3d-material-selector__card-price {
+    font-size: var(--font-size-body-small);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-primary);
+}
+
+.block-3d-material-selector__card-badge {
+    padding: var(--space-xs) var(--space-sm);
+    background: var(--color-success);
+    color: white;
+    font-size: 10px;
+    font-weight: var(--font-weight-semibold);
+    border-radius: var(--radius-sm);
+    text-transform: uppercase;
+}
+
+/* Properties comparison */
+.block-3d-material-selector__props {
+    margin-top: var(--space-lg);
+    padding-top: var(--space-lg);
+    border-top: 1px solid var(--color-border);
+}
+
+.block-3d-material-selector__props-title {
+    font-size: var(--font-size-body-small);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-md);
+}
+
+.block-3d-material-selector__props-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+}
+
+.block-3d-material-selector__prop {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+}
+
+.block-3d-material-selector__prop-label {
+    width: 100px;
+    font-size: var(--font-size-caption);
+    color: var(--color-text-muted);
+}
+
+.block-3d-material-selector__prop-bar {
+    flex: 1;
+    height: 8px;
+    background: var(--color-border);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+}
+
+.block-3d-material-selector__prop-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--color-primary) 0%, var(--color-accent) 100%);
+    border-radius: var(--radius-full);
+}
+
+.block-3d-material-selector__prop-value {
+    width: 40px;
+    font-size: var(--font-size-caption);
+    color: var(--color-text-secondary);
+    text-align: right;
+}
+
+/* Color variants */
+.block-3d-material-selector__colors {
+    margin-top: var(--space-lg);
+}
+
+.block-3d-material-selector__colors-title {
+    font-size: var(--font-size-body-small);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-sm);
+}
+
+.block-3d-material-selector__color-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+}
+
+.block-3d-material-selector__color {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-md);
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: all var(--motion-fast) var(--ease-out);
+    position: relative;
+}
+
+.block-3d-material-selector__color:hover {
+    transform: scale(1.1);
+}
+
+.block-3d-material-selector__color--selected {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 2px var(--color-background), 0 0 0 4px var(--color-primary);
+}
+
+.block-3d-material-selector__color-tooltip {
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    padding: var(--space-xs) var(--space-sm);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    font-size: var(--font-size-caption);
+    color: var(--color-text-primary);
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: all var(--motion-fast) var(--ease-out);
+}
+
+.block-3d-material-selector__color:hover .block-3d-material-selector__color-tooltip {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Plugin slot */
+.block-3d-material-selector__slot {
+    margin-top: var(--space-lg);
+    padding-top: var(--space-lg);
+    border-top: 1px solid var(--color-border);
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+    .block-3d-material-selector__grid {
+        grid-template-columns: 1fr;
+    }
+}

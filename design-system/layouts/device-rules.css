@@ -1,0 +1,327 @@
+/**
+ * Device-Specific Layout Rules
+ * 
+ * Purpose: Responsive layouts for different device classes
+ * Per-device styling constraints
+ */
+
+/* ============================================
+   WEB DESKTOP
+   ============================================ */
+
+@media (min-width: 1024px) {
+    .layout-desktop {
+        display: grid;
+        grid-template-columns: 280px 1fr;
+        min-height: 100vh;
+    }
+
+    .layout-desktop__sidebar {
+        position: sticky;
+        top: 0;
+        height: 100vh;
+        overflow-y: auto;
+        background: var(--color-surface);
+        border-right: 1px solid var(--color-border);
+    }
+
+    .layout-desktop__main {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+    }
+
+    .layout-desktop__content {
+        flex: 1;
+        padding: var(--space-xl);
+    }
+
+    /* Multi-column layouts */
+    .layout-two-column {
+        display: grid;
+        grid-template-columns: 1fr 400px;
+        gap: var(--space-xl);
+    }
+
+    .layout-three-column {
+        display: grid;
+        grid-template-columns: 280px 1fr 320px;
+        gap: var(--space-lg);
+    }
+
+    /* Hover interactions enabled */
+    .hover-effect:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--elevation-lg);
+    }
+
+    /* Persistent navigation */
+    .nav-persistent {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: var(--z-index-sticky);
+    }
+}
+
+/* ============================================
+   TABLET
+   ============================================ */
+
+@media (min-width: 768px) and (max-width: 1023px) {
+    .layout-tablet {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+    }
+
+    .layout-tablet__content {
+        flex: 1;
+        padding: var(--space-lg);
+    }
+
+    /* Two-column max on tablet */
+    .layout-two-column {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: var(--space-lg);
+    }
+
+    /* Three-column becomes two */
+    .layout-three-column {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: var(--space-lg);
+    }
+
+    .layout-three-column>*:last-child {
+        grid-column: span 2;
+    }
+}
+
+/* ============================================
+   MOBILE BROWSER
+   ============================================ */
+
+@media (max-width: 767px) {
+    .layout-mobile {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        padding-bottom: 80px;
+        /* Space for bottom tabs */
+    }
+
+    .layout-mobile__content {
+        flex: 1;
+        padding: var(--space-md);
+    }
+
+    /* Single column layouts */
+    .layout-two-column,
+    .layout-three-column {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-md);
+    }
+
+    /* Sticky CTAs */
+    .cta-sticky {
+        position: fixed;
+        bottom: 80px;
+        /* Above bottom tabs */
+        left: 0;
+        right: 0;
+        padding: var(--space-md);
+        background: var(--color-surface);
+        border-top: 1px solid var(--color-border);
+        z-index: var(--z-index-sticky);
+    }
+
+    /* Collapsible panels */
+    .panel-collapsible {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height var(--motion-normal) var(--ease-out);
+    }
+
+    .panel-collapsible--open {
+        max-height: 500px;
+    }
+}
+
+/* ============================================
+   iOS APP SPECIFIC
+   ============================================ */
+
+@supports (padding-top: env(safe-area-inset-top)) {
+    .layout-ios {
+        padding-top: env(safe-area-inset-top);
+        padding-bottom: calc(env(safe-area-inset-bottom) + 56px);
+        padding-left: env(safe-area-inset-left);
+        padding-right: env(safe-area-inset-right);
+    }
+
+    /* iOS header with safe area */
+    .header-ios {
+        padding-top: env(safe-area-inset-top);
+        background: var(--color-surface);
+    }
+
+    /* iOS bottom nav with safe area */
+    .nav-ios-bottom {
+        padding-bottom: env(safe-area-inset-bottom);
+    }
+
+    /* iOS modal with safe area */
+    .modal-ios {
+        padding-top: calc(env(safe-area-inset-top) + var(--space-md));
+        border-radius: var(--radius-2xl) var(--radius-2xl) 0 0;
+    }
+}
+
+/* Native gesture hints */
+.ios-swipe-indicator {
+    width: 36px;
+    height: 5px;
+    background: var(--color-border);
+    border-radius: var(--radius-full);
+    margin: var(--space-sm) auto var(--space-md);
+}
+
+/* ============================================
+   ANDROID APP SPECIFIC
+   ============================================ */
+
+.layout-android {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* Material-style toolbar */
+.toolbar-android {
+    height: 56px;
+    display: flex;
+    align-items: center;
+    padding: 0 var(--space-md);
+    background: var(--color-surface);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.toolbar-android__back {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: var(--space-md);
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.toolbar-android__title {
+    font-size: var(--font-size-heading-sm);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-primary);
+}
+
+/* Material ripple effect */
+.ripple {
+    position: relative;
+    overflow: hidden;
+}
+
+.ripple::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at var(--ripple-x, 50%) var(--ripple-y, 50%), var(--color-primary) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity var(--motion-fast) var(--ease-out);
+}
+
+.ripple:active::after {
+    opacity: 0.1;
+}
+
+/* FAB (Floating Action Button) */
+.fab-android {
+    position: fixed;
+    bottom: calc(56px + var(--space-lg));
+    right: var(--space-lg);
+    width: 56px;
+    height: 56px;
+    background: var(--color-primary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    box-shadow: var(--elevation-lg);
+    z-index: var(--z-index-fixed);
+    cursor: pointer;
+    transition: all var(--motion-fast) var(--ease-out);
+}
+
+.fab-android:hover {
+    transform: scale(1.1);
+    box-shadow: var(--elevation-xl);
+}
+
+/* ============================================
+   SHARED RESPONSIVE UTILITIES
+   ============================================ */
+
+/* Hide on specific devices */
+.hide-desktop {
+    @media (min-width: 1024px) {
+        display: none !important;
+    }
+}
+
+.hide-tablet {
+    @media (min-width: 768px) and (max-width: 1023px) {
+        display: none !important;
+    }
+}
+
+.hide-mobile {
+    @media (max-width: 767px) {
+        display: none !important;
+    }
+}
+
+/* Show on specific devices */
+.show-desktop-only {
+    display: none !important;
+
+    @media (min-width: 1024px) {
+        display: block !important;
+    }
+}
+
+.show-tablet-only {
+    display: none !important;
+
+    @media (min-width: 768px) and (max-width: 1023px) {
+        display: block !important;
+    }
+}
+
+.show-mobile-only {
+    display: none !important;
+
+    @media (max-width: 767px) {
+        display: block !important;
+    }
+}
+
+/* Touch-friendly targets */
+@media (pointer: coarse) {
+    .touch-target {
+        min-height: 44px;
+        min-width: 44px;
+    }
+}

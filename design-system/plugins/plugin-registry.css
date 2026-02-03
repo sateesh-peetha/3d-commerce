@@ -1,0 +1,326 @@
+/**
+ * Plugin UI Registration System
+ * 
+ * Purpose: Register and manage plugin UI components
+ * Features: Plugin cards, activation states, configuration
+ */
+
+/* ============================================
+   PLUGIN REGISTRY INTERFACE
+   ============================================ */
+
+.plugin-registry {
+    background: var(--color-surface);
+    border-radius: var(--radius-xl);
+    border: 1px solid var(--color-border);
+    overflow: hidden;
+}
+
+.plugin-registry__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-lg);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.plugin-registry__title-group {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+}
+
+.plugin-registry__icon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-primary) 100%);
+    border-radius: var(--radius-md);
+    font-size: 20px;
+}
+
+.plugin-registry__title {
+    font-size: var(--font-size-heading-sm);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-primary);
+}
+
+.plugin-registry__count {
+    font-size: var(--font-size-caption);
+    color: var(--color-text-muted);
+}
+
+.plugin-registry__actions {
+    display: flex;
+    gap: var(--space-sm);
+}
+
+.plugin-registry__action-btn {
+    padding: var(--space-sm) var(--space-md);
+    background: transparent;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    font-size: var(--font-size-body-small);
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    transition: all var(--motion-fast) var(--ease-out);
+}
+
+.plugin-registry__action-btn:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+}
+
+.plugin-registry__action-btn--primary {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    color: white;
+}
+
+.plugin-registry__action-btn--primary:hover {
+    background: var(--color-primary-hover);
+}
+
+/* Search & Filter */
+.plugin-registry__toolbar {
+    display: flex;
+    gap: var(--space-md);
+    padding: var(--space-md) var(--space-lg);
+    background: var(--color-background);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.plugin-registry__search {
+    flex: 1;
+    position: relative;
+}
+
+.plugin-registry__search-icon {
+    position: absolute;
+    left: var(--space-md);
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--color-text-muted);
+}
+
+.plugin-registry__search-input {
+    width: 100%;
+    padding: var(--space-sm) var(--space-md);
+    padding-left: calc(var(--space-md) * 2 + 16px);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    font-size: var(--font-size-body-small);
+    color: var(--color-text-primary);
+}
+
+.plugin-registry__search-input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+}
+
+.plugin-registry__filters {
+    display: flex;
+    gap: var(--space-xs);
+}
+
+.plugin-registry__filter {
+    padding: var(--space-xs) var(--space-md);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-full);
+    font-size: var(--font-size-caption);
+    color: var(--color-text-secondary);
+    cursor: pointer;
+}
+
+.plugin-registry__filter--active {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    color: white;
+}
+
+/* Plugin Grid */
+.plugin-registry__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: var(--space-lg);
+    padding: var(--space-lg);
+}
+
+/* Plugin Card */
+.plugin-card {
+    background: var(--color-background);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    transition: all var(--motion-fast) var(--ease-out);
+}
+
+.plugin-card:hover {
+    border-color: var(--color-primary);
+    transform: translateY(-2px);
+}
+
+.plugin-card--active {
+    border-color: var(--color-success);
+}
+
+.plugin-card__header {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-md);
+    padding: var(--space-md);
+}
+
+.plugin-card__icon {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-surface);
+    border-radius: var(--radius-lg);
+    font-size: 24px;
+    flex-shrink: 0;
+}
+
+.plugin-card__info {
+    flex: 1;
+    min-width: 0;
+}
+
+.plugin-card__name {
+    font-size: var(--font-size-body-regular);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-primary);
+    margin-bottom: var(--space-xs);
+}
+
+.plugin-card__author {
+    font-size: var(--font-size-caption);
+    color: var(--color-text-muted);
+}
+
+.plugin-card__toggle {
+    width: 44px;
+    height: 24px;
+    background: var(--color-border);
+    border-radius: var(--radius-full);
+    position: relative;
+    cursor: pointer;
+    transition: background var(--motion-fast) var(--ease-out);
+}
+
+.plugin-card--active .plugin-card__toggle {
+    background: var(--color-success);
+}
+
+.plugin-card__toggle-knob {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 20px;
+    height: 20px;
+    background: white;
+    border-radius: 50%;
+    transition: transform var(--motion-fast) var(--ease-out);
+}
+
+.plugin-card--active .plugin-card__toggle-knob {
+    transform: translateX(20px);
+}
+
+.plugin-card__body {
+    padding: 0 var(--space-md) var(--space-md);
+}
+
+.plugin-card__description {
+    font-size: var(--font-size-body-small);
+    color: var(--color-text-secondary);
+    line-height: var(--line-height-relaxed);
+    margin-bottom: var(--space-md);
+}
+
+.plugin-card__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xs);
+    margin-bottom: var(--space-md);
+}
+
+.plugin-card__tag {
+    padding: 2px var(--space-sm);
+    background: var(--color-surface);
+    border-radius: var(--radius-full);
+    font-size: 10px;
+    color: var(--color-text-muted);
+}
+
+.plugin-card__slots {
+    padding: var(--space-sm);
+    background: var(--color-surface);
+    border-radius: var(--radius-md);
+}
+
+.plugin-card__slots-title {
+    font-size: 10px;
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    margin-bottom: var(--space-xs);
+}
+
+.plugin-card__slot-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xs);
+}
+
+.plugin-card__slot {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px var(--space-sm);
+    background: var(--color-background);
+    border-radius: var(--radius-sm);
+    font-size: 10px;
+    font-family: var(--font-family-mono);
+    color: var(--color-primary);
+}
+
+.plugin-card__footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--space-sm) var(--space-md);
+    background: var(--color-surface);
+    border-top: 1px solid var(--color-border);
+}
+
+.plugin-card__version {
+    font-size: var(--font-size-caption);
+    color: var(--color-text-muted);
+}
+
+.plugin-card__actions {
+    display: flex;
+    gap: var(--space-xs);
+}
+
+.plugin-card__action {
+    padding: var(--space-xs) var(--space-sm);
+    background: transparent;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    font-size: var(--font-size-caption);
+    color: var(--color-text-secondary);
+    cursor: pointer;
+}
+
+.plugin-card__action:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+}

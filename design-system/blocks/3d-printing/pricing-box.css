@@ -1,0 +1,275 @@
+/**
+ * Block: 3D/PricingBox
+ * 
+ * Purpose: Dynamic pricing display for 3D prints
+ * Devices: All
+ * Plugin Points: .pricing-box-slot
+ */
+
+.block-3d-pricing-box {
+    background: var(--color-surface);
+    border-radius: var(--radius-xl);
+    border: 1px solid var(--color-border);
+    overflow: hidden;
+}
+
+.block-3d-pricing-box__header {
+    padding: var(--space-lg);
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+    text-align: center;
+}
+
+.block-3d-pricing-box__label {
+    font-size: var(--font-size-caption);
+    font-weight: var(--font-weight-medium);
+    color: rgba(255, 255, 255, 0.8);
+    text-transform: uppercase;
+    letter-spacing: var(--letter-spacing-wide);
+    margin-bottom: var(--space-xs);
+}
+
+.block-3d-pricing-box__price {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: var(--space-xs);
+}
+
+.block-3d-pricing-box__currency {
+    font-size: var(--font-size-heading-md);
+    font-weight: var(--font-weight-semibold);
+    color: white;
+}
+
+.block-3d-pricing-box__amount {
+    font-size: var(--font-size-heading-xl);
+    font-weight: var(--font-weight-bold);
+    color: white;
+}
+
+.block-3d-pricing-box__cents {
+    font-size: var(--font-size-heading-md);
+    font-weight: var(--font-weight-semibold);
+    color: rgba(255, 255, 255, 0.8);
+}
+
+/* Price breakdown */
+.block-3d-pricing-box__breakdown {
+    padding: var(--space-lg);
+}
+
+.block-3d-pricing-box__row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-sm) 0;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.block-3d-pricing-box__row:last-child {
+    border-bottom: none;
+}
+
+.block-3d-pricing-box__row-label {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    font-size: var(--font-size-body-small);
+    color: var(--color-text-secondary);
+}
+
+.block-3d-pricing-box__row-icon {
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-background);
+    border-radius: var(--radius-sm);
+    color: var(--color-text-muted);
+    font-size: 12px;
+}
+
+.block-3d-pricing-box__row-value {
+    font-size: var(--font-size-body-small);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-primary);
+}
+
+.block-3d-pricing-box__row--discount .block-3d-pricing-box__row-value {
+    color: var(--color-success);
+}
+
+/* Estimated time */
+.block-3d-pricing-box__time {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-sm);
+    padding: var(--space-md);
+    margin: 0 var(--space-lg);
+    background: var(--color-background);
+    border-radius: var(--radius-md);
+}
+
+.block-3d-pricing-box__time-icon {
+    color: var(--color-accent);
+}
+
+.block-3d-pricing-box__time-label {
+    font-size: var(--font-size-body-small);
+    color: var(--color-text-secondary);
+}
+
+.block-3d-pricing-box__time-value {
+    font-size: var(--font-size-body-small);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-primary);
+}
+
+/* Quantity selector */
+.block-3d-pricing-box__quantity {
+    padding: var(--space-lg);
+    border-top: 1px solid var(--color-border);
+}
+
+.block-3d-pricing-box__quantity-label {
+    font-size: var(--font-size-body-small);
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-sm);
+}
+
+.block-3d-pricing-box__quantity-controls {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+}
+
+.block-3d-pricing-box__quantity-btn {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-background);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    font-size: 18px;
+    transition: all var(--motion-fast) var(--ease-out);
+}
+
+.block-3d-pricing-box__quantity-btn:hover {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    color: white;
+}
+
+.block-3d-pricing-box__quantity-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.block-3d-pricing-box__quantity-value {
+    flex: 1;
+    text-align: center;
+    font-size: var(--font-size-heading-sm);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-primary);
+}
+
+/* Volume discount banner */
+.block-3d-pricing-box__discount-banner {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: var(--space-sm) var(--space-md);
+    background: rgba(34, 197, 94, 0.1);
+    border: 1px solid var(--color-success);
+    border-radius: var(--radius-md);
+    margin-top: var(--space-md);
+}
+
+.block-3d-pricing-box__discount-icon {
+    color: var(--color-success);
+}
+
+.block-3d-pricing-box__discount-text {
+    font-size: var(--font-size-caption);
+    color: var(--color-success);
+}
+
+/* Action button */
+.block-3d-pricing-box__actions {
+    padding: var(--space-lg);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+}
+
+.block-3d-pricing-box__add-btn {
+    width: 100%;
+    padding: var(--space-md);
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%);
+    color: white;
+    border: none;
+    border-radius: var(--radius-md);
+    font-size: var(--font-size-body-regular);
+    font-weight: var(--font-weight-semibold);
+    cursor: pointer;
+    transition: all var(--motion-fast) var(--ease-out);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-sm);
+}
+
+.block-3d-pricing-box__add-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--elevation-glow);
+}
+
+.block-3d-pricing-box__quote-btn {
+    width: 100%;
+    padding: var(--space-sm);
+    background: transparent;
+    color: var(--color-text-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    font-size: var(--font-size-body-small);
+    cursor: pointer;
+    transition: all var(--motion-fast) var(--ease-out);
+}
+
+.block-3d-pricing-box__quote-btn:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+}
+
+/* Trust badges */
+.block-3d-pricing-box__trust {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-lg);
+    padding: var(--space-md);
+    border-top: 1px solid var(--color-border);
+}
+
+.block-3d-pricing-box__trust-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    font-size: var(--font-size-caption);
+    color: var(--color-text-muted);
+}
+
+.block-3d-pricing-box__trust-icon {
+    color: var(--color-success);
+}
+
+/* Plugin slot */
+.block-3d-pricing-box__slot {
+    padding: var(--space-md) var(--space-lg);
+    border-top: 1px solid var(--color-border);
+}

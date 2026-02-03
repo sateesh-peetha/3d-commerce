@@ -1,0 +1,153 @@
+{
+    "bundle_id": "commerce",
+    "spec_hash": "GOLDEN-2026-02-04-gp001",
+    "invariants_ref": "/specs/system-invariants.json",
+    "endpoints": [
+        {
+            "id": "list-products-paginated",
+            "method": "GET",
+            "path": "/api/products",
+            "auth": {
+                "required": false
+            },
+            "query": {
+                "page": "number?",
+                "limit": "number?",
+                "category": "string?",
+                "material": "string?",
+                "minPrice": "number?",
+                "maxPrice": "number?",
+                "sort": "string?",
+                "featured": "boolean?"
+            },
+            "response": {
+                "products": "Product[]",
+                "total": "number",
+                "page": "number",
+                "totalPages": "number"
+            }
+        },
+        {
+            "id": "get-product-detail",
+            "method": "GET",
+            "path": "/api/products/:id",
+            "auth": {
+                "required": false
+            },
+            "params": {
+                "id": "string"
+            },
+            "response": {
+                "product": "Product"
+            }
+        },
+        {
+            "id": "get-categories",
+            "method": "GET",
+            "path": "/api/categories",
+            "auth": {
+                "required": false
+            },
+            "response": {
+                "categories": "Category[]"
+            }
+        },
+        {
+            "id": "apply-coupon",
+            "method": "POST",
+            "path": "/api/cart/coupon",
+            "auth": {
+                "required": true,
+                "roles": [
+                    "customer"
+                ]
+            },
+            "body": {
+                "code": "string"
+            },
+            "response": {
+                "valid": "boolean",
+                "discount": "number",
+                "message": "string"
+            }
+        },
+        {
+            "id": "remove-coupon",
+            "method": "DELETE",
+            "path": "/api/cart/coupon",
+            "auth": {
+                "required": true,
+                "roles": [
+                    "customer"
+                ]
+            },
+            "response": {
+                "cart": "Cart"
+            }
+        },
+        {
+            "id": "get-order-history",
+            "method": "GET",
+            "path": "/api/orders",
+            "auth": {
+                "required": true,
+                "roles": [
+                    "customer",
+                    "admin"
+                ]
+            },
+            "query": {
+                "page": "number?",
+                "limit": "number?",
+                "status": "string?"
+            },
+            "response": {
+                "orders": "Order[]",
+                "total": "number"
+            }
+        },
+        {
+            "id": "update-cart-item",
+            "method": "PATCH",
+            "path": "/api/cart/:itemId",
+            "auth": {
+                "required": true,
+                "roles": [
+                    "customer"
+                ]
+            },
+            "params": {
+                "itemId": "string"
+            },
+            "body": {
+                "quantity": "number"
+            },
+            "response": {
+                "cart": "Cart"
+            }
+        },
+        {
+            "id": "delete-cart-item",
+            "method": "DELETE",
+            "path": "/api/cart/:itemId",
+            "auth": {
+                "required": true,
+                "roles": [
+                    "customer"
+                ]
+            },
+            "params": {
+                "itemId": "string"
+            },
+            "response": {
+                "cart": "Cart"
+            }
+        }
+    ],
+    "validation": {
+        "all_endpoints_authenticated_appropriately": "PASS",
+        "invariant_INV-003": "PASS",
+        "invariant_INV-004": "PASS",
+        "invariant_INV-005": "PASS"
+    }
+}

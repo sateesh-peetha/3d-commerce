@@ -1,0 +1,227 @@
+{
+    "version": "1.0.0",
+    "bundles": [
+        {
+            "id": "commerce",
+            "name": "Commerce Bundle",
+            "priority": 1,
+            "scope": {
+                "includes": [
+                    "Store page with product listing",
+                    "Product detail page",
+                    "Cart management (add, remove, update)",
+                    "Coupon system",
+                    "Checkout flow refinement",
+                    "Payment method selection (mock)",
+                    "Order history"
+                ],
+                "excludes": [
+                    "Real payment gateway integration",
+                    "Subscription/recurring billing",
+                    "Multi-currency",
+                    "Tax calculation engine"
+                ]
+            },
+            "success_tests": [
+                "User can browse products",
+                "User can filter/sort products",
+                "User can add to cart from listing",
+                "User can apply coupon",
+                "Checkout calculates correct total",
+                "Order history shows past orders"
+            ],
+            "depends_on": [
+                "golden-path"
+            ]
+        },
+        {
+            "id": "3d-printing-ops",
+            "name": "3D Printing Operations Bundle",
+            "priority": 2,
+            "scope": {
+                "includes": [
+                    "File management (history, favorites)",
+                    "Configuration variants (presets)",
+                    "Advanced pricing rules",
+                    "Order workflow states",
+                    "Print job tracking",
+                    "Delivery options"
+                ],
+                "excludes": [
+                    "Direct printer control",
+                    "CAD editing",
+                    "Slice preview",
+                    "Real-time printer monitoring"
+                ]
+            },
+            "success_tests": [
+                "User can save configuration presets",
+                "User can reorder previous models",
+                "Pricing updates with config changes",
+                "Admin can advance order states",
+                "User receives status notifications"
+            ],
+            "depends_on": [
+                "golden-path",
+                "commerce"
+            ]
+        },
+        {
+            "id": "admin-platform",
+            "name": "Admin & Platform Bundle",
+            "priority": 3,
+            "scope": {
+                "includes": [
+                    "User management (list, search, roles)",
+                    "API key manager (multiple providers)",
+                    "Secrets rotation UI",
+                    "Audit logs viewer",
+                    "System settings panel",
+                    "Email templates"
+                ],
+                "excludes": [
+                    "Multi-tenant architecture",
+                    "White-label customization",
+                    "Billing/invoicing"
+                ]
+            },
+            "success_tests": [
+                "Admin can view all users",
+                "Admin can change user roles",
+                "Admin can rotate API keys",
+                "Admin can view audit logs",
+                "System settings persist"
+            ],
+            "depends_on": [
+                "golden-path"
+            ]
+        },
+        {
+            "id": "cms-blog",
+            "name": "CMS & Blog Bundle",
+            "priority": 4,
+            "scope": {
+                "includes": [
+                    "Static pages (About, FAQ, Terms)",
+                    "Blog post creation/editing",
+                    "SEO metadata management",
+                    "Media library",
+                    "Content scheduling"
+                ],
+                "excludes": [
+                    "Full WYSIWYG editor",
+                    "Multi-language",
+                    "Comments system",
+                    "Social sharing"
+                ]
+            },
+            "success_tests": [
+                "Admin can create static page",
+                "Admin can publish blog post",
+                "SEO meta renders correctly",
+                "Media uploads successfully",
+                "Scheduled posts publish on time"
+            ],
+            "depends_on": [
+                "admin-platform"
+            ]
+        },
+        {
+            "id": "theme-ui",
+            "name": "Theme & UI Customization Bundle",
+            "priority": 5,
+            "scope": {
+                "includes": [
+                    "Theme switcher (light/dark)",
+                    "Custom theme creation (admin)",
+                    "Device-specific rendering adjustments",
+                    "Layout variants per screen",
+                    "Accessibility settings"
+                ],
+                "excludes": [
+                    "Full customer-facing theme builder",
+                    "CSS export",
+                    "Mobile app theming"
+                ]
+            },
+            "success_tests": [
+                "User can switch themes",
+                "Admin can create custom theme",
+                "Theme persists across sessions",
+                "Accessibility settings work",
+                "Device-specific layouts render"
+            ],
+            "depends_on": [
+                "golden-path"
+            ]
+        },
+        {
+            "id": "plugin-extension",
+            "name": "Plugin & Extension Bundle",
+            "priority": 6,
+            "scope": {
+                "includes": [
+                    "Plugin SDK definition",
+                    "Plugin lifecycle (install, enable, disable)",
+                    "Permission system",
+                    "Marketplace scaffold (list, install)",
+                    "Plugin configuration UI"
+                ],
+                "excludes": [
+                    "External plugin submission",
+                    "Payment for plugins",
+                    "Plugin versioning/updates"
+                ]
+            },
+            "success_tests": [
+                "Admin can install plugin",
+                "Plugin renders in designated slot",
+                "Plugin can be disabled",
+                "Permissions are enforced",
+                "Plugin config persists"
+            ],
+            "depends_on": [
+                "admin-platform"
+            ]
+        },
+        {
+            "id": "ai-enablement",
+            "name": "AI Enablement Bundle",
+            "priority": 7,
+            "scope": {
+                "includes": [
+                    "Prompt-driven UI adjustments",
+                    "AI-generated layout suggestions",
+                    "Validation & guardrails UI",
+                    "Change history & rollback",
+                    "AI usage analytics (admin)"
+                ],
+                "excludes": [
+                    "AI content generation",
+                    "AI product descriptions",
+                    "Autonomous AI actions"
+                ]
+            },
+            "success_tests": [
+                "Admin can prompt UI change",
+                "Change preview shows diff",
+                "Change can be applied",
+                "Change can be rolled back",
+                "AI actions logged"
+            ],
+            "depends_on": [
+                "golden-path",
+                "plugin-extension"
+            ]
+        }
+    ],
+    "execution_order": [
+        "commerce",
+        "3d-printing-ops",
+        "admin-platform",
+        "cms-blog",
+        "theme-ui",
+        "plugin-extension",
+        "ai-enablement"
+    ]
+}

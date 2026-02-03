@@ -1,0 +1,174 @@
+{
+    "bundle_id": "admin-platform",
+    "spec_hash": "GOLDEN-2026-02-04-gp001",
+    "endpoints": [
+        {
+            "id": "list-users",
+            "method": "GET",
+            "path": "/api/admin/users",
+            "auth": {
+                "required": true,
+                "roles": [
+                    "admin"
+                ]
+            },
+            "query": {
+                "page": "number?",
+                "limit": "number?",
+                "search": "string?",
+                "role": "string?"
+            },
+            "response": {
+                "users": "User[]",
+                "total": "number"
+            }
+        },
+        {
+            "id": "get-user",
+            "method": "GET",
+            "path": "/api/admin/users/:id",
+            "auth": {
+                "required": true,
+                "roles": [
+                    "admin"
+                ]
+            },
+            "params": {
+                "id": "string"
+            },
+            "response": {
+                "user": "User"
+            }
+        },
+        {
+            "id": "update-user-role",
+            "method": "PATCH",
+            "path": "/api/admin/users/:id/role",
+            "auth": {
+                "required": true,
+                "roles": [
+                    "super_admin"
+                ]
+            },
+            "params": {
+                "id": "string"
+            },
+            "body": {
+                "role": "string"
+            },
+            "response": {
+                "user": "User"
+            }
+        },
+        {
+            "id": "disable-user",
+            "method": "POST",
+            "path": "/api/admin/users/:id/disable",
+            "auth": {
+                "required": true,
+                "roles": [
+                    "admin"
+                ]
+            },
+            "params": {
+                "id": "string"
+            },
+            "response": {
+                "user": "User"
+            }
+        },
+        {
+            "id": "list-api-keys-by-provider",
+            "method": "GET",
+            "path": "/api/admin/api-keys/:provider",
+            "auth": {
+                "required": true,
+                "roles": [
+                    "admin"
+                ]
+            },
+            "params": {
+                "provider": "string"
+            },
+            "response": {
+                "keys": "ApiKeyConfig[]"
+            }
+        },
+        {
+            "id": "rotate-api-key",
+            "method": "POST",
+            "path": "/api/admin/api-keys/:id/rotate",
+            "auth": {
+                "required": true,
+                "roles": [
+                    "admin"
+                ]
+            },
+            "params": {
+                "id": "string"
+            },
+            "response": {
+                "key": "ApiKeyConfig",
+                "newValue": "string"
+            }
+        },
+        {
+            "id": "get-audit-logs",
+            "method": "GET",
+            "path": "/api/admin/audit",
+            "auth": {
+                "required": true,
+                "roles": [
+                    "admin"
+                ]
+            },
+            "query": {
+                "page": "number?",
+                "limit": "number?",
+                "action": "string?",
+                "user": "string?",
+                "from": "string?",
+                "to": "string?"
+            },
+            "response": {
+                "logs": "AuditLog[]",
+                "total": "number"
+            }
+        },
+        {
+            "id": "get-settings",
+            "method": "GET",
+            "path": "/api/admin/settings",
+            "auth": {
+                "required": true,
+                "roles": [
+                    "admin"
+                ]
+            },
+            "response": {
+                "settings": "SystemSettings"
+            }
+        },
+        {
+            "id": "update-settings",
+            "method": "PATCH",
+            "path": "/api/admin/settings",
+            "auth": {
+                "required": true,
+                "roles": [
+                    "admin"
+                ]
+            },
+            "body": {
+                "settings": "Partial<SystemSettings>"
+            },
+            "response": {
+                "settings": "SystemSettings"
+            }
+        }
+    ],
+    "validation": {
+        "all_endpoints_admin_only": "PASS",
+        "invariant_INV-010": "PASS"
+    }
+}

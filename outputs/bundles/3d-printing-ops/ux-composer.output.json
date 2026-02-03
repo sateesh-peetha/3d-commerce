@@ -1,0 +1,169 @@
+{
+    "bundle_id": "3d-printing-ops",
+    "spec_hash": "GOLDEN-2026-02-04-gp001",
+    "invariants_ref": "/specs/system-invariants.json",
+    "screens": [
+        {
+            "id": "my-files",
+            "route": "/files",
+            "device": "web_desktop",
+            "auth_required": true,
+            "blocks": [
+                {
+                    "id": "header-main-nav",
+                    "zone": "header",
+                    "order": 0
+                },
+                {
+                    "id": "file-grid",
+                    "zone": "main",
+                    "order": 1,
+                    "type": "inline_component",
+                    "props": {
+                        "view_mode": "grid",
+                        "actions": [
+                            "reorder",
+                            "delete",
+                            "favorite"
+                        ]
+                    }
+                },
+                {
+                    "id": "footer-main",
+                    "zone": "footer",
+                    "order": 99
+                }
+            ]
+        },
+        {
+            "id": "presets",
+            "route": "/presets",
+            "device": "web_desktop",
+            "auth_required": true,
+            "blocks": [
+                {
+                    "id": "header-main-nav",
+                    "zone": "header",
+                    "order": 0
+                },
+                {
+                    "id": "preset-list",
+                    "zone": "main",
+                    "order": 1,
+                    "type": "inline_component",
+                    "props": {
+                        "actions": [
+                            "edit",
+                            "delete",
+                            "set_default"
+                        ]
+                    }
+                },
+                {
+                    "id": "preset-form",
+                    "zone": "aside",
+                    "order": 1,
+                    "type": "inline_component",
+                    "conditional": {
+                        "show_if": "editing"
+                    }
+                },
+                {
+                    "id": "footer-main",
+                    "zone": "footer",
+                    "order": 99
+                }
+            ]
+        },
+        {
+            "id": "order-tracking",
+            "route": "/orders/:id/track",
+            "device": "web_desktop",
+            "auth_required": true,
+            "blocks": [
+                {
+                    "id": "header-main-nav",
+                    "zone": "header",
+                    "order": 0
+                },
+                {
+                    "id": "order-card",
+                    "zone": "main",
+                    "order": 1,
+                    "props": {
+                        "detailed": true
+                    }
+                },
+                {
+                    "id": "order-timeline",
+                    "zone": "main",
+                    "order": 2,
+                    "type": "inline_component"
+                },
+                {
+                    "id": "delivery-options",
+                    "zone": "aside",
+                    "order": 1,
+                    "type": "inline_component",
+                    "conditional": {
+                        "show_if": "can_modify_delivery"
+                    }
+                },
+                {
+                    "id": "footer-main",
+                    "zone": "footer",
+                    "order": 99
+                }
+            ]
+        },
+        {
+            "id": "admin-order-workflow",
+            "route": "/admin/orders/:id",
+            "device": "web_desktop",
+            "auth_required": true,
+            "required_role": "admin",
+            "blocks": [
+                {
+                    "id": "header-main-nav",
+                    "zone": "header",
+                    "order": 0,
+                    "props": {
+                        "admin_mode": true
+                    }
+                },
+                {
+                    "id": "order-card",
+                    "zone": "main",
+                    "order": 1,
+                    "props": {
+                        "admin_view": true
+                    }
+                },
+                {
+                    "id": "order-state-machine",
+                    "zone": "main",
+                    "order": 2,
+                    "type": "inline_component",
+                    "props": {
+                        "transitions": [
+                            "pending→processing",
+                            "processing→printing",
+                            "printing→shipped",
+                            "shipped→delivered"
+                        ]
+                    }
+                },
+                {
+                    "id": "printer-status",
+                    "zone": "aside",
+                    "order": 1
+                },
+                {
+                    "id": "footer-main",
+                    "zone": "footer",
+                    "order": 99
+                }
+            ]
+        }
+    ]
+}

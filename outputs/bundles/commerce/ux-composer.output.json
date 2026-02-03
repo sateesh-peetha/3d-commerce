@@ -1,0 +1,148 @@
+{
+    "bundle_id": "commerce",
+    "spec_hash": "GOLDEN-2026-02-04-gp001",
+    "invariants_ref": "/specs/system-invariants.json",
+    "screens": [
+        {
+            "id": "store",
+            "route": "/store",
+            "device": "web_desktop",
+            "auth_required": false,
+            "blocks": [
+                {
+                    "id": "header-main-nav",
+                    "zone": "header",
+                    "order": 0
+                },
+                {
+                    "id": "filter-panel",
+                    "zone": "aside",
+                    "order": 1,
+                    "props": {
+                        "categories": true,
+                        "materials": true,
+                        "price_range": true
+                    }
+                },
+                {
+                    "id": "product-grid",
+                    "zone": "main",
+                    "order": 1,
+                    "props": {
+                        "paginated": true,
+                        "page_size": 12
+                    }
+                },
+                {
+                    "id": "footer-main",
+                    "zone": "footer",
+                    "order": 99
+                }
+            ]
+        },
+        {
+            "id": "product-detail",
+            "route": "/product/:id",
+            "device": "web_desktop",
+            "auth_required": false,
+            "blocks": [
+                {
+                    "id": "header-main-nav",
+                    "zone": "header",
+                    "order": 0
+                },
+                {
+                    "id": "model-viewer",
+                    "zone": "main",
+                    "order": 1,
+                    "props": {
+                        "preview_mode": true
+                    }
+                },
+                {
+                    "id": "product-card",
+                    "zone": "main",
+                    "order": 2,
+                    "props": {
+                        "detailed": true
+                    }
+                },
+                {
+                    "id": "material-selector",
+                    "zone": "aside",
+                    "order": 1
+                },
+                {
+                    "id": "pricing-box",
+                    "zone": "aside",
+                    "order": 2
+                },
+                {
+                    "id": "footer-main",
+                    "zone": "footer",
+                    "order": 99
+                }
+            ]
+        },
+        {
+            "id": "cart",
+            "route": "/cart",
+            "device": "web_desktop",
+            "auth_required": false,
+            "blocks": [
+                {
+                    "id": "header-main-nav",
+                    "zone": "header",
+                    "order": 0
+                },
+                {
+                    "id": "cart-summary",
+                    "zone": "main",
+                    "order": 1,
+                    "props": {
+                        "editable": true
+                    }
+                },
+                {
+                    "id": "coupon-input",
+                    "zone": "main",
+                    "order": 2,
+                    "type": "inline_component",
+                    "source": "components.css"
+                },
+                {
+                    "id": "footer-main",
+                    "zone": "footer",
+                    "order": 99
+                }
+            ]
+        },
+        {
+            "id": "order-history",
+            "route": "/orders",
+            "device": "web_desktop",
+            "auth_required": true,
+            "blocks": [
+                {
+                    "id": "header-main-nav",
+                    "zone": "header",
+                    "order": 0
+                },
+                {
+                    "id": "order-card",
+                    "zone": "main",
+                    "order": 1,
+                    "props": {
+                        "list_mode": true,
+                        "paginated": true
+                    }
+                },
+                {
+                    "id": "footer-main",
+                    "zone": "footer",
+                    "order": 99
+                }
+            ]
+        }
+    ]
+}

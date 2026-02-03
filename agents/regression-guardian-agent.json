@@ -1,0 +1,46 @@
+{
+    "agent_id": "regression-guardian-agent",
+    "version": "1.0.0",
+    "spec_hash": "GOLDEN-2026-02-04-gp001",
+    "objective": "Ensure new bundles do not break existing functionality",
+    "input_sources": [
+        "/tests/**/*",
+        "/outputs/golden/**/*",
+        "/specs/system-invariants.json"
+    ],
+    "checks": [
+        {
+            "id": "golden-path-tests",
+            "description": "All Golden Path tests must pass",
+            "command": "npm run test:e2e -- --grep 'Golden Path'",
+            "pass_condition": "exit_code == 0"
+        },
+        {
+            "id": "security-tests",
+            "description": "All security tests must pass",
+            "command": "npm run test:security",
+            "pass_condition": "exit_code == 0"
+        },
+        {
+            "id": "invariant-check",
+            "description": "No invariant violations in new code",
+            "script": "/scripts/check-invariants.ts",
+            "pass_condition": "violations == 0"
+        },
+        {
+            "id": "bundle-tests",
+            "description": "All previously completed bundle tests pass",
+            "command": "npm run test -- --grep 'Bundle:'",
+            "pass_condition": "exit_code == 0"
+        }
+    ],
+    "outputs": {
+        "report": "/outputs/regression-report.json",
+        "blocking_issues": "array of failed checks"
+    },
+    "enforcement": {
+        "on_failure": "BLOCK_BUILD",
+        "retry_allowed": false,
+        "manual_override": "super_admin only"
+    }
+}

@@ -1,0 +1,125 @@
+{
+    "bundle_id": "theme-ui",
+    "spec_hash": "GOLDEN-2026-02-04-gp001",
+    "screens": [
+        {
+            "id": "theme-settings",
+            "route": "/settings/theme",
+            "auth_required": true,
+            "blocks": [
+                {
+                    "id": "header-main-nav",
+                    "zone": "header",
+                    "order": 0
+                },
+                {
+                    "id": "theme-switcher",
+                    "zone": "main",
+                    "order": 1,
+                    "type": "inline_component",
+                    "props": {
+                        "themes": [
+                            "light",
+                            "dark",
+                            "system"
+                        ]
+                    }
+                },
+                {
+                    "id": "accessibility-settings",
+                    "zone": "main",
+                    "order": 2,
+                    "type": "inline_component"
+                },
+                {
+                    "id": "footer-main",
+                    "zone": "footer",
+                    "order": 99
+                }
+            ]
+        },
+        {
+            "id": "admin-theme-editor",
+            "route": "/admin/themes",
+            "auth_required": true,
+            "required_role": "admin",
+            "blocks": [
+                {
+                    "id": "header-main-nav",
+                    "zone": "header",
+                    "order": 0,
+                    "props": {
+                        "admin_mode": true
+                    }
+                },
+                {
+                    "id": "color-picker-grid",
+                    "zone": "main",
+                    "order": 1,
+                    "type": "inline_component"
+                },
+                {
+                    "id": "typography-settings",
+                    "zone": "main",
+                    "order": 2,
+                    "type": "inline_component"
+                },
+                {
+                    "id": "theme-preview",
+                    "zone": "aside",
+                    "order": 1,
+                    "type": "inline_component"
+                }
+            ]
+        }
+    ],
+    "endpoints": [
+        {
+            "id": "get-user-theme",
+            "method": "GET",
+            "path": "/api/user/theme",
+            "auth": {
+                "required": true
+            }
+        },
+        {
+            "id": "update-user-theme",
+            "method": "PUT",
+            "path": "/api/user/theme",
+            "auth": {
+                "required": true
+            }
+        },
+        {
+            "id": "list-themes",
+            "method": "GET",
+            "path": "/api/themes",
+            "auth": {
+                "required": false
+            }
+        },
+        {
+            "id": "create-theme",
+            "method": "POST",
+            "path": "/api/admin/themes",
+            "auth": {
+                "required": true,
+                "roles": [
+                    "admin"
+                ]
+            }
+        },
+        {
+            "id": "update-theme",
+            "method": "PUT",
+            "path": "/api/admin/themes/:id",
+            "auth": {
+                "required": true,
+                "roles": [
+                    "admin"
+                ]
+            }
+        }
+    ],
+    "status": "APPROVED"
+}

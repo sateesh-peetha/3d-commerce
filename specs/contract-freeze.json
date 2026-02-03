@@ -1,0 +1,59 @@
+{
+    "version": "1.0.0",
+    "frozen_date": "2026-02-04T04:20:00Z",
+    "status": "FROZEN",
+    "contracts": {
+        "api": {
+            "version": "1.0.0",
+            "total_endpoints": 65,
+            "breaking_changes_allowed": false,
+            "extension_via": "new_endpoints_only"
+        },
+        "ui_blocks": {
+            "version": "1.0.0",
+            "total_blocks": 28,
+            "new_blocks_allowed": false,
+            "extension_via": "plugins_only"
+        },
+        "design_tokens": {
+            "version": "1.0.0",
+            "mutation_allowed": false,
+            "extension_via": "theme_system"
+        },
+        "plugin_sdk": {
+            "version": "1.0.0",
+            "lifecycle_methods": [
+                "onInstall",
+                "onEnable",
+                "onDisable",
+                "onUninstall"
+            ],
+            "permissions": [
+                "read_user",
+                "write_cart",
+                "modify_ui",
+                "api_access"
+            ],
+            "breaking_changes_allowed": false
+        },
+        "ai_orchestration": {
+            "version": "1.0.0",
+            "transformations": [
+                "reorder_block",
+                "toggle_visibility",
+                "change_zone"
+            ],
+            "supervision_required": true,
+            "extension_via": "new_transformations_with_review"
+        }
+    },
+    "invariants": {
+        "ref": "/specs/system-invariants.json",
+        "enforcement": "ACTIVE"
+    },
+    "versioning": {
+        "schema": "semver",
+        "current": "1.0.0",
+        "breaking_change_requires": "major_version_bump"
+    }
+}

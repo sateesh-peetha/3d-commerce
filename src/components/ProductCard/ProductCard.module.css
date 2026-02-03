@@ -1,0 +1,127 @@
+/* ProductCard Styles */
+
+.productCard {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    transition: transform var(--motion-fast), box-shadow var(--motion-fast);
+}
+
+.productCard:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--elevation-lg);
+}
+
+.imageWrapper {
+    position: relative;
+    aspect-ratio: 1;
+    overflow: hidden;
+    background: var(--color-background);
+}
+
+.image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--motion-normal);
+}
+
+.productCard:hover .image {
+    transform: scale(1.05);
+}
+
+.badge {
+    position: absolute;
+    top: var(--space-sm);
+    left: var(--space-sm);
+    background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+    color: white;
+    font-size: var(--font-size-caption);
+    font-weight: 600;
+    padding: var(--space-xs) var(--space-sm);
+    border-radius: var(--radius-sm);
+}
+
+.content {
+    padding: var(--space-md);
+}
+
+.name {
+    font-size: var(--font-size-body-regular);
+    color: var(--color-text-primary);
+    margin: 0 0 var(--space-xs) 0;
+    font-weight: 600;
+}
+
+.description {
+    font-size: var(--font-size-body-small);
+    color: var(--color-text-secondary);
+    margin: 0 0 var(--space-md) 0;
+    line-height: var(--line-height-relaxed);
+}
+
+.priceRow {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-xs);
+}
+
+.price {
+    font-size: var(--font-size-heading-sm);
+    color: var(--color-primary);
+    font-weight: 700;
+}
+
+.fromLabel {
+    font-size: var(--font-size-caption);
+    color: var(--color-text-muted);
+}
+
+.actions {
+    padding: var(--space-md);
+    padding-top: 0;
+}
+
+.addBtn,
+.viewBtn {
+    width: 100%;
+    padding: var(--space-sm) var(--space-md);
+    border: none;
+    border-radius: var(--radius-md);
+    font-size: var(--font-size-body-small);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--motion-fast);
+}
+
+.addBtn {
+    background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+    color: white;
+}
+
+.viewBtn {
+    background: transparent;
+    border: 1px solid var(--color-border);
+    color: var(--color-text-secondary);
+}
+
+.viewBtn:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+}
+
+/* Detailed variant */
+.detailed {
+    display: flex;
+    flex-direction: column;
+}
+
+.detailed .imageWrapper {
+    aspect-ratio: 16/9;
+}
+
+.pluginSlot {
+    padding: var(--space-md);
+    padding-top: 0;
+}

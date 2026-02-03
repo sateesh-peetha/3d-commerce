@@ -1,0 +1,173 @@
+{
+    "bundle_id": "admin-platform",
+    "spec_hash": "GOLDEN-2026-02-04-gp001",
+    "invariants_ref": "/specs/system-invariants.json",
+    "screens": [
+        {
+            "id": "admin-users",
+            "route": "/admin/users",
+            "device": "web_desktop",
+            "auth_required": true,
+            "required_role": "admin",
+            "blocks": [
+                {
+                    "id": "header-main-nav",
+                    "zone": "header",
+                    "order": 0,
+                    "props": {
+                        "admin_mode": true
+                    }
+                },
+                {
+                    "id": "search-bar",
+                    "zone": "main",
+                    "order": 1,
+                    "type": "inline_component"
+                },
+                {
+                    "id": "user-table",
+                    "zone": "main",
+                    "order": 2,
+                    "type": "inline_component",
+                    "props": {
+                        "columns": [
+                            "email",
+                            "role",
+                            "created",
+                            "status",
+                            "actions"
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "id": "admin-api-keys-full",
+            "route": "/admin/settings/api-keys",
+            "device": "web_desktop",
+            "auth_required": true,
+            "required_role": "admin",
+            "blocks": [
+                {
+                    "id": "header-main-nav",
+                    "zone": "header",
+                    "order": 0,
+                    "props": {
+                        "admin_mode": true
+                    }
+                },
+                {
+                    "id": "api-provider-tabs",
+                    "zone": "main",
+                    "order": 1,
+                    "type": "inline_component",
+                    "props": {
+                        "providers": [
+                            "stripe",
+                            "firebase",
+                            "ai_provider",
+                            "shipping"
+                        ]
+                    }
+                },
+                {
+                    "id": "api-key-form",
+                    "zone": "main",
+                    "order": 2,
+                    "type": "inline_component"
+                },
+                {
+                    "id": "api-key-list",
+                    "zone": "main",
+                    "order": 3,
+                    "type": "inline_component",
+                    "props": {
+                        "show_rotation": true
+                    }
+                }
+            ]
+        },
+        {
+            "id": "admin-audit-logs",
+            "route": "/admin/audit",
+            "device": "web_desktop",
+            "auth_required": true,
+            "required_role": "admin",
+            "blocks": [
+                {
+                    "id": "header-main-nav",
+                    "zone": "header",
+                    "order": 0,
+                    "props": {
+                        "admin_mode": true
+                    }
+                },
+                {
+                    "id": "audit-filter",
+                    "zone": "aside",
+                    "order": 1,
+                    "type": "inline_component",
+                    "props": {
+                        "filters": [
+                            "action",
+                            "user",
+                            "date_range"
+                        ]
+                    }
+                },
+                {
+                    "id": "audit-log-table",
+                    "zone": "main",
+                    "order": 1,
+                    "type": "inline_component",
+                    "props": {
+                        "columns": [
+                            "timestamp",
+                            "user",
+                            "action",
+                            "resource",
+                            "details"
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "id": "admin-settings",
+            "route": "/admin/settings",
+            "device": "web_desktop",
+            "auth_required": true,
+            "required_role": "admin",
+            "blocks": [
+                {
+                    "id": "header-main-nav",
+                    "zone": "header",
+                    "order": 0,
+                    "props": {
+                        "admin_mode": true
+                    }
+                },
+                {
+                    "id": "settings-tabs",
+                    "zone": "main",
+                    "order": 1,
+                    "type": "inline_component",
+                    "props": {
+                        "tabs": [
+                            "general",
+                            "email",
+                            "security",
+                            "integrations"
+                        ]
+                    }
+                },
+                {
+                    "id": "settings-form",
+                    "zone": "main",
+                    "order": 2,
+                    "type": "inline_component"
+                }
+            ]
+        }
+    ]
+}

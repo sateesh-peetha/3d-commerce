@@ -1,0 +1,204 @@
+{
+    "bundle_id": "cms-blog",
+    "spec_hash": "GOLDEN-2026-02-04-gp001",
+    "screens": [
+        {
+            "id": "page-editor",
+            "route": "/admin/pages/:slug/edit",
+            "auth_required": true,
+            "required_role": "admin",
+            "blocks": [
+                {
+                    "id": "header-main-nav",
+                    "zone": "header",
+                    "order": 0,
+                    "props": {
+                        "admin_mode": true
+                    }
+                },
+                {
+                    "id": "page-editor-toolbar",
+                    "zone": "main",
+                    "order": 1,
+                    "type": "inline_component"
+                },
+                {
+                    "id": "page-content-area",
+                    "zone": "main",
+                    "order": 2,
+                    "type": "inline_component"
+                },
+                {
+                    "id": "seo-panel",
+                    "zone": "aside",
+                    "order": 1,
+                    "type": "inline_component"
+                }
+            ]
+        },
+        {
+            "id": "blog-list",
+            "route": "/blog",
+            "auth_required": false,
+            "blocks": [
+                {
+                    "id": "header-main-nav",
+                    "zone": "header",
+                    "order": 0
+                },
+                {
+                    "id": "blog-grid",
+                    "zone": "main",
+                    "order": 1,
+                    "type": "inline_component"
+                },
+                {
+                    "id": "footer-main",
+                    "zone": "footer",
+                    "order": 99
+                }
+            ]
+        },
+        {
+            "id": "blog-post",
+            "route": "/blog/:slug",
+            "auth_required": false,
+            "blocks": [
+                {
+                    "id": "header-main-nav",
+                    "zone": "header",
+                    "order": 0
+                },
+                {
+                    "id": "blog-article",
+                    "zone": "main",
+                    "order": 1,
+                    "type": "inline_component"
+                },
+                {
+                    "id": "footer-main",
+                    "zone": "footer",
+                    "order": 99
+                }
+            ]
+        },
+        {
+            "id": "media-library",
+            "route": "/admin/media",
+            "auth_required": true,
+            "required_role": "admin",
+            "blocks": [
+                {
+                    "id": "header-main-nav",
+                    "zone": "header",
+                    "order": 0,
+                    "props": {
+                        "admin_mode": true
+                    }
+                },
+                {
+                    "id": "media-upload",
+                    "zone": "main",
+                    "order": 1,
+                    "type": "inline_component"
+                },
+                {
+                    "id": "media-grid",
+                    "zone": "main",
+                    "order": 2,
+                    "type": "inline_component"
+                }
+            ]
+        }
+    ],
+    "endpoints": [
+        {
+            "id": "list-pages",
+            "method": "GET",
+            "path": "/api/pages",
+            "auth": {
+                "required": false
+            }
+        },
+        {
+            "id": "get-page",
+            "method": "GET",
+            "path": "/api/pages/:slug",
+            "auth": {
+                "required": false
+            }
+        },
+        {
+            "id": "create-page",
+            "method": "POST",
+            "path": "/api/admin/pages",
+            "auth": {
+                "required": true,
+                "roles": [
+                    "admin"
+                ]
+            }
+        },
+        {
+            "id": "update-page",
+            "method": "PUT",
+            "path": "/api/admin/pages/:slug",
+            "auth": {
+                "required": true,
+                "roles": [
+                    "admin"
+                ]
+            }
+        },
+        {
+            "id": "list-blog-posts",
+            "method": "GET",
+            "path": "/api/blog",
+            "auth": {
+                "required": false
+            }
+        },
+        {
+            "id": "get-blog-post",
+            "method": "GET",
+            "path": "/api/blog/:slug",
+            "auth": {
+                "required": false
+            }
+        },
+        {
+            "id": "create-blog-post",
+            "method": "POST",
+            "path": "/api/admin/blog",
+            "auth": {
+                "required": true,
+                "roles": [
+                    "admin"
+                ]
+            }
+        },
+        {
+            "id": "upload-media",
+            "method": "POST",
+            "path": "/api/admin/media",
+            "auth": {
+                "required": true,
+                "roles": [
+                    "admin"
+                ]
+            }
+        },
+        {
+            "id": "list-media",
+            "method": "GET",
+            "path": "/api/admin/media",
+            "auth": {
+                "required": true,
+                "roles": [
+                    "admin"
+                ]
+            }
+        }
+    ],
+    "status": "APPROVED"
+}

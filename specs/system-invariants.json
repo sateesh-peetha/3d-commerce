@@ -1,0 +1,110 @@
+{
+    "version": "1.0.0",
+    "frozen": true,
+    "created": "2026-02-04T04:11:00Z",
+    "description": "Non-negotiable system invariants. Any violation causes automatic rejection.",
+    "invariants": [
+        {
+            "id": "INV-001",
+            "rule": "No UI component without design tokens",
+            "check": "All CSS must reference --token variables",
+            "violation_action": "REJECT",
+            "agent_scope": [
+                "frontend-scaffold-agent",
+                "ux-composer-agent"
+            ]
+        },
+        {
+            "id": "INV-002",
+            "rule": "No screen without block composition",
+            "check": "Every route must have composition JSON",
+            "violation_action": "REJECT",
+            "agent_scope": [
+                "ux-composer-agent"
+            ]
+        },
+        {
+            "id": "INV-003",
+            "rule": "No API without authentication",
+            "check": "All /api/* endpoints require auth unless explicitly public",
+            "violation_action": "REJECT",
+            "agent_scope": [
+                "backend-contract-agent",
+                "security-policy-agent"
+            ]
+        },
+        {
+            "id": "INV-004",
+            "rule": "No cross-user data access",
+            "check": "Firestore rules enforce userId isolation",
+            "violation_action": "BLOCK_CRITICAL",
+            "agent_scope": [
+                "security-policy-agent",
+                "test-generation-agent"
+            ]
+        },
+        {
+            "id": "INV-005",
+            "rule": "No pricing logic on frontend",
+            "check": "Price calculation only in backend functions",
+            "violation_action": "BLOCK_CRITICAL",
+            "agent_scope": [
+                "frontend-scaffold-agent",
+                "backend-contract-agent"
+            ]
+        },
+        {
+            "id": "INV-006",
+            "rule": "No plugin without sandboxing",
+            "check": "Plugins run in isolated context with permissions",
+            "violation_action": "REJECT",
+            "agent_scope": [
+                "ai-orchestration-agent"
+            ]
+        },
+        {
+            "id": "INV-007",
+            "rule": "No AI output applied without validation + rollback",
+            "check": "AI changes require preview, approval, rollback ID",
+            "violation_action": "REJECT",
+            "agent_scope": [
+                "ai-orchestration-agent"
+            ]
+        },
+        {
+            "id": "INV-008",
+            "rule": "No schema change without migration test",
+            "check": "Firestore schema changes require migration plan",
+            "violation_action": "REJECT",
+            "agent_scope": [
+                "backend-contract-agent",
+                "test-generation-agent"
+            ]
+        },
+        {
+            "id": "INV-009",
+            "rule": "No secrets in frontend or repo",
+            "check": "API keys via environment variables only",
+            "violation_action": "BLOCK_CRITICAL",
+            "agent_scope": [
+                "security-policy-agent"
+            ]
+        },
+        {
+            "id": "INV-010",
+            "rule": "No admin action without admin claim",
+            "check": "Admin routes check role in JWT claims",
+            "violation_action": "BLOCK_CRITICAL",
+            "agent_scope": [
+                "security-policy-agent",
+                "backend-contract-agent"
+            ]
+        }
+    ],
+    "enforcement": {
+        "pre_commit": true,
+        "agent_output_validation": true,
+        "ci_pipeline": true,
+        "runtime_monitoring": true
+    }
+}

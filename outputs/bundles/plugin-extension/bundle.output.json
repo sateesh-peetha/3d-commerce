@@ -1,0 +1,157 @@
+{
+    "bundle_id": "plugin-extension",
+    "spec_hash": "GOLDEN-2026-02-04-gp001",
+    "screens": [
+        {
+            "id": "plugin-marketplace",
+            "route": "/admin/plugins",
+            "auth_required": true,
+            "required_role": "admin",
+            "blocks": [
+                {
+                    "id": "header-main-nav",
+                    "zone": "header",
+                    "order": 0,
+                    "props": {
+                        "admin_mode": true
+                    }
+                },
+                {
+                    "id": "plugin-search",
+                    "zone": "main",
+                    "order": 1,
+                    "type": "inline_component"
+                },
+                {
+                    "id": "plugin-grid",
+                    "zone": "main",
+                    "order": 2,
+                    "type": "inline_component"
+                }
+            ]
+        },
+        {
+            "id": "plugin-config",
+            "route": "/admin/plugins/:id/config",
+            "auth_required": true,
+            "required_role": "admin",
+            "blocks": [
+                {
+                    "id": "header-main-nav",
+                    "zone": "header",
+                    "order": 0,
+                    "props": {
+                        "admin_mode": true
+                    }
+                },
+                {
+                    "id": "plugin-info",
+                    "zone": "main",
+                    "order": 1,
+                    "type": "inline_component"
+                },
+                {
+                    "id": "plugin-settings-form",
+                    "zone": "main",
+                    "order": 2,
+                    "type": "inline_component"
+                },
+                {
+                    "id": "plugin-permissions",
+                    "zone": "aside",
+                    "order": 1,
+                    "type": "inline_component"
+                }
+            ]
+        }
+    ],
+    "endpoints": [
+        {
+            "id": "list-plugins",
+            "method": "GET",
+            "path": "/api/admin/plugins",
+            "auth": {
+                "required": true,
+                "roles": [
+                    "admin"
+                ]
+            }
+        },
+        {
+            "id": "install-plugin",
+            "method": "POST",
+            "path": "/api/admin/plugins/:id/install",
+            "auth": {
+                "required": true,
+                "roles": [
+                    "admin"
+                ]
+            }
+        },
+        {
+            "id": "uninstall-plugin",
+            "method": "DELETE",
+            "path": "/api/admin/plugins/:id",
+            "auth": {
+                "required": true,
+                "roles": [
+                    "admin"
+                ]
+            }
+        },
+        {
+            "id": "toggle-plugin",
+            "method": "POST",
+            "path": "/api/admin/plugins/:id/toggle",
+            "auth": {
+                "required": true,
+                "roles": [
+                    "admin"
+                ]
+            }
+        },
+        {
+            "id": "get-plugin-config",
+            "method": "GET",
+            "path": "/api/admin/plugins/:id/config",
+            "auth": {
+                "required": true,
+                "roles": [
+                    "admin"
+                ]
+            }
+        },
+        {
+            "id": "update-plugin-config",
+            "method": "PUT",
+            "path": "/api/admin/plugins/:id/config",
+            "auth": {
+                "required": true,
+                "roles": [
+                    "admin"
+                ]
+            }
+        }
+    ],
+    "sdk": {
+        "version": "1.0.0",
+        "lifecycle": [
+            "onInstall",
+            "onEnable",
+            "onDisable",
+            "onUninstall"
+        ],
+        "permissions": [
+            "read_user",
+            "write_cart",
+            "modify_ui",
+            "api_access"
+        ],
+        "sandboxing": {
+            "enabled": true,
+            "timeout_ms": 5000,
+            "memory_limit_mb": 64
+        }
+    },
+    "status": "APPROVED"
+}

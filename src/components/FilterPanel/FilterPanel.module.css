@@ -1,0 +1,86 @@
+/* FilterPanel Styles - Token references only */
+
+.filterPanel {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-lg);
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-lg);
+    padding-bottom: var(--space-md);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.title {
+    font-size: var(--font-size-heading-sm);
+    color: var(--color-text-primary);
+    margin: 0;
+}
+
+.clearBtn {
+    background: none;
+    border: none;
+    color: var(--color-primary);
+    font-size: var(--font-size-body-small);
+    cursor: pointer;
+}
+
+.filterGroup {
+    margin-bottom: var(--space-lg);
+}
+
+.groupTitle {
+    font-size: var(--font-size-body-regular);
+    color: var(--color-text-primary);
+    margin-bottom: var(--space-sm);
+    font-weight: 600;
+}
+
+.options {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+}
+
+.option {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-body-small);
+    cursor: pointer;
+}
+
+.option input {
+    accent-color: var(--color-primary);
+}
+
+.priceInputs {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+}
+
+.priceInput {
+    flex: 1;
+    padding: var(--space-sm);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    background: var(--color-background);
+    color: var(--color-text-primary);
+    font-size: var(--font-size-body-small);
+}
+
+.priceInput:focus {
+    border-color: var(--color-primary);
+    outline: none;
+}
+
+.pluginSlot {
+    margin-top: var(--space-md);
+}

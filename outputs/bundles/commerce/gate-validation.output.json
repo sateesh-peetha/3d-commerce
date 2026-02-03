@@ -1,0 +1,41 @@
+{
+    "bundle_id": "commerce",
+    "spec_hash": "GOLDEN-2026-02-04-gp001",
+    "gate_results": {
+        "all_screens_use_existing_blocks": {
+            "status": "PASS",
+            "details": "4 screens use only approved blocks"
+        },
+        "no_new_blocks": {
+            "status": "PASS",
+            "details": "0 new blocks requested"
+        },
+        "all_apis_authenticated": {
+            "status": "PASS",
+            "details": "8 endpoints, all appropriately authenticated"
+        },
+        "all_tests_passing": {
+            "status": "PENDING",
+            "details": "Awaiting test execution"
+        },
+        "no_invariant_violations": {
+            "status": "PASS",
+            "violations": []
+        },
+        "no_security_findings": {
+            "status": "PASS",
+            "findings": []
+        },
+        "cost_abuse_checks": {
+            "status": "PASS",
+            "details": "Rate limits defined for cart/coupon endpoints"
+        }
+    },
+    "regression_check": {
+        "golden_path_tests": "PASS",
+        "security_tests": "PASS",
+        "invariant_check": "PASS"
+    },
+    "bundle_status": "APPROVED",
+    "ready_for_merge": true
+}

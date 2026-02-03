@@ -1,0 +1,157 @@
+{
+    "bundle_id": "ai-enablement",
+    "spec_hash": "GOLDEN-2026-02-04-gp001",
+    "screens": [
+        {
+            "id": "ai-layout-studio",
+            "route": "/admin/ai/layout",
+            "auth_required": true,
+            "required_role": "admin",
+            "blocks": [
+                {
+                    "id": "header-main-nav",
+                    "zone": "header",
+                    "order": 0,
+                    "props": {
+                        "admin_mode": true
+                    }
+                },
+                {
+                    "id": "prompt-box",
+                    "zone": "main",
+                    "order": 1,
+                    "props": {
+                        "ai_mode": "layout_change"
+                    }
+                },
+                {
+                    "id": "layout-preview-panel",
+                    "zone": "main",
+                    "order": 2,
+                    "type": "inline_component"
+                },
+                {
+                    "id": "change-diff-viewer",
+                    "zone": "main",
+                    "order": 3,
+                    "type": "inline_component"
+                },
+                {
+                    "id": "change-history",
+                    "zone": "aside",
+                    "order": 1,
+                    "type": "inline_component"
+                }
+            ]
+        },
+        {
+            "id": "ai-usage-analytics",
+            "route": "/admin/ai/analytics",
+            "auth_required": true,
+            "required_role": "admin",
+            "blocks": [
+                {
+                    "id": "header-main-nav",
+                    "zone": "header",
+                    "order": 0,
+                    "props": {
+                        "admin_mode": true
+                    }
+                },
+                {
+                    "id": "ai-usage-chart",
+                    "zone": "main",
+                    "order": 1,
+                    "type": "inline_component"
+                },
+                {
+                    "id": "ai-action-log",
+                    "zone": "main",
+                    "order": 2,
+                    "type": "inline_component"
+                }
+            ]
+        }
+    ],
+    "endpoints": [
+        {
+            "id": "ai-layout-suggest",
+            "method": "POST",
+            "path": "/api/admin/ai/layout/suggest",
+            "auth": {
+                "required": true,
+                "roles": [
+                    "admin"
+                ]
+            }
+        },
+        {
+            "id": "ai-layout-apply",
+            "method": "POST",
+            "path": "/api/admin/ai/layout/apply",
+            "auth": {
+                "required": true,
+                "roles": [
+                    "admin"
+                ]
+            }
+        },
+        {
+            "id": "ai-layout-rollback",
+            "method": "POST",
+            "path": "/api/admin/ai/layout/rollback",
+            "auth": {
+                "required": true,
+                "roles": [
+                    "admin"
+                ]
+            }
+        },
+        {
+            "id": "ai-layout-history",
+            "method": "GET",
+            "path": "/api/admin/ai/layout/history",
+            "auth": {
+                "required": true,
+                "roles": [
+                    "admin"
+                ]
+            }
+        },
+        {
+            "id": "ai-usage-stats",
+            "method": "GET",
+            "path": "/api/admin/ai/usage",
+            "auth": {
+                "required": true,
+                "roles": [
+                    "admin"
+                ]
+            }
+        }
+    ],
+    "ai_supervision": {
+        "suggest_only": true,
+        "diff_required": true,
+        "explainable": true,
+        "reversible": true,
+        "admin_approval_required": true,
+        "allowed_transformations": [
+            "reorder_block",
+            "toggle_visibility",
+            "change_zone"
+        ],
+        "forbidden_transformations": [
+            "create_block",
+            "delete_block",
+            "modify_token",
+            "inject_script"
+        ]
+    },
+    "guardrails": {
+        "max_changes_per_request": 10,
+        "rate_limit": "10/hour",
+        "rollback_retention_days": 30
+    },
+    "status": "APPROVED"
+}

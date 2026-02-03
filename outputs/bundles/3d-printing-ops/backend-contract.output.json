@@ -1,0 +1,200 @@
+{
+    "bundle_id": "3d-printing-ops",
+    "spec_hash": "GOLDEN-2026-02-04-gp001",
+    "endpoints": [
+        {
+            "id": "get-my-files",
+            "method": "GET",
+            "path": "/api/files",
+            "auth": {
+                "required": true,
+                "roles": [
+                    "customer",
+                    "admin"
+                ]
+            },
+            "query": {
+                "page": "number?",
+                "limit": "number?",
+                "favorites": "boolean?"
+            },
+            "response": {
+                "files": "ModelFile[]",
+                "total": "number"
+            }
+        },
+        {
+            "id": "delete-file",
+            "method": "DELETE",
+            "path": "/api/files/:id",
+            "auth": {
+                "required": true,
+                "roles": [
+                    "customer"
+                ]
+            },
+            "params": {
+                "id": "string"
+            },
+            "response": {
+                "success": "boolean"
+            }
+        },
+        {
+            "id": "toggle-favorite",
+            "method": "POST",
+            "path": "/api/files/:id/favorite",
+            "auth": {
+                "required": true,
+                "roles": [
+                    "customer"
+                ]
+            },
+            "params": {
+                "id": "string"
+            },
+            "response": {
+                "file": "ModelFile"
+            }
+        },
+        {
+            "id": "get-presets",
+            "method": "GET",
+            "path": "/api/presets",
+            "auth": {
+                "required": true,
+                "roles": [
+                    "customer"
+                ]
+            },
+            "response": {
+                "presets": "PrintPreset[]"
+            }
+        },
+        {
+            "id": "create-preset",
+            "method": "POST",
+            "path": "/api/presets",
+            "auth": {
+                "required": true,
+                "roles": [
+                    "customer"
+                ]
+            },
+            "body": {
+                "name": "string",
+                "config": "PrintConfig"
+            },
+            "response": {
+                "preset": "PrintPreset"
+            }
+        },
+        {
+            "id": "update-preset",
+            "method": "PATCH",
+            "path": "/api/presets/:id",
+            "auth": {
+                "required": true,
+                "roles": [
+                    "customer"
+                ]
+            },
+            "params": {
+                "id": "string"
+            },
+            "body": {
+                "name": "string?",
+                "config": "PrintConfig?",
+                "isDefault": "boolean?"
+            },
+            "response": {
+                "preset": "PrintPreset"
+            }
+        },
+        {
+            "id": "delete-preset",
+            "method": "DELETE",
+            "path": "/api/presets/:id",
+            "auth": {
+                "required": true,
+                "roles": [
+                    "customer"
+                ]
+            },
+            "params": {
+                "id": "string"
+            },
+            "response": {
+                "success": "boolean"
+            }
+        },
+        {
+            "id": "get-order-tracking",
+            "method": "GET",
+            "path": "/api/orders/:id/tracking",
+            "auth": {
+                "required": true,
+                "roles": [
+                    "customer",
+                    "admin"
+                ]
+            },
+            "params": {
+                "id": "string"
+            },
+            "response": {
+                "timeline": "OrderEvent[]",
+                "estimatedDelivery": "string?"
+            }
+        },
+        {
+            "id": "update-delivery",
+            "method": "PATCH",
+            "path": "/api/orders/:id/delivery",
+            "auth": {
+                "required": true,
+                "roles": [
+                    "customer"
+                ]
+            },
+            "params": {
+                "id": "string"
+            },
+            "body": {
+                "option": "string",
+                "address": "Address?"
+            },
+            "response": {
+                "order": "Order"
+            }
+        },
+        {
+            "id": "admin-transition-order",
+            "method": "POST",
+            "path": "/api/admin/orders/:id/transition",
+            "auth": {
+                "required": true,
+                "roles": [
+                    "admin"
+                ]
+            },
+            "params": {
+                "id": "string"
+            },
+            "body": {
+                "to_status": "string",
+                "notes": "string?"
+            },
+            "response": {
+                "order": "Order",
+                "event": "OrderEvent"
+            }
+        }
+    ],
+    "validation": {
+        "all_endpoints_authenticated": "PASS",
+        "invariant_INV-003": "PASS",
+        "invariant_INV-004": "PASS",
+        "invariant_INV-010": "PASS"
+    }
+}

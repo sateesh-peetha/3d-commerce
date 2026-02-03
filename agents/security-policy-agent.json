@@ -1,0 +1,44 @@
+{
+    "agent_id": "security-policy-agent",
+    "version": "1.0.0",
+    "spec_hash": "3DC-SPEC-2026-02-04-a1b2c3d4e5f6",
+    "objective": "Enforce zero-trust security rules",
+    "input_specs": [
+        "/specs/security-principles.json",
+        "/specs/screens.json",
+        "/outputs/backend/*.json"
+    ],
+    "allowed_outputs": [
+        "auth_rules",
+        "access_matrices",
+        "threat_notes",
+        "security_test_cases",
+        "firestore_security_rules"
+    ],
+    "forbidden_outputs": [
+        "feature_decisions",
+        "ui_layout",
+        "business_logic",
+        "pricing_logic"
+    ],
+    "output_path": "/outputs/security/",
+    "output_format": {
+        "auth": "auth/rules.json",
+        "access": "access/matrix.json",
+        "threats": "threats/notes.md",
+        "firestore": "firestore.rules"
+    },
+    "validation_rules": [
+        "no_cross_user_access",
+        "admin_actions_gated",
+        "secrets_not_exposed",
+        "all_flows_validated"
+    ],
+    "severity_levels": [
+        "LOW",
+        "MEDIUM",
+        "HIGH",
+        "CRITICAL"
+    ],
+    "exit_condition": "No HIGH or CRITICAL findings"
+}

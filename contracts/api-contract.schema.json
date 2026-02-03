@@ -1,0 +1,109 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "API Contract",
+    "description": "Schema for Backend Contract Agent output",
+    "type": "object",
+    "required": [
+        "endpoint_id",
+        "spec_hash",
+        "method",
+        "path",
+        "auth",
+        "request",
+        "response"
+    ],
+    "properties": {
+        "endpoint_id": {
+            "type": "string"
+        },
+        "spec_hash": {
+            "type": "string"
+        },
+        "method": {
+            "type": "string",
+            "enum": [
+                "GET",
+                "POST",
+                "PUT",
+                "PATCH",
+                "DELETE"
+            ]
+        },
+        "path": {
+            "type": "string",
+            "pattern": "^/api/"
+        },
+        "auth": {
+            "type": "object",
+            "required": [
+                "required"
+            ],
+            "properties": {
+                "required": {
+                    "type": "boolean"
+                },
+                "roles": {
+                    "type": "array",
+                    "items": {
+                        "enum": [
+                            "customer",
+                            "admin",
+                            "super_admin"
+                        ]
+                    }
+                }
+            }
+        },
+        "rate_limit": {
+            "type": "object",
+            "properties": {
+                "requests_per_minute": {
+                    "type": "integer"
+                }
+            }
+        },
+        "request": {
+            "type": "object",
+            "properties": {
+                "params": {
+                    "type": "object"
+                },
+                "query": {
+                    "type": "object"
+                },
+                "body": {
+                    "type": "object"
+                }
+            }
+        },
+        "response": {
+            "type": "object",
+            "properties": {
+                "200": {
+                    "type": "object"
+                },
+                "400": {
+                    "type": "object"
+                },
+                "401": {
+                    "type": "object"
+                },
+                "403": {
+                    "type": "object"
+                },
+                "404": {
+                    "type": "object"
+                },
+                "500": {
+                    "type": "object"
+                }
+            }
+        },
+        "firestore_collection": {
+            "type": "string"
+        },
+        "cloud_function": {
+            "type": "string"
+        }
+    }
+}

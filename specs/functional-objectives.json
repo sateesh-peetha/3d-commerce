@@ -1,0 +1,72 @@
+{
+    "version": "1.0.0",
+    "spec_hash": "3DC-SPEC-2026-02-04-a1b2c3d4e5f6",
+    "created": "2026-02-04T03:50:00Z",
+    "locked": true,
+    "functional_objectives": {
+        "primary": "3D Commerce Platform for custom 3D printing services",
+        "features": [
+            "3D model upload and preview",
+            "Material and configuration selection",
+            "Real-time pricing calculation",
+            "Order management and tracking",
+            "Admin dashboard for fleet management",
+            "Plugin-based extensibility",
+            "AI-assisted layout generation"
+        ],
+        "non_features": [
+            "CAD editing",
+            "Slice generation",
+            "Direct printer control"
+        ]
+    },
+    "device_strategy": {
+        "targets": [
+            {
+                "device": "web_desktop",
+                "min_width": 1024,
+                "priority": 1
+            },
+            {
+                "device": "web_tablet",
+                "min_width": 768,
+                "max_width": 1023,
+                "priority": 2
+            },
+            {
+                "device": "web_mobile",
+                "max_width": 767,
+                "priority": 2
+            },
+            {
+                "device": "ios_app",
+                "priority": 3
+            },
+            {
+                "device": "android_app",
+                "priority": 3
+            }
+        ],
+        "breakpoints": [
+            768,
+            1024,
+            1280
+        ],
+        "touch_target_min": 44
+    },
+    "security_principles": {
+        "auth": "Firebase Auth with JWT",
+        "authorization": "Role-based (customer, admin, super_admin)",
+        "data_isolation": "User data scoped by uid",
+        "secrets": "Never in frontend, environment variables only",
+        "api": "All endpoints authenticated",
+        "pricing": "Server-side calculation only"
+    },
+    "architecture_constraints": {
+        "frontend": "React + React Native",
+        "backend": "Firebase (Firestore, Functions, Auth)",
+        "styling": "Token-driven CSS, no hardcoded values",
+        "state": "No global state for sensitive data",
+        "api_pattern": "REST with typed contracts"
+    }
+}

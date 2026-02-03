@@ -1,0 +1,190 @@
+{
+    "version": "1.0.0",
+    "spec_hash": "3DC-SPEC-2026-02-04-a1b2c3d4e5f6",
+    "quality_gates": {
+        "phase_d1_design_system": {
+            "gate_id": "D1",
+            "agent": "design-system-agent",
+            "checks": [
+                {
+                    "check": "no_hardcoded_values",
+                    "severity": "CRITICAL"
+                },
+                {
+                    "check": "token_naming_consistency",
+                    "severity": "HIGH"
+                },
+                {
+                    "check": "contrast_ratio_minimum",
+                    "severity": "HIGH"
+                }
+            ],
+            "pass_condition": "all checks pass",
+            "on_fail": "retry with feedback"
+        },
+        "phase_d2_ux_composer": {
+            "gate_id": "D2",
+            "agent": "ux-composer-agent",
+            "checks": [
+                {
+                    "check": "only_approved_blocks",
+                    "severity": "CRITICAL"
+                },
+                {
+                    "check": "device_rules_respected",
+                    "severity": "HIGH"
+                },
+                {
+                    "check": "no_undefined_blocks",
+                    "severity": "CRITICAL"
+                },
+                {
+                    "check": "all_slots_populated",
+                    "severity": "MEDIUM"
+                }
+            ],
+            "pass_condition": "zero CRITICAL violations",
+            "on_fail": "retry with feedback"
+        },
+        "phase_d3_frontend_scaffold": {
+            "gate_id": "D3",
+            "agent": "frontend-scaffold-agent",
+            "checks": [
+                {
+                    "check": "no_inline_styles",
+                    "severity": "HIGH"
+                },
+                {
+                    "check": "no_business_logic",
+                    "severity": "CRITICAL"
+                },
+                {
+                    "check": "token_references_only",
+                    "severity": "HIGH"
+                },
+                {
+                    "check": "components_compile",
+                    "severity": "CRITICAL"
+                }
+            ],
+            "pass_condition": "components compile, no CRITICAL violations",
+            "on_fail": "retry with feedback"
+        },
+        "phase_d4_backend_contract": {
+            "gate_id": "D4",
+            "agent": "backend-contract-agent",
+            "checks": [
+                {
+                    "check": "all_endpoints_authenticated",
+                    "severity": "CRITICAL"
+                },
+                {
+                    "check": "no_over_fetching",
+                    "severity": "MEDIUM"
+                },
+                {
+                    "check": "no_ui_dependency",
+                    "severity": "HIGH"
+                }
+            ],
+            "pass_condition": "all endpoints authenticated",
+            "on_fail": "retry with feedback"
+        },
+        "phase_d5_security_policy": {
+            "gate_id": "D5",
+            "agent": "security-policy-agent",
+            "checks": [
+                {
+                    "check": "no_cross_user_access",
+                    "severity": "CRITICAL"
+                },
+                {
+                    "check": "admin_actions_gated",
+                    "severity": "CRITICAL"
+                },
+                {
+                    "check": "secrets_not_exposed",
+                    "severity": "CRITICAL"
+                },
+                {
+                    "check": "pricing_server_side",
+                    "severity": "CRITICAL"
+                }
+            ],
+            "pass_condition": "no HIGH or CRITICAL findings",
+            "on_fail": "block until resolved"
+        },
+        "phase_d6_test_generation": {
+            "gate_id": "D6",
+            "agent": "test-generation-agent",
+            "checks": [
+                {
+                    "check": "coverage_minimum_80",
+                    "severity": "HIGH"
+                },
+                {
+                    "check": "golden_flows_100",
+                    "severity": "CRITICAL"
+                },
+                {
+                    "check": "security_tests_present",
+                    "severity": "HIGH"
+                }
+            ],
+            "pass_condition": "coverage >= 80%, golden flows 100%",
+            "on_fail": "retry with feedback"
+        },
+        "phase_d7_ai_orchestration": {
+            "gate_id": "D7",
+            "agent": "ai-orchestration-agent",
+            "checks": [
+                {
+                    "check": "prompts_constrained",
+                    "severity": "HIGH"
+                },
+                {
+                    "check": "outputs_sandboxed",
+                    "severity": "CRITICAL"
+                },
+                {
+                    "check": "no_blocked_patterns",
+                    "severity": "CRITICAL"
+                }
+            ],
+            "pass_condition": "all guardrails in place",
+            "on_fail": "retry with feedback"
+        }
+    },
+    "fail_fast_rules": [
+        {
+            "violation": "undefined_ui_block",
+            "action": "reject",
+            "severity": "CRITICAL"
+        },
+        {
+            "violation": "missing_test",
+            "action": "reject",
+            "severity": "HIGH"
+        },
+        {
+            "violation": "api_without_auth",
+            "action": "reject",
+            "severity": "CRITICAL"
+        },
+        {
+            "violation": "pricing_logic_in_frontend",
+            "action": "reject",
+            "severity": "CRITICAL"
+        },
+        {
+            "violation": "secret_exposure",
+            "action": "reject",
+            "severity": "CRITICAL"
+        },
+        {
+            "violation": "device_rule_violation",
+            "action": "warn",
+            "severity": "HIGH"
+        }
+    ]
+}

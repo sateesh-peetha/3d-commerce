@@ -1,0 +1,141 @@
+{
+    "roles": [
+        "customer",
+        "admin",
+        "super_admin"
+    ],
+    "resources": {
+        "own_profile": {
+            "customer": [
+                "read",
+                "update"
+            ],
+            "admin": [
+                "read"
+            ],
+            "super_admin": [
+                "read",
+                "update",
+                "delete"
+            ]
+        },
+        "other_profiles": {
+            "customer": [],
+            "admin": [
+                "read"
+            ],
+            "super_admin": [
+                "read",
+                "update",
+                "delete"
+            ]
+        },
+        "own_orders": {
+            "customer": [
+                "read",
+                "create"
+            ],
+            "admin": [
+                "read",
+                "update"
+            ],
+            "super_admin": [
+                "read",
+                "update",
+                "delete"
+            ]
+        },
+        "all_orders": {
+            "customer": [],
+            "admin": [
+                "read",
+                "update"
+            ],
+            "super_admin": [
+                "read",
+                "update",
+                "delete"
+            ]
+        },
+        "products": {
+            "customer": [
+                "read"
+            ],
+            "admin": [
+                "read",
+                "create",
+                "update"
+            ],
+            "super_admin": [
+                "read",
+                "create",
+                "update",
+                "delete"
+            ]
+        },
+        "materials": {
+            "customer": [
+                "read"
+            ],
+            "admin": [
+                "read",
+                "create",
+                "update"
+            ],
+            "super_admin": [
+                "read",
+                "create",
+                "update",
+                "delete"
+            ]
+        },
+        "printers": {
+            "customer": [],
+            "admin": [
+                "read",
+                "update"
+            ],
+            "super_admin": [
+                "read",
+                "create",
+                "update",
+                "delete"
+            ]
+        },
+        "admin_dashboard": {
+            "customer": [],
+            "admin": [
+                "read"
+            ],
+            "super_admin": [
+                "read"
+            ]
+        },
+        "system_settings": {
+            "customer": [],
+            "admin": [],
+            "super_admin": [
+                "read",
+                "update"
+            ]
+        },
+        "pricing_calculation": {
+            "customer": [
+                "read"
+            ],
+            "admin": [
+                "read",
+                "update"
+            ],
+            "super_admin": [
+                "read",
+                "update"
+            ]
+        }
+    },
+    "special_rules": {
+        "pricing_modification": "super_admin only, audit logged",
+        "user_deletion": "super_admin only, requires confirmation",
+        "order_cancellation": "customer (own, pending only) or admin"
+    }
+}

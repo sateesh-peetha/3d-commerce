@@ -1,0 +1,317 @@
+{
+    "version": "1.0.0",
+    "spec_hash": "3DC-SPEC-2026-02-04-a1b2c3d4e5f6",
+    "blocks": {
+        "navigation": [
+            {
+                "id": "header-main-nav",
+                "devices": [
+                    "web_desktop",
+                    "web_tablet"
+                ],
+                "slots": [
+                    "logo",
+                    "nav",
+                    "actions",
+                    "plugin"
+                ]
+            },
+            {
+                "id": "header-mobile-nav",
+                "devices": [
+                    "web_mobile",
+                    "ios_app",
+                    "android_app"
+                ],
+                "slots": [
+                    "drawer",
+                    "plugin"
+                ]
+            },
+            {
+                "id": "nav-bottom-tabs",
+                "devices": [
+                    "web_mobile",
+                    "ios_app",
+                    "android_app"
+                ],
+                "slots": [
+                    "tabs",
+                    "plugin"
+                ]
+            },
+            {
+                "id": "footer-main",
+                "devices": [
+                    "web_desktop",
+                    "web_tablet",
+                    "web_mobile"
+                ],
+                "slots": [
+                    "brand",
+                    "links",
+                    "plugin"
+                ]
+            }
+        ],
+        "commerce": [
+            {
+                "id": "product-card",
+                "devices": [
+                    "all"
+                ],
+                "slots": [
+                    "image",
+                    "content",
+                    "actions",
+                    "plugin"
+                ]
+            },
+            {
+                "id": "product-grid",
+                "devices": [
+                    "all"
+                ],
+                "slots": [
+                    "header",
+                    "grid",
+                    "pagination",
+                    "plugin"
+                ]
+            },
+            {
+                "id": "filter-panel",
+                "devices": [
+                    "all"
+                ],
+                "slots": [
+                    "filters",
+                    "active",
+                    "plugin"
+                ]
+            },
+            {
+                "id": "cart-summary",
+                "devices": [
+                    "all"
+                ],
+                "slots": [
+                    "items",
+                    "totals",
+                    "cta",
+                    "plugin"
+                ]
+            }
+        ],
+        "3d_printing": [
+            {
+                "id": "file-upload",
+                "devices": [
+                    "all"
+                ],
+                "slots": [
+                    "dropzone",
+                    "preview",
+                    "plugin"
+                ]
+            },
+            {
+                "id": "model-viewer",
+                "devices": [
+                    "all"
+                ],
+                "slots": [
+                    "canvas",
+                    "toolbar",
+                    "info",
+                    "plugin"
+                ]
+            },
+            {
+                "id": "config-panel",
+                "devices": [
+                    "all"
+                ],
+                "slots": [
+                    "settings",
+                    "dimensions",
+                    "plugin"
+                ]
+            },
+            {
+                "id": "material-selector",
+                "devices": [
+                    "all"
+                ],
+                "slots": [
+                    "materials",
+                    "colors",
+                    "plugin"
+                ]
+            },
+            {
+                "id": "pricing-box",
+                "devices": [
+                    "all"
+                ],
+                "slots": [
+                    "breakdown",
+                    "quantity",
+                    "cta",
+                    "plugin"
+                ]
+            }
+        ],
+        "user": [
+            {
+                "id": "profile-card",
+                "devices": [
+                    "all"
+                ],
+                "slots": [
+                    "avatar",
+                    "info",
+                    "stats",
+                    "plugin"
+                ]
+            },
+            {
+                "id": "order-card",
+                "devices": [
+                    "all"
+                ],
+                "slots": [
+                    "header",
+                    "items",
+                    "progress",
+                    "plugin"
+                ]
+            }
+        ],
+        "admin": [
+            {
+                "id": "kpi-grid",
+                "devices": [
+                    "web_desktop",
+                    "web_tablet"
+                ],
+                "slots": [
+                    "cards",
+                    "plugin"
+                ]
+            },
+            {
+                "id": "order-queue",
+                "devices": [
+                    "web_desktop",
+                    "web_tablet"
+                ],
+                "slots": [
+                    "filters",
+                    "table",
+                    "pagination",
+                    "plugin"
+                ]
+            },
+            {
+                "id": "printer-status",
+                "devices": [
+                    "web_desktop",
+                    "web_tablet"
+                ],
+                "slots": [
+                    "summary",
+                    "grid",
+                    "plugin"
+                ]
+            }
+        ],
+        "ai": [
+            {
+                "id": "prompt-box",
+                "devices": [
+                    "all"
+                ],
+                "slots": [
+                    "input",
+                    "quick",
+                    "actions",
+                    "plugin"
+                ]
+            },
+            {
+                "id": "generated-preview",
+                "devices": [
+                    "web_desktop",
+                    "web_tablet"
+                ],
+                "slots": [
+                    "devices",
+                    "viewport",
+                    "diff",
+                    "plugin"
+                ]
+            }
+        ],
+        "shared": [
+            {
+                "id": "btn",
+                "variants": [
+                    "primary",
+                    "secondary",
+                    "ghost",
+                    "gradient"
+                ]
+            },
+            {
+                "id": "input",
+                "variants": [
+                    "default",
+                    "error",
+                    "success"
+                ]
+            },
+            {
+                "id": "badge",
+                "variants": [
+                    "default",
+                    "primary",
+                    "success",
+                    "warning",
+                    "error"
+                ]
+            },
+            {
+                "id": "card",
+                "slots": [
+                    "header",
+                    "body",
+                    "footer"
+                ]
+            },
+            {
+                "id": "avatar",
+                "sizes": [
+                    "sm",
+                    "md",
+                    "lg",
+                    "xl"
+                ]
+            },
+            {
+                "id": "skeleton",
+                "variants": [
+                    "text",
+                    "title",
+                    "avatar",
+                    "button"
+                ]
+            }
+        ]
+    },
+    "rules": {
+        "no_new_blocks": "Agents cannot create blocks not in this list",
+        "slot_required": "All blocks must render designated slots",
+        "plugin_slot": "All major blocks must have plugin injection point"
+    }
+}

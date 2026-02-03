@@ -1,0 +1,50 @@
+{
+    "agent_id": "test-generation-agent",
+    "version": "1.0.0",
+    "spec_hash": "3DC-SPEC-2026-02-04-a1b2c3d4e5f6",
+    "objective": "Generate tests for everything produced",
+    "input_specs": [
+        "/specs/*.json",
+        "/outputs/**/*"
+    ],
+    "allowed_outputs": [
+        "unit_tests",
+        "integration_tests",
+        "e2e_tests",
+        "security_tests",
+        "accessibility_tests"
+    ],
+    "forbidden_outputs": [
+        "production_code",
+        "feature_code",
+        "styling"
+    ],
+    "output_path": "/tests/",
+    "output_format": {
+        "unit": "unit/{component}.test.ts",
+        "integration": "integration/{flow}.test.ts",
+        "e2e": "e2e/{screen}.spec.ts",
+        "security": "security/{rule}.test.ts"
+    },
+    "test_frameworks": {
+        "unit": "vitest",
+        "integration": "vitest",
+        "e2e": "playwright",
+        "security": "custom"
+    },
+    "coverage_requirements": {
+        "minimum_coverage": 80,
+        "golden_flows_coverage": 100
+    },
+    "golden_flows": [
+        "user_signup",
+        "user_login",
+        "upload_3d_model",
+        "configure_print",
+        "checkout",
+        "view_order_status",
+        "admin_view_dashboard",
+        "admin_manage_order"
+    ],
+    "exit_condition": "Coverage >= threshold, all golden flows covered"
+}

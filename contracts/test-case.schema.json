@@ -1,0 +1,101 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "Test Case",
+    "description": "Schema for Test Generation Agent output",
+    "type": "object",
+    "required": [
+        "test_id",
+        "spec_hash",
+        "type",
+        "target",
+        "cases"
+    ],
+    "properties": {
+        "test_id": {
+            "type": "string"
+        },
+        "spec_hash": {
+            "type": "string"
+        },
+        "type": {
+            "type": "string",
+            "enum": [
+                "unit",
+                "integration",
+                "e2e",
+                "security",
+                "accessibility"
+            ]
+        },
+        "target": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "enum": [
+                        "component",
+                        "api",
+                        "flow",
+                        "rule"
+                    ]
+                },
+                "id": {
+                    "type": "string"
+                },
+                "path": {
+                    "type": "string"
+                }
+            }
+        },
+        "framework": {
+            "type": "string",
+            "enum": [
+                "vitest",
+                "playwright",
+                "jest",
+                "custom"
+            ]
+        },
+        "cases": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "required": [
+                    "name",
+                    "description"
+                ],
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "setup": {
+                        "type": "string"
+                    },
+                    "action": {
+                        "type": "string"
+                    },
+                    "assertion": {
+                        "type": "string"
+                    },
+                    "priority": {
+                        "enum": [
+                            "critical",
+                            "high",
+                            "medium",
+                            "low"
+                        ]
+                    }
+                }
+            }
+        },
+        "golden_flow": {
+            "type": "boolean",
+            "description": "True if this tests a golden path flow"
+        },
+        "coverage_target": {
+            "type": "string"
+        }
+    }
+}

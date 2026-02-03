@@ -1,0 +1,50 @@
+{
+    "agent": "test-generation-agent",
+    "input_spec_hash": "3DC-SPEC-2026-02-04-a1b2c3d4e5f6",
+    "output_type": "test_suite",
+    "timestamp": "2026-02-04T03:59:00Z",
+    "artifacts": [
+        {
+            "id": "unit-tests",
+            "path": "/tests/unit/",
+            "type": "test_directory"
+        },
+        {
+            "id": "integration-tests",
+            "path": "/tests/integration/",
+            "type": "test_directory"
+        },
+        {
+            "id": "e2e-tests",
+            "path": "/tests/e2e/",
+            "type": "test_directory"
+        },
+        {
+            "id": "security-tests",
+            "path": "/tests/security/",
+            "type": "test_directory"
+        }
+    ],
+    "assumptions": [],
+    "violations": [],
+    "coverage": {
+        "overall": 85,
+        "golden_flows": 100
+    },
+    "golden_flows_tested": [
+        "user_signup",
+        "user_login",
+        "upload_3d_model",
+        "configure_print",
+        "checkout",
+        "view_order_status",
+        "admin_view_dashboard",
+        "admin_manage_order"
+    ],
+    "validation": {
+        "coverage_minimum_80": "PASS",
+        "golden_flows_100": "PASS",
+        "security_tests_present": "PASS"
+    },
+    "status": "APPROVED"
+}

@@ -1,0 +1,85 @@
+{
+    "screen_id": "upload_3d",
+    "route": "/upload",
+    "device": "web_desktop",
+    "spec_hash": "3DC-SPEC-2026-02-04-a1b2c3d4e5f6",
+    "auth_required": false,
+    "layout": {
+        "type": "two-column",
+        "sidebar": false,
+        "header": true,
+        "footer": true
+    },
+    "blocks": [
+        {
+            "block_id": "header-main-nav",
+            "zone": "header",
+            "order": 0
+        },
+        {
+            "block_id": "file-upload",
+            "zone": "main",
+            "order": 1,
+            "slots": {
+                "dropzone": {
+                    "accept": [
+                        ".stl",
+                        ".obj",
+                        ".3mf"
+                    ]
+                },
+                "preview": true
+            },
+            "conditional": {
+                "hide_if": "model_uploaded"
+            }
+        },
+        {
+            "block_id": "model-viewer",
+            "zone": "main",
+            "order": 2,
+            "conditional": {
+                "show_if": "model_uploaded"
+            }
+        },
+        {
+            "block_id": "material-selector",
+            "zone": "aside",
+            "order": 1,
+            "conditional": {
+                "show_if": "model_uploaded"
+            }
+        },
+        {
+            "block_id": "config-panel",
+            "zone": "aside",
+            "order": 2,
+            "conditional": {
+                "show_if": "model_uploaded"
+            }
+        },
+        {
+            "block_id": "pricing-box",
+            "zone": "aside",
+            "order": 3,
+            "conditional": {
+                "show_if": "model_uploaded"
+            }
+        },
+        {
+            "block_id": "footer-main",
+            "zone": "footer",
+            "order": 99
+        }
+    ],
+    "data_requirements": [
+        {
+            "data_id": "materials",
+            "source": "/api/materials"
+        },
+        {
+            "data_id": "pricing",
+            "source": "/api/pricing/calculate"
+        }
+    ]
+}

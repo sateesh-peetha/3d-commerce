@@ -1,0 +1,105 @@
+{
+    "version": "1.0.0",
+    "package_name": "3d-commerce-platform",
+    "installable_units": {
+        "frontend_web": {
+            "path": "/packages/web",
+            "type": "react_app",
+            "build_command": "npm run build",
+            "output": "/dist"
+        },
+        "frontend_mobile": {
+            "path": "/packages/mobile",
+            "type": "react_native_app",
+            "build_command": "expo build"
+        },
+        "backend_functions": {
+            "path": "/packages/functions",
+            "type": "firebase_functions",
+            "deploy_command": "firebase deploy --only functions"
+        },
+        "firestore_rules": {
+            "path": "/outputs/backend/firestore",
+            "type": "firestore_rules",
+            "deploy_command": "firebase deploy --only firestore:rules"
+        }
+    },
+    "environment_schema": {
+        "required": [
+            {
+                "key": "FIREBASE_PROJECT_ID",
+                "type": "string"
+            },
+            {
+                "key": "FIREBASE_API_KEY",
+                "type": "string",
+                "secret": true
+            },
+            {
+                "key": "FIREBASE_AUTH_DOMAIN",
+                "type": "string"
+            },
+            {
+                "key": "STRIPE_PUBLISHABLE_KEY",
+                "type": "string"
+            },
+            {
+                "key": "STRIPE_SECRET_KEY",
+                "type": "string",
+                "secret": true
+            },
+            {
+                "key": "STORAGE_BUCKET",
+                "type": "string"
+            }
+        ],
+        "optional": [
+            {
+                "key": "SENTRY_DSN",
+                "type": "string"
+            },
+            {
+                "key": "ANALYTICS_ID",
+                "type": "string"
+            }
+        ]
+    },
+    "secrets_injection": {
+        "method": "environment_variables",
+        "alternatives": [
+            "gcp_secret_manager",
+            "aws_secrets_manager",
+            "vault"
+        ],
+        "frontend_exposure": "Only NEXT_PUBLIC_ prefixed vars"
+    },
+    "health_checks": {
+        "frontend": {
+            "endpoint": "/api/health",
+            "expected": {
+                "status": "ok"
+            }
+        },
+        "functions": {
+            "endpoint": "/api/health",
+            "expected": {
+                "status": "ok",
+                "db": "connected"
+            }
+        }
+    },
+    "deployment_targets": [
+        {
+            "provider": "firebase",
+            "tier": "primary"
+        },
+        {
+            "provider": "vercel",
+            "tier": "alternative"
+        },
+        {
+            "provider": "gcp_cloud_run",
+            "tier": "enterprise"
+        }
+    ]
+}

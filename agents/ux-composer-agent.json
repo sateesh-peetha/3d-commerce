@@ -1,0 +1,32 @@
+{
+    "agent_id": "ux-composer-agent",
+    "version": "1.0.0",
+    "spec_hash": "3DC-SPEC-2026-02-04-a1b2c3d4e5f6",
+    "objective": "Compose screens using only predefined blocks",
+    "input_specs": [
+        "/specs/ui-blocks.json",
+        "/specs/screens.json",
+        "/specs/design-tokens.json"
+    ],
+    "allowed_outputs": [
+        "screen_composition_json",
+        "block_placement_map"
+    ],
+    "forbidden_outputs": [
+        "new_blocks",
+        "styling_decisions",
+        "visual_assets",
+        "business_logic"
+    ],
+    "output_path": "/outputs/compositions/",
+    "output_format": {
+        "pattern": "{screen_id}.composition.json"
+    },
+    "validation_rules": [
+        "only_approved_blocks",
+        "device_rules_respected",
+        "no_undefined_blocks",
+        "all_slots_populated"
+    ],
+    "exit_condition": "All screen compositions validated"
+}

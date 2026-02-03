@@ -1,0 +1,75 @@
+{
+    "version": "1.0.0",
+    "spec_hash": "3DC-SPEC-2026-02-04-a1b2c3d4e5f6",
+    "tokens": {
+        "colors": {
+            "primary": "#6366f1",
+            "primary_hover": "#4f46e5",
+            "secondary": "#0ea5e9",
+            "accent": "#f59e0b",
+            "success": "#22c55e",
+            "warning": "#f59e0b",
+            "error": "#ef4444",
+            "background": "#0f172a",
+            "surface": "#1e293b",
+            "surface_hover": "#334155",
+            "border": "#334155",
+            "text_primary": "#f8fafc",
+            "text_secondary": "#94a3b8",
+            "text_muted": "#64748b"
+        },
+        "typography": {
+            "font_family_body": "Inter, system-ui, sans-serif",
+            "font_family_mono": "JetBrains Mono, monospace",
+            "font_size_heading_xl": "3rem",
+            "font_size_heading_lg": "2.25rem",
+            "font_size_heading_md": "1.5rem",
+            "font_size_heading_sm": "1.25rem",
+            "font_size_body_lg": "1.125rem",
+            "font_size_body_regular": "1rem",
+            "font_size_body_small": "0.875rem",
+            "font_size_caption": "0.75rem",
+            "font_weight_regular": 400,
+            "font_weight_medium": 500,
+            "font_weight_semibold": 600,
+            "font_weight_bold": 700,
+            "line_height_tight": 1.2,
+            "line_height_normal": 1.5,
+            "line_height_relaxed": 1.75
+        },
+        "spacing": {
+            "xs": "4px",
+            "sm": "8px",
+            "md": "16px",
+            "lg": "24px",
+            "xl": "32px",
+            "2xl": "48px",
+            "3xl": "64px"
+        },
+        "elevation": {
+            "sm": "0 1px 2px rgba(0,0,0,0.3)",
+            "md": "0 4px 6px rgba(0,0,0,0.3)",
+            "lg": "0 10px 15px rgba(0,0,0,0.3)",
+            "xl": "0 20px 25px rgba(0,0,0,0.3)",
+            "glow": "0 0 20px rgba(99,102,241,0.4)"
+        },
+        "motion": {
+            "fast": "150ms",
+            "normal": "300ms",
+            "slow": "500ms",
+            "ease_out": "cubic-bezier(0.16, 1, 0.3, 1)"
+        },
+        "radius": {
+            "sm": "4px",
+            "md": "8px",
+            "lg": "12px",
+            "xl": "16px",
+            "2xl": "24px",
+            "full": "9999px"
+        }
+    },
+    "rules": {
+        "no_hardcoded_values": "All styling must use tokens",
+        "token_reference_format": "var(--{category}-{name})"
+    }
+}

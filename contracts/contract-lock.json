@@ -1,0 +1,48 @@
+{
+    "version": "1.0.0",
+    "locked_at": "2026-02-04T04:00:00Z",
+    "spec_hash": "3DC-SPEC-2026-02-04-a1b2c3d4e5f6",
+    "frozen_contracts": {
+        "ui_blocks": {
+            "path": "/specs/ui-blocks.json",
+            "version": "1.0.0",
+            "locked": true,
+            "change_policy": "New features via plugins only"
+        },
+        "design_tokens": {
+            "path": "/specs/design-tokens.json",
+            "version": "1.0.0",
+            "locked": true,
+            "change_policy": "Theme variants only, no token removal"
+        },
+        "plugin_api": {
+            "path": "/contracts/plugin-api.schema.json",
+            "version": "1.0.0",
+            "locked": true,
+            "change_policy": "Additive changes only"
+        },
+        "security_policies": {
+            "path": "/specs/security-principles.json",
+            "version": "1.0.0",
+            "locked": true,
+            "change_policy": "Security hardening only"
+        },
+        "api_contracts": {
+            "path": "/contracts/api-contract.schema.json",
+            "version": "1.0.0",
+            "locked": true,
+            "change_policy": "Versioned endpoints for changes"
+        }
+    },
+    "extensibility": {
+        "new_features": "Must be implemented as plugins",
+        "ui_changes": "Must use existing blocks via compositions",
+        "rewrites": "Forbidden without super_admin approval"
+    },
+    "versioning": {
+        "semantic": true,
+        "major": "Breaking changes (forbidden post-lock)",
+        "minor": "New additive features",
+        "patch": "Bug fixes only"
+    }
+}

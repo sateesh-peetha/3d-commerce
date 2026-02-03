@@ -1,0 +1,51 @@
+{
+    "agent": "backend-contract-agent",
+    "input_spec_hash": "3DC-SPEC-2026-02-04-a1b2c3d4e5f6",
+    "output_type": "api_contracts",
+    "timestamp": "2026-02-04T03:57:00Z",
+    "artifacts": [
+        {
+            "id": "products-api",
+            "path": "/outputs/backend/api/products.schema.json",
+            "type": "api_schema"
+        },
+        {
+            "id": "cart-api",
+            "path": "/outputs/backend/api/cart.schema.json",
+            "type": "api_schema"
+        },
+        {
+            "id": "orders-api",
+            "path": "/outputs/backend/api/orders.schema.json",
+            "type": "api_schema"
+        },
+        {
+            "id": "pricing-api",
+            "path": "/outputs/backend/api/pricing.schema.json",
+            "type": "api_schema"
+        },
+        {
+            "id": "admin-api",
+            "path": "/outputs/backend/api/admin.schema.json",
+            "type": "api_schema"
+        },
+        {
+            "id": "firestore-collections",
+            "path": "/outputs/backend/firestore/collections.json",
+            "type": "firestore"
+        },
+        {
+            "id": "firestore-rules",
+            "path": "/outputs/backend/firestore/firestore.rules",
+            "type": "rules"
+        }
+    ],
+    "assumptions": [],
+    "violations": [],
+    "validation": {
+        "all_endpoints_authenticated": "PASS",
+        "no_over_fetching": "PASS",
+        "no_ui_dependency": "PASS"
+    },
+    "status": "APPROVED"
+}

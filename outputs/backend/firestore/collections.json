@@ -1,0 +1,181 @@
+{
+    "collections": {
+        "users": {
+            "fields": {
+                "uid": {
+                    "type": "string",
+                    "required": true
+                },
+                "email": {
+                    "type": "string",
+                    "required": true
+                },
+                "displayName": {
+                    "type": "string"
+                },
+                "role": {
+                    "type": "string",
+                    "enum": [
+                        "customer",
+                        "admin",
+                        "super_admin"
+                    ],
+                    "default": "customer"
+                },
+                "createdAt": {
+                    "type": "timestamp"
+                },
+                "updatedAt": {
+                    "type": "timestamp"
+                }
+            },
+            "subcollections": [
+                "addresses",
+                "payment_methods"
+            ]
+        },
+        "products": {
+            "fields": {
+                "id": {
+                    "type": "string",
+                    "required": true
+                },
+                "name": {
+                    "type": "string",
+                    "required": true
+                },
+                "description": {
+                    "type": "string"
+                },
+                "basePrice": {
+                    "type": "number",
+                    "required": true
+                },
+                "category": {
+                    "type": "string"
+                },
+                "images": {
+                    "type": "array"
+                },
+                "featured": {
+                    "type": "boolean",
+                    "default": false
+                },
+                "active": {
+                    "type": "boolean",
+                    "default": true
+                }
+            }
+        },
+        "materials": {
+            "fields": {
+                "id": {
+                    "type": "string",
+                    "required": true
+                },
+                "name": {
+                    "type": "string",
+                    "required": true
+                },
+                "priceMultiplier": {
+                    "type": "number",
+                    "required": true
+                },
+                "colors": {
+                    "type": "array"
+                },
+                "properties": {
+                    "type": "map"
+                }
+            }
+        },
+        "orders": {
+            "fields": {
+                "id": {
+                    "type": "string",
+                    "required": true
+                },
+                "userId": {
+                    "type": "string",
+                    "required": true
+                },
+                "status": {
+                    "type": "string",
+                    "enum": [
+                        "pending",
+                        "processing",
+                        "printing",
+                        "shipped",
+                        "delivered",
+                        "cancelled"
+                    ]
+                },
+                "items": {
+                    "type": "array",
+                    "required": true
+                },
+                "totalPrice": {
+                    "type": "number",
+                    "required": true
+                },
+                "shippingAddress": {
+                    "type": "map"
+                },
+                "createdAt": {
+                    "type": "timestamp"
+                },
+                "updatedAt": {
+                    "type": "timestamp"
+                }
+            },
+            "subcollections": [
+                "timeline",
+                "print_jobs"
+            ]
+        },
+        "carts": {
+            "fields": {
+                "userId": {
+                    "type": "string",
+                    "required": true
+                },
+                "items": {
+                    "type": "array"
+                },
+                "updatedAt": {
+                    "type": "timestamp"
+                }
+            }
+        },
+        "printers": {
+            "fields": {
+                "id": {
+                    "type": "string",
+                    "required": true
+                },
+                "name": {
+                    "type": "string",
+                    "required": true
+                },
+                "status": {
+                    "type": "string",
+                    "enum": [
+                        "idle",
+                        "printing",
+                        "maintenance",
+                        "error"
+                    ]
+                },
+                "currentJob": {
+                    "type": "reference"
+                },
+                "totalJobs": {
+                    "type": "number"
+                },
+                "capabilities": {
+                    "type": "array"
+                }
+            }
+        }
+    }
+}

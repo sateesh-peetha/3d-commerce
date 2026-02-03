@@ -1,0 +1,50 @@
+{
+    "agent_id": "ai-orchestration-agent",
+    "version": "1.0.0",
+    "spec_hash": "3DC-SPEC-2026-02-04-a1b2c3d4e5f6",
+    "objective": "Define how AI interacts with the system safely",
+    "input_specs": [
+        "/specs/ui-blocks.json",
+        "/specs/design-tokens.json",
+        "/specs/security-principles.json"
+    ],
+    "allowed_outputs": [
+        "prompt_templates",
+        "guardrails",
+        "validation_rules",
+        "sandboxed_preview_config"
+    ],
+    "forbidden_outputs": [
+        "production_code",
+        "direct_database_access",
+        "security_bypass"
+    ],
+    "output_path": "/outputs/ai/",
+    "output_format": {
+        "prompts": "prompts/{category}.json",
+        "guardrails": "guardrails.json",
+        "validation": "validation.json"
+    },
+    "prompt_categories": [
+        "layout_generation",
+        "theme_generation",
+        "block_composition",
+        "content_generation"
+    ],
+    "guardrails": {
+        "max_output_tokens": 4096,
+        "blocked_patterns": [
+            "eval(",
+            "innerHTML",
+            "dangerouslySetInnerHTML"
+        ],
+        "allowed_block_ids": "from /specs/ui-blocks.json",
+        "allowed_token_refs": "from /specs/design-tokens.json"
+    },
+    "sandbox": {
+        "preview_only": true,
+        "no_persistence_without_approval": true,
+        "diff_required_before_apply": true
+    },
+    "exit_condition": "Prompts constrained, outputs sandboxed"
+}

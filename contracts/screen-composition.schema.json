@@ -1,0 +1,150 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "Screen Composition",
+    "description": "Schema for UX Composer output",
+    "type": "object",
+    "required": [
+        "screen_id",
+        "device",
+        "spec_hash",
+        "layout",
+        "blocks"
+    ],
+    "properties": {
+        "screen_id": {
+            "type": "string",
+            "description": "Unique screen identifier from /specs/screens.json"
+        },
+        "route": {
+            "type": "string",
+            "description": "URL route for the screen"
+        },
+        "device": {
+            "type": "string",
+            "enum": [
+                "web_desktop",
+                "web_tablet",
+                "web_mobile",
+                "ios_app",
+                "android_app"
+            ]
+        },
+        "spec_hash": {
+            "type": "string"
+        },
+        "auth_required": {
+            "type": "boolean",
+            "default": false
+        },
+        "required_role": {
+            "type": "string",
+            "enum": [
+                "customer",
+                "admin",
+                "super_admin"
+            ]
+        },
+        "layout": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "enum": [
+                        "single-column",
+                        "two-column",
+                        "dashboard",
+                        "fullscreen"
+                    ]
+                },
+                "sidebar": {
+                    "type": "boolean"
+                },
+                "header": {
+                    "type": "boolean"
+                },
+                "footer": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "blocks": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "required": [
+                    "block_id",
+                    "zone",
+                    "order"
+                ],
+                "properties": {
+                    "block_id": {
+                        "type": "string",
+                        "description": "Block ID from /specs/ui-blocks.json"
+                    },
+                    "zone": {
+                        "type": "string",
+                        "enum": [
+                            "header",
+                            "sidebar",
+                            "main",
+                            "aside",
+                            "footer",
+                            "modal",
+                            "overlay"
+                        ]
+                    },
+                    "order": {
+                        "type": "integer",
+                        "minimum": 0
+                    },
+                    "slots": {
+                        "type": "object",
+                        "additionalProperties": {
+                            "oneOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "object"
+                                }
+                            ]
+                        }
+                    },
+                    "props": {
+                        "type": "object"
+                    },
+                    "conditional": {
+                        "type": "object",
+                        "properties": {
+                            "show_if": {
+                                "type": "string"
+                            },
+                            "hide_if": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "data_requirements": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "data_id": {
+                        "type": "string"
+                    },
+                    "source": {
+                        "type": "string"
+                    },
+                    "required_for": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

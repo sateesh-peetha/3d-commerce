@@ -1,0 +1,105 @@
+{
+    "screen_id": "admin_dashboard",
+    "route": "/admin",
+    "device": "web_desktop",
+    "spec_hash": "3DC-SPEC-2026-02-04-a1b2c3d4e5f6",
+    "auth_required": true,
+    "required_role": "admin",
+    "layout": {
+        "type": "dashboard",
+        "sidebar": true,
+        "header": true,
+        "footer": false
+    },
+    "blocks": [
+        {
+            "block_id": "header-main-nav",
+            "zone": "header",
+            "order": 0,
+            "props": {
+                "admin_mode": true
+            }
+        },
+        {
+            "block_id": "kpi-grid",
+            "zone": "main",
+            "order": 1,
+            "slots": {
+                "cards": [
+                    {
+                        "metric": "revenue_today",
+                        "trend": true
+                    },
+                    {
+                        "metric": "orders_pending",
+                        "trend": true
+                    },
+                    {
+                        "metric": "printers_active",
+                        "trend": false
+                    },
+                    {
+                        "metric": "customers_new",
+                        "trend": true
+                    }
+                ]
+            }
+        },
+        {
+            "block_id": "printer-status",
+            "zone": "main",
+            "order": 2,
+            "slots": {
+                "summary": true,
+                "grid": {
+                    "columns": 3
+                }
+            }
+        },
+        {
+            "block_id": "order-queue",
+            "zone": "main",
+            "order": 3,
+            "slots": {
+                "filters": [
+                    "status",
+                    "priority"
+                ],
+                "table": true,
+                "pagination": true
+            }
+        },
+        {
+            "block_id": "prompt-box",
+            "zone": "sidebar",
+            "order": 1,
+            "slots": {
+                "input": {
+                    "placeholder": "Ask AI assistant..."
+                },
+                "quick": [
+                    "Today's summary",
+                    "Urgent orders",
+                    "Printer issues"
+                ]
+            },
+            "props": {
+                "compact": true
+            }
+        }
+    ],
+    "data_requirements": [
+        {
+            "data_id": "kpis",
+            "source": "/api/admin/kpis"
+        },
+        {
+            "data_id": "printers",
+            "source": "/api/admin/printers"
+        },
+        {
+            "data_id": "orders",
+            "source": "/api/admin/orders?status=pending"
+        }
+    ]
+}

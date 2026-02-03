@@ -1,0 +1,52 @@
+{
+    "test_id": "security-cross-user-access",
+    "spec_hash": "3DC-SPEC-2026-02-04-a1b2c3d4e5f6",
+    "type": "security",
+    "target": {
+        "type": "rule",
+        "id": "no_cross_user_access"
+    },
+    "framework": "custom",
+    "cases": [
+        {
+            "name": "Cannot view other user orders",
+            "description": "User A cannot access User B's orders",
+            "setup": "Create User A and User B with orders",
+            "action": "User A requests GET /api/orders/{userB_order_id}",
+            "assertion": "403 Forbidden response",
+            "priority": "critical"
+        },
+        {
+            "name": "Cannot modify other user profile",
+            "description": "User A cannot update User B's profile",
+            "setup": "Create User A and User B",
+            "action": "User A requests PUT /api/users/{userB_id}",
+            "assertion": "403 Forbidden response",
+            "priority": "critical"
+        },
+        {
+            "name": "Cannot access other user cart",
+            "description": "User A cannot view User B's cart",
+            "setup": "Create User A and User B with carts",
+            "action": "User A requests GET /api/cart/{userB_id}",
+            "assertion": "403 Forbidden response",
+            "priority": "critical"
+        },
+        {
+            "name": "Admin can view any order",
+            "description": "Admin user can access any user's orders",
+            "setup": "Create admin and customer with order",
+            "action": "Admin requests GET /api/orders/{customer_order_id}",
+            "assertion": "200 OK with order data",
+            "priority": "high"
+        },
+        {
+            "name": "Customer cannot access admin endpoints",
+            "description": "Customer cannot access /admin routes",
+            "setup": "Login as customer",
+            "action": "Request GET /api/admin/dashboard",
+            "assertion": "403 Forbidden response",
+            "priority": "critical"
+        }
+    ]
+}

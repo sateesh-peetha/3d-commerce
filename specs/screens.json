@@ -1,0 +1,191 @@
+{
+    "version": "1.0.0",
+    "spec_hash": "3DC-SPEC-2026-02-04-a1b2c3d4e5f6",
+    "screens": {
+        "web_public": [
+            {
+                "id": "home",
+                "route": "/",
+                "device": "web_desktop",
+                "priority": 1
+            },
+            {
+                "id": "store",
+                "route": "/store",
+                "device": "web_desktop",
+                "priority": 1
+            },
+            {
+                "id": "product_detail",
+                "route": "/product/:id",
+                "device": "web_desktop",
+                "priority": 2
+            },
+            {
+                "id": "upload_3d",
+                "route": "/upload",
+                "device": "web_desktop",
+                "priority": 1
+            },
+            {
+                "id": "configure_3d",
+                "route": "/configure/:id",
+                "device": "web_desktop",
+                "priority": 1
+            },
+            {
+                "id": "cart",
+                "route": "/cart",
+                "device": "web_desktop",
+                "priority": 1
+            },
+            {
+                "id": "checkout",
+                "route": "/checkout",
+                "device": "web_desktop",
+                "priority": 1
+            },
+            {
+                "id": "order_confirmation",
+                "route": "/order/:id/confirmation",
+                "device": "web_desktop",
+                "priority": 2
+            }
+        ],
+        "web_user": [
+            {
+                "id": "profile",
+                "route": "/profile",
+                "device": "web_desktop",
+                "auth": true
+            },
+            {
+                "id": "orders",
+                "route": "/orders",
+                "device": "web_desktop",
+                "auth": true
+            },
+            {
+                "id": "order_detail",
+                "route": "/orders/:id",
+                "device": "web_desktop",
+                "auth": true
+            },
+            {
+                "id": "settings",
+                "route": "/settings",
+                "device": "web_desktop",
+                "auth": true
+            }
+        ],
+        "admin": [
+            {
+                "id": "admin_dashboard",
+                "route": "/admin",
+                "device": "web_desktop",
+                "auth": true,
+                "role": "admin"
+            },
+            {
+                "id": "admin_orders",
+                "route": "/admin/orders",
+                "device": "web_desktop",
+                "auth": true,
+                "role": "admin"
+            },
+            {
+                "id": "admin_printers",
+                "route": "/admin/printers",
+                "device": "web_desktop",
+                "auth": true,
+                "role": "admin"
+            },
+            {
+                "id": "admin_customers",
+                "route": "/admin/customers",
+                "device": "web_desktop",
+                "auth": true,
+                "role": "admin"
+            },
+            {
+                "id": "admin_products",
+                "route": "/admin/products",
+                "device": "web_desktop",
+                "auth": true,
+                "role": "admin"
+            },
+            {
+                "id": "admin_plugins",
+                "route": "/admin/plugins",
+                "device": "web_desktop",
+                "auth": true,
+                "role": "admin"
+            },
+            {
+                "id": "admin_ai_builder",
+                "route": "/admin/ai-builder",
+                "device": "web_desktop",
+                "auth": true,
+                "role": "admin"
+            },
+            {
+                "id": "admin_settings",
+                "route": "/admin/settings",
+                "device": "web_desktop",
+                "auth": true,
+                "role": "super_admin"
+            }
+        ],
+        "mobile": [
+            {
+                "id": "mobile_home",
+                "device": [
+                    "web_mobile",
+                    "ios_app",
+                    "android_app"
+                ]
+            },
+            {
+                "id": "mobile_store",
+                "device": [
+                    "web_mobile",
+                    "ios_app",
+                    "android_app"
+                ]
+            },
+            {
+                "id": "mobile_upload",
+                "device": [
+                    "web_mobile",
+                    "ios_app",
+                    "android_app"
+                ]
+            },
+            {
+                "id": "mobile_orders",
+                "device": [
+                    "web_mobile",
+                    "ios_app",
+                    "android_app"
+                ],
+                "auth": true
+            },
+            {
+                "id": "mobile_profile",
+                "device": [
+                    "web_mobile",
+                    "ios_app",
+                    "android_app"
+                ],
+                "auth": true
+            }
+        ]
+    },
+    "golden_slice": [
+        "home",
+        "upload_3d",
+        "configure_3d",
+        "checkout",
+        "admin_dashboard"
+    ]
+}

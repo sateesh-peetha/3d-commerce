@@ -1,0 +1,48 @@
+{
+    "version": "1.0.0",
+    "spec_hash": "3DC-SPEC-2026-02-04-a1b2c3d4e5f6",
+    "guardrails": {
+        "token_limits": {
+            "max_input_tokens": 4096,
+            "max_output_tokens": 4096
+        },
+        "blocked_patterns": [
+            "eval(",
+            "Function(",
+            "innerHTML",
+            "dangerouslySetInnerHTML",
+            "document.write",
+            "script>",
+            "onclick=",
+            "onerror=",
+            "javascript:",
+            "data:text/html"
+        ],
+        "allowed_block_ids": "Must match entries in /specs/ui-blocks.json",
+        "allowed_token_refs": "Must match entries in /specs/design-tokens.json",
+        "content_filters": {
+            "no_external_urls": true,
+            "no_inline_scripts": true,
+            "no_style_overrides": true
+        }
+    },
+    "sandbox": {
+        "preview_only": true,
+        "no_persistence_without_approval": true,
+        "diff_required_before_apply": true,
+        "isolation": {
+            "no_network_access": true,
+            "no_filesystem_access": true,
+            "no_eval": true
+        }
+    },
+    "rate_limits": {
+        "requests_per_minute": 10,
+        "requests_per_user_per_hour": 50
+    },
+    "audit": {
+        "log_all_prompts": true,
+        "log_all_outputs": true,
+        "retain_days": 30
+    }
+}

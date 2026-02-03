@@ -1,0 +1,109 @@
+{
+    "version": "1.0.0",
+    "spec_hash": "3DC-SPEC-2026-02-04-a1b2c3d4e5f6",
+    "security": {
+        "authentication": {
+            "provider": "Firebase Auth",
+            "methods": [
+                "email",
+                "google",
+                "apple"
+            ],
+            "jwt_validation": "required",
+            "token_expiry": "1h",
+            "refresh_token": "7d"
+        },
+        "authorization": {
+            "model": "RBAC",
+            "roles": [
+                {
+                    "id": "customer",
+                    "level": 1
+                },
+                {
+                    "id": "admin",
+                    "level": 2
+                },
+                {
+                    "id": "super_admin",
+                    "level": 3
+                }
+            ],
+            "default_role": "customer"
+        },
+        "data_access": {
+            "customer": {
+                "own_profile": "read,write",
+                "own_orders": "read",
+                "products": "read",
+                "other_users": "none"
+            },
+            "admin": {
+                "all_orders": "read,write",
+                "all_customers": "read",
+                "products": "read,write",
+                "printers": "read,write",
+                "admin_metrics": "read"
+            },
+            "super_admin": {
+                "all": "read,write",
+                "system_settings": "read,write",
+                "admin_users": "read,write"
+            }
+        },
+        "api_security": {
+            "all_endpoints_authenticated": true,
+            "rate_limiting": {
+                "requests_per_minute": 60
+            },
+            "cors": {
+                "allowed_origins": [
+                    "app_domain"
+                ]
+            },
+            "input_validation": "required",
+            "sql_injection": "n/a_firestore"
+        },
+        "secrets": {
+            "storage": "environment_variables",
+            "frontend_exposure": "forbidden",
+            "required": [
+                "FIREBASE_CONFIG",
+                "STRIPE_KEY",
+                "STORAGE_BUCKET"
+            ]
+        },
+        "pricing_security": {
+            "calculation": "server_side_only",
+            "frontend_display": "read_only",
+            "manipulation": "forbidden"
+        }
+    },
+    "threat_model": [
+        {
+            "threat": "Cross-user data access",
+            "mitigation": "Firestore rules with uid check",
+            "severity": "critical"
+        },
+        {
+            "threat": "Price manipulation",
+            "mitigation": "Server-side calculation",
+            "severity": "critical"
+        },
+        {
+            "threat": "Unauthorized admin access",
+            "mitigation": "Role-based route guards",
+            "severity": "high"
+        },
+        {
+            "threat": "File upload exploits",
+            "mitigation": "File type validation, size limits",
+            "severity": "high"
+        },
+        {
+            "threat": "API abuse",
+            "mitigation": "Rate limiting, auth required",
+            "severity": "medium"
+        }
+    ]
+}

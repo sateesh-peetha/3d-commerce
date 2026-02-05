@@ -1,0 +1,260 @@
+{
+    "version": "1.0.0",
+    "created": "2026-02-05T10:05:00Z",
+    "description": "Alert policies defining severity classifications and escalation paths",
+    "alert_classes": {
+        "critical": {
+            "severity": 1,
+            "description": "System down, data risk, security breach",
+            "response_time": "immediate",
+            "notification_channels": [
+                "pagerduty",
+                "sms",
+                "phone"
+            ],
+            "escalation_after_minutes": 5,
+            "auto_page": true,
+            "examples": [
+                "System completely unavailable",
+                "Database unreachable",
+                "Payment processing down",
+                "Security breach detected",
+                "Data corruption detected"
+            ],
+            "runbook_required": true
+        },
+        "high": {
+            "severity": 2,
+            "description": "Core feature broken, significant degradation",
+            "response_time": "5_minutes",
+            "notification_channels": [
+                "slack",
+                "email",
+                "pagerduty"
+            ],
+            "escalation_after_minutes": 15,
+            "auto_page": true,
+            "examples": [
+                "Auth service partially failing",
+                "File upload failures > 10%",
+                "Order success rate < 90%",
+                "AI provider unavailable",
+                "Plugin system crashed"
+            ],
+            "runbook_required": true
+        },
+        "medium": {
+            "severity": 3,
+            "description": "Degraded performance, non-critical feature broken",
+            "response_time": "30_minutes",
+            "notification_channels": [
+                "slack",
+                "email"
+            ],
+            "escalation_after_minutes": 60,
+            "auto_page": false,
+            "examples": [
+                "Response latency p99 > 2s",
+                "Error rate > 1%",
+                "Cache miss rate > 50%",
+                "Single AI provider down (others available)",
+                "Non-critical plugin failing"
+            ],
+            "runbook_required": false
+        },
+        "informational": {
+            "severity": 4,
+            "description": "Trends, cost alerts, capacity warnings",
+            "response_time": "next_business_day",
+            "notification_channels": [
+                "email",
+                "slack"
+            ],
+            "escalation_after_minutes": null,
+            "auto_page": false,
+            "examples": [
+                "Storage usage > 80%",
+                "AI cost approaching daily limit",
+                "Unusual traffic pattern",
+                "Dependency deprecation warning"
+            ],
+            "runbook_required": false
+        }
+    },
+    "alert_definitions": {
+        "system_down": {
+            "id": "SYS001",
+            "name": "System Unavailable",
+            "class": "critical",
+            "condition": "health_check_failure AND duration > 30s",
+            "message": "3D Commerce platform is not responding",
+            "action": "Check system-down runbook immediately",
+            "runbook": "/ops/runbooks/system-down.md"
+        },
+        "database_unreachable": {
+            "id": "DB001",
+            "name": "Database Connection Failed",
+            "class": "critical",
+            "condition": "firestore_health_check = failed",
+            "message": "Cannot connect to Firestore database",
+            "action": "Check database connectivity and firewall rules",
+            "runbook": "/ops/runbooks/system-down.md"
+        },
+        "payment_failures": {
+            "id": "PAY001",
+            "name": "Payment Processing Failures",
+            "class": "critical",
+            "condition": "payment_failure_rate > 50% AND payment_attempts > 10",
+            "message": "More than 50% of payments are failing",
+            "action": "Check Stripe dashboard and webhook logs",
+            "runbook": "/ops/runbooks/payments-failing.md"
+        },
+        "auth_failures": {
+            "id": "AUTH001",
+            "name": "Authentication Service Degraded",
+            "class": "high",
+            "condition": "auth_failure_rate > 10%",
+            "message": "Authentication failures elevated",
+            "action": "Check Firebase Auth status and logs",
+            "runbook": "/ops/runbooks/system-down.md"
+        },
+        "upload_failures": {
+            "id": "UPLOAD001",
+            "name": "File Upload Failures Elevated",
+            "class": "high",
+            "condition": "upload_failure_rate > 10% AND upload_attempts > 20",
+            "message": "File uploads are failing at elevated rate",
+            "action": "Check storage health and upload logs",
+            "runbook": "/ops/runbooks/upload-failures.md"
+        },
+        "ai_provider_down": {
+            "id": "AI001",
+            "name": "AI Provider Unavailable",
+            "class": "high",
+            "condition": "all_ai_providers_unreachable",
+            "message": "All AI providers are unavailable",
+            "action": "AI features are degraded, check provider status",
+            "runbook": "/ops/runbooks/ai-outages.md"
+        },
+        "ai_cost_exceeded": {
+            "id": "AI002",
+            "name": "AI Daily Cost Limit Approaching",
+            "class": "medium",
+            "condition": "ai_daily_cost_usd > 20",
+            "message": "AI cost approaching daily limit",
+            "action": "Review AI usage patterns",
+            "runbook": "/ops/runbooks/ai-outages.md"
+        },
+        "plugin_crash_loop": {
+            "id": "PLUGIN001",
+            "name": "Plugin Crash Loop Detected",
+            "class": "high",
+            "condition": "plugin_restarts > 5 in 5m",
+            "message": "Plugin is repeatedly crashing",
+            "action": "Disable failing plugin and investigate",
+            "runbook": "/ops/runbooks/plugin-crashes.md"
+        },
+        "high_latency": {
+            "id": "PERF001",
+            "name": "High API Latency",
+            "class": "medium",
+            "condition": "request_latency_p99 > 2000ms",
+            "message": "API response times are degraded",
+            "action": "Check for slow queries or resource contention",
+            "runbook": null
+        },
+        "error_rate_elevated": {
+            "id": "ERR001",
+            "name": "Error Rate Elevated",
+            "class": "medium",
+            "condition": "error_rate > 1%",
+            "message": "Error rate above normal threshold",
+            "action": "Review recent deployments and error logs",
+            "runbook": null
+        },
+        "security_alert": {
+            "id": "SEC001",
+            "name": "Security Event Detected",
+            "class": "critical",
+            "condition": "security_event_severity = critical",
+            "message": "Critical security event detected",
+            "action": "Investigate immediately, consider system isolation",
+            "runbook": "/ops/runbooks/security-alerts.md"
+        },
+        "storage_capacity": {
+            "id": "CAP001",
+            "name": "Storage Capacity Warning",
+            "class": "informational",
+            "condition": "storage_used_percentage > 80%",
+            "message": "Storage usage above 80%",
+            "action": "Plan for capacity expansion",
+            "runbook": null
+        }
+    },
+    "suppression_rules": {
+        "duplicate_suppression": {
+            "enabled": true,
+            "window_minutes": 15,
+            "description": "Suppress duplicate alerts within 15-minute window"
+        },
+        "maintenance_window": {
+            "enabled": true,
+            "suppress_during_maintenance": true,
+            "except_classes": [
+                "critical"
+            ]
+        },
+        "flapping_detection": {
+            "enabled": true,
+            "threshold": 3,
+            "window_minutes": 10,
+            "description": "Suppress alerts that flip state > 3 times in 10 minutes"
+        }
+    },
+    "escalation_policies": {
+        "default": {
+            "levels": [
+                {
+                    "level": 1,
+                    "delay_minutes": 0,
+                    "targets": [
+                        "on_call_primary"
+                    ]
+                },
+                {
+                    "level": 2,
+                    "delay_minutes": 15,
+                    "targets": [
+                        "on_call_secondary",
+                        "engineering_lead"
+                    ]
+                },
+                {
+                    "level": 3,
+                    "delay_minutes": 30,
+                    "targets": [
+                        "cto",
+                        "incident_commander"
+                    ]
+                }
+            ]
+        }
+    },
+    "notification_templates": {
+        "alert_fired": {
+            "subject": "[{severity}] {alert_name} - {environment}",
+            "body": "Alert: {alert_name}\nSeverity: {severity}\nEnvironment: {environment}\nTime: {timestamp}\n\nCondition: {condition}\nMessage: {message}\n\nAction Required: {action}\nRunbook: {runbook_link}"
+        },
+        "alert_resolved": {
+            "subject": "[RESOLVED] {alert_name} - {environment}",
+            "body": "Alert Resolved: {alert_name}\nEnvironment: {environment}\nResolution Time: {timestamp}\nDuration: {duration}"
+        }
+    },
+    "hard_rules": [
+        "Every alert must say what broke",
+        "Every alert must say what to do",
+        "Critical alerts must link to runbook",
+        "Suppressed alerts must still be logged",
+        "Escalation must continue until acknowledged"
+    ]
+}

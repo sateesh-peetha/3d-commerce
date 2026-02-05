@@ -1,0 +1,233 @@
+{
+    "version": "1.0.0",
+    "created": "2026-02-05T10:05:00Z",
+    "description": "Disaster recovery configuration and failover procedures",
+    "objectives": {
+        "rpo": {
+            "value_hours": 1,
+            "description": "Recovery Point Objective - maximum acceptable data loss",
+            "justification": "6-hourly backups for critical data, acceptable for commerce platform"
+        },
+        "rto": {
+            "value_hours": 4,
+            "description": "Recovery Time Objective - maximum acceptable downtime",
+            "justification": "Full restore tested to complete within 4 hours"
+        },
+        "mttr": {
+            "target_hours": 2,
+            "description": "Mean Time To Recovery - average recovery time goal"
+        }
+    },
+    "failover_scenarios": {
+        "primary_region_outage": {
+            "id": "DR001",
+            "severity": "critical",
+            "description": "Primary GCP region (us-central1) completely unavailable",
+            "detection": {
+                "signals": [
+                    "All health checks failing",
+                    "GCP status page shows outage",
+                    "Cannot reach any service in region"
+                ],
+                "detection_time_minutes": 5
+            },
+            "response": {
+                "automatic_actions": [
+                    "Alert on-call immediately",
+                    "DNS failover to standby region (if configured)"
+                ],
+                "manual_actions": [
+                    "Confirm outage is regional, not configuration",
+                    "Activate DR runbook",
+                    "Communicate with users",
+                    "Initiate restore in backup region"
+                ]
+            },
+            "recovery": {
+                "steps": [
+                    "Provision infrastructure in us-east1",
+                    "Restore from cross-region backup",
+                    "Update DNS to point to new region",
+                    "Validate all services operational",
+                    "Monitor for 1 hour before declaring recovered"
+                ],
+                "estimated_duration_hours": 4
+            },
+            "runbook": "/ops/runbooks/system-down.md"
+        },
+        "storage_corruption": {
+            "id": "DR002",
+            "severity": "critical",
+            "description": "Cloud Storage data corrupted or inaccessible",
+            "detection": {
+                "signals": [
+                    "Storage health check failing",
+                    "Upload/download errors",
+                    "Checksum mismatches"
+                ]
+            },
+            "response": {
+                "steps": [
+                    "Disable new uploads",
+                    "Assess corruption scope",
+                    "Restore from versioned backup",
+                    "Verify integrity of restored data"
+                ]
+            },
+            "recovery": {
+                "from_versioning": "Restore previous object versions",
+                "from_backup": "Restore from cross-region backup",
+                "estimated_duration_hours": 2
+            },
+            "runbook": "/ops/runbooks/upload-failures.md"
+        },
+        "auth_provider_failure": {
+            "id": "DR003",
+            "severity": "high",
+            "description": "Firebase Auth unavailable",
+            "detection": {
+                "signals": [
+                    "Auth health check failing",
+                    "Login failures elevated",
+                    "Firebase status page shows issues"
+                ]
+            },
+            "response": {
+                "graceful_degradation": [
+                    "Extend existing session lifetimes",
+                    "Allow cached token validation",
+                    "Display maintenance message to new users"
+                ],
+                "recovery": "Wait for provider recovery - no failover possible"
+            },
+            "impact": "New logins blocked, existing sessions continue",
+            "runbook": "/ops/runbooks/system-down.md"
+        },
+        "ai_provider_outage": {
+            "id": "DR004",
+            "severity": "medium",
+            "description": "AI provider(s) unavailable",
+            "detection": {
+                "signals": [
+                    "AI health check failing",
+                    "AI call failures > 90%"
+                ]
+            },
+            "response": {
+                "automatic_actions": [
+                    "Switch to backup AI provider if configured",
+                    "Disable AI features gracefully"
+                ],
+                "user_impact": "AI-powered features unavailable, core features work"
+            },
+            "graceful_degradation": {
+                "enabled": true,
+                "features_affected": [
+                    "ai_layout_suggestions",
+                    "ai_preview"
+                ],
+                "features_unaffected": [
+                    "all_core_commerce",
+                    "all_admin"
+                ]
+            },
+            "runbook": "/ops/runbooks/ai-outages.md"
+        },
+        "database_corruption": {
+            "id": "DR005",
+            "severity": "critical",
+            "description": "Firestore data corrupted",
+            "detection": {
+                "signals": [
+                    "Read errors",
+                    "Schema validation failures",
+                    "Referential integrity violations"
+                ]
+            },
+            "response": {
+                "steps": [
+                    "Enable read-only mode",
+                    "Assess corruption scope",
+                    "Restore affected collections from backup",
+                    "Validate data integrity"
+                ]
+            },
+            "runbook": "/ops/runbooks/system-down.md"
+        },
+        "payment_provider_outage": {
+            "id": "DR006",
+            "severity": "high",
+            "description": "Stripe unavailable",
+            "detection": {
+                "signals": [
+                    "Payment health check failing",
+                    "Payment failures > 50%",
+                    "Stripe status page shows issues"
+                ]
+            },
+            "response": {
+                "actions": [
+                    "Disable checkout (no fallback)",
+                    "Queue orders for retry",
+                    "Communicate with affected users"
+                ],
+                "user_impact": "Cannot complete purchases"
+            },
+            "runbook": "/ops/runbooks/payments-failing.md"
+        }
+    },
+    "failover_infrastructure": {
+        "primary": {
+            "region": "us-central1",
+            "project": "3dcommerce-prod"
+        },
+        "secondary": {
+            "region": "us-east1",
+            "project": "3dcommerce-dr",
+            "status": "cold_standby",
+            "description": "Infrastructure can be provisioned on demand"
+        },
+        "dns_failover": {
+            "enabled": false,
+            "provider": "cloud_dns",
+            "ttl_seconds": 300,
+            "note": "Manual DNS update required currently"
+        }
+    },
+    "communication_plan": {
+        "internal": {
+            "channels": [
+                "slack_incidents",
+                "pagerduty"
+            ],
+            "template": "Incident declared: {scenario}. Status: {status}. ETA: {eta}"
+        },
+        "external": {
+            "status_page": "status.3dcommerce.example.com",
+            "update_frequency_minutes": 30,
+            "template": "We are experiencing {issue}. Our team is working to resolve. Updates every 30 minutes."
+        }
+    },
+    "dr_testing": {
+        "frequency": "quarterly",
+        "scope": "Full failover drill to DR region",
+        "participants": [
+            "incident_responder",
+            "dba",
+            "sre"
+        ],
+        "success_criteria": [
+            "Recovery within RTO (4 hours)",
+            "Data loss within RPO (1 hour)",
+            "All critical features operational",
+            "No panicked decisions"
+        ]
+    },
+    "hard_rules": [
+        "RPO and RTO must be defined and communicated",
+        "DR scenarios must be documented",
+        "Recovery must not depend on tribal knowledge",
+        "DR drills must be conducted quarterly",
+        "Failed drills require immediate remediation"
+    ]
+}

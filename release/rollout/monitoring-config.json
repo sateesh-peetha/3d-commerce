@@ -1,0 +1,108 @@
+{
+    "version": "1.0.0",
+    "created": "2026-02-05T11:00:00Z",
+    "description": "Observability and monitoring configuration",
+    "dashboards": {
+        "release_health": {
+            "refresh_seconds": 30,
+            "panels": [
+                "error_rate_gauge",
+                "latency_histogram",
+                "throughput_counter",
+                "active_users",
+                "rollout_stage"
+            ]
+        },
+        "user_journey": {
+            "refresh_seconds": 60,
+            "panels": [
+                "funnel_visualization",
+                "drop_off_points",
+                "conversion_rate"
+            ]
+        },
+        "ai_usage": {
+            "refresh_seconds": 300,
+            "panels": [
+                "ai_requests",
+                "ai_cost",
+                "ai_approval_rate"
+            ]
+        }
+    },
+    "error_budget": {
+        "monthly_budget_percentage": 0.1,
+        "current_consumption": 0,
+        "alert_at_percentage": [
+            50,
+            80,
+            100
+        ]
+    },
+    "thresholds": {
+        "error_rate": {
+            "warning": 0.01,
+            "critical": 0.05,
+            "unit": "percentage"
+        },
+        "latency_p95": {
+            "warning": 500,
+            "critical": 2000,
+            "unit": "milliseconds"
+        },
+        "latency_p99": {
+            "warning": 1000,
+            "critical": 3000,
+            "unit": "milliseconds"
+        },
+        "memory_usage": {
+            "warning": 0.7,
+            "critical": 0.9,
+            "unit": "percentage"
+        },
+        "cpu_usage": {
+            "warning": 0.6,
+            "critical": 0.85,
+            "unit": "percentage"
+        }
+    },
+    "anomaly_detection": {
+        "enabled": true,
+        "sensitivity": "medium",
+        "baseline_window_days": 7,
+        "deviation_threshold_sigma": 3,
+        "metrics_monitored": [
+            "request_count",
+            "error_rate",
+            "latency",
+            "unique_users"
+        ]
+    },
+    "ai_cost_monitoring": {
+        "daily_budget_usd": 25,
+        "hourly_budget_usd": 5,
+        "alert_at_percentage": [
+            50,
+            80,
+            100
+        ],
+        "action_at_100": "disable_ai_features"
+    },
+    "logging": {
+        "level": "info",
+        "structured": true,
+        "retention_days": 30,
+        "sensitive_fields_masked": [
+            "email",
+            "password",
+            "token",
+            "card_number"
+        ]
+    },
+    "tracing": {
+        "enabled": true,
+        "sample_rate": 0.1,
+        "include_request_body": false,
+        "max_spans_per_trace": 100
+    }
+}

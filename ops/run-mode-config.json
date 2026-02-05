@@ -1,0 +1,170 @@
+{
+    "version": "1.0.0",
+    "created": "2026-02-05T10:05:00Z",
+    "description": "Run mode configuration defining operational limits per environment",
+    "run_modes": {
+        "development": {
+            "id": "development",
+            "description": "Local development with relaxed limits",
+            "limits": {
+                "rate_limit": {
+                    "requests_per_minute": 1000,
+                    "burst_size": 100
+                },
+                "ai": {
+                    "calls_per_minute": 100,
+                    "max_tokens_per_request": 8000,
+                    "cost_limit_daily_usd": 100
+                },
+                "plugins": {
+                    "max_concurrent": 20,
+                    "timeout_ms": 30000,
+                    "memory_limit_mb": 512
+                },
+                "uploads": {
+                    "max_file_size_mb": 500,
+                    "max_concurrent_uploads": 20
+                }
+            },
+            "features": {
+                "debug_mode": true,
+                "verbose_errors": true,
+                "hot_reload": true,
+                "mock_payments": true,
+                "skip_email_verification": true
+            },
+            "logging": {
+                "level": "debug",
+                "include_stack_traces": true,
+                "log_request_bodies": true
+            }
+        },
+        "staging": {
+            "id": "staging",
+            "description": "Pre-production environment with moderate limits",
+            "limits": {
+                "rate_limit": {
+                    "requests_per_minute": 300,
+                    "burst_size": 50
+                },
+                "ai": {
+                    "calls_per_minute": 30,
+                    "max_tokens_per_request": 4000,
+                    "cost_limit_daily_usd": 50
+                },
+                "plugins": {
+                    "max_concurrent": 10,
+                    "timeout_ms": 15000,
+                    "memory_limit_mb": 256
+                },
+                "uploads": {
+                    "max_file_size_mb": 200,
+                    "max_concurrent_uploads": 10
+                }
+            },
+            "features": {
+                "debug_mode": false,
+                "verbose_errors": true,
+                "hot_reload": false,
+                "mock_payments": true,
+                "skip_email_verification": false
+            },
+            "logging": {
+                "level": "info",
+                "include_stack_traces": true,
+                "log_request_bodies": false
+            }
+        },
+        "production": {
+            "id": "production",
+            "description": "Production environment with strict limits",
+            "limits": {
+                "rate_limit": {
+                    "requests_per_minute": 100,
+                    "burst_size": 20
+                },
+                "ai": {
+                    "calls_per_minute": 10,
+                    "max_tokens_per_request": 2000,
+                    "cost_limit_daily_usd": 25
+                },
+                "plugins": {
+                    "max_concurrent": 5,
+                    "timeout_ms": 10000,
+                    "memory_limit_mb": 128
+                },
+                "uploads": {
+                    "max_file_size_mb": 100,
+                    "max_concurrent_uploads": 5
+                }
+            },
+            "features": {
+                "debug_mode": false,
+                "verbose_errors": false,
+                "hot_reload": false,
+                "mock_payments": false,
+                "skip_email_verification": false
+            },
+            "logging": {
+                "level": "warn",
+                "include_stack_traces": false,
+                "log_request_bodies": false
+            }
+        }
+    },
+    "operational_roles": {
+        "operator": {
+            "description": "Day-to-day operations management",
+            "permissions": [
+                "view_logs",
+                "view_metrics",
+                "acknowledge_alerts",
+                "restart_services",
+                "enable_feature_flags"
+            ],
+            "escalation_to": "security_reviewer"
+        },
+        "security_reviewer": {
+            "description": "Security event review and audit",
+            "permissions": [
+                "all_operator_permissions",
+                "view_security_logs",
+                "review_audit_trail",
+                "approve_access_requests",
+                "block_users"
+            ],
+            "escalation_to": "incident_responder"
+        },
+        "incident_responder": {
+            "description": "Critical incident management",
+            "permissions": [
+                "all_security_reviewer_permissions",
+                "trigger_failover",
+                "initiate_restore",
+                "emergency_shutdown",
+                "deploy_hotfix"
+            ],
+            "escalation_to": null
+        }
+    },
+    "environment_detection": {
+        "method": "environment_variable",
+        "variable_name": "RUN_MODE",
+        "fallback": "development",
+        "validation": {
+            "allowed_values": [
+                "development",
+                "staging",
+                "production"
+            ],
+            "reject_unknown": true
+        }
+    },
+    "hard_rules": [
+        "Every agent/service MUST read RUN_MODE at startup",
+        "Production limits MUST be strictly enforced",
+        "Mock payments MUST be disabled in production",
+        "Debug mode MUST be disabled in production",
+        "Verbose errors MUST be disabled in production"
+    ]
+}

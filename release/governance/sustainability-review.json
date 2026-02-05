@@ -1,0 +1,165 @@
+{
+    "version": "1.0.0",
+    "created": "2026-02-05T11:00:00Z",
+    "description": "Cost, performance, and sustainability review configuration",
+    "review_schedule": {
+        "frequency": "weekly",
+        "day": "Monday",
+        "attendees": [
+            "engineering_lead",
+            "product_owner",
+            "ops_lead"
+        ]
+    },
+    "cost_tracking": {
+        "ai_spend": {
+            "daily_budget_usd": 25,
+            "monthly_budget_usd": 500,
+            "metrics": {
+                "total_spend": "sum of all AI API costs",
+                "cost_per_user": "total_spend / active_users",
+                "cost_per_transaction": "total_spend / completed_orders"
+            },
+            "optimization_triggers": {
+                "cost_per_user_above": 0.10,
+                "daily_budget_exceeded": true
+            },
+            "optimization_actions": [
+                "Increase caching TTL",
+                "Reduce suggestion frequency",
+                "Limit to high-value users"
+            ]
+        },
+        "compute": {
+            "metrics": {
+                "monthly_cost": "Cloud Run + Functions",
+                "cost_per_request": "monthly_cost / request_count"
+            },
+            "optimization_triggers": {
+                "cost_per_request_above": 0.001
+            },
+            "optimization_actions": [
+                "Cold start reduction",
+                "Instance rightsizing",
+                "Caching improvements"
+            ]
+        },
+        "storage": {
+            "metrics": {
+                "total_size_gb": "Firestore + Cloud Storage",
+                "growth_rate_monthly": "percentage increase",
+                "cost_per_user": "storage_cost / active_users"
+            },
+            "optimization_triggers": {
+                "growth_rate_above": 0.2
+            },
+            "optimization_actions": [
+                "Archive old data",
+                "Compress 3D models",
+                "Implement retention policy"
+            ]
+        },
+        "bandwidth": {
+            "metrics": {
+                "monthly_egress_gb": "total data transferred",
+                "cost_per_page_view": "bandwidth_cost / page_views"
+            },
+            "optimization_triggers": {
+                "monthly_cost_above": 100
+            },
+            "optimization_actions": [
+                "Enable CDN caching",
+                "Optimize image sizes",
+                "Lazy load 3D models"
+            ]
+        }
+    },
+    "performance_tracking": {
+        "latency": {
+            "p50_target_ms": 200,
+            "p95_target_ms": 500,
+            "p99_target_ms": 1000,
+            "hotspot_detection": {
+                "enabled": true,
+                "threshold_ms": 800,
+                "action": "add_to_optimization_backlog"
+            }
+        },
+        "throughput": {
+            "requests_per_second_baseline": 100,
+            "scale_trigger": 0.8,
+            "scale_action": "auto_scale"
+        },
+        "error_rate": {
+            "target": 0.001,
+            "alert_threshold": 0.01,
+            "incident_threshold": 0.05
+        }
+    },
+    "hotspot_identification": {
+        "enabled": true,
+        "metrics": [
+            "endpoint_latency",
+            "function_cpu_time",
+            "database_query_time"
+        ],
+        "top_n": 10,
+        "review_frequency": "weekly"
+    },
+    "limit_tuning": {
+        "rate_limits": {
+            "current": {
+                "requests_per_minute": 100,
+                "requests_per_hour": 1000
+            },
+            "adjustment_criteria": {
+                "increase_if": "no abuse detected AND user complaints about limits",
+                "decrease_if": "abuse detected OR cost overrun"
+            }
+        },
+        "ai_limits": {
+            "current": {
+                "suggestions_per_day_per_user": 50,
+                "max_tokens_per_request": 1000
+            },
+            "adjustment_criteria": {
+                "increase_if": "high engagement AND budget allows",
+                "decrease_if": "cost overrun OR low acceptance rate"
+            }
+        }
+    },
+    "sustainability_score": {
+        "calculation": {
+            "factors": [
+                {
+                    "name": "cost_efficiency",
+                    "weight": 0.3
+                },
+                {
+                    "name": "performance_stability",
+                    "weight": 0.3
+                },
+                {
+                    "name": "error_rate",
+                    "weight": 0.2
+                },
+                {
+                    "name": "user_satisfaction",
+                    "weight": 0.2
+                }
+            ]
+        },
+        "thresholds": {
+            "healthy": 0.8,
+            "needs_attention": 0.6,
+            "critical": 0.4
+        }
+    },
+    "change_process": {
+        "description": "All optimization changes go through agent pipeline",
+        "approval_required": true,
+        "requires": [
+            "Engineering Lead sign-off"
+        ]
+    }
+}

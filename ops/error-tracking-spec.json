@@ -1,0 +1,254 @@
+{
+    "version": "1.0.0",
+    "created": "2026-02-05T10:05:00Z",
+    "description": "Error tracking requirements for comprehensive root-cause analysis",
+    "capture_requirements": {
+        "stack_trace": {
+            "required": true,
+            "max_depth": 50,
+            "include_source_context": true,
+            "source_context_lines": 5,
+            "redact_file_paths_in_production": true
+        },
+        "request_context": {
+            "required": true,
+            "fields": [
+                "request_id",
+                "http_method",
+                "endpoint",
+                "query_params_redacted",
+                "content_type",
+                "user_agent",
+                "response_status"
+            ],
+            "exclude": [
+                "authorization_header",
+                "cookie",
+                "request_body"
+            ]
+        },
+        "user_context": {
+            "required": true,
+            "fields": [
+                "user_role",
+                "session_age_seconds",
+                "action_being_performed"
+            ],
+            "exclude": [
+                "user_id",
+                "email",
+                "ip_address",
+                "device_fingerprint"
+            ],
+            "note": "Capture role, not identity"
+        },
+        "environment_context": {
+            "required": true,
+            "fields": [
+                "run_mode",
+                "deployment_version",
+                "git_commit_sha",
+                "node_instance",
+                "region"
+            ]
+        },
+        "timing_context": {
+            "required": true,
+            "fields": [
+                "error_timestamp",
+                "request_start_time",
+                "request_duration_ms_at_error"
+            ]
+        }
+    },
+    "error_classifications": {
+        "unhandled_exception": {
+            "severity": "critical",
+            "alert": true,
+            "description": "Exception not caught by any handler"
+        },
+        "handled_exception": {
+            "severity": "error",
+            "alert": false,
+            "description": "Exception caught and handled with error response"
+        },
+        "validation_error": {
+            "severity": "warning",
+            "alert": false,
+            "description": "User input validation failure"
+        },
+        "external_service_error": {
+            "severity": "error",
+            "alert": true,
+            "description": "Third-party service returned error"
+        },
+        "timeout_error": {
+            "severity": "error",
+            "alert": true,
+            "description": "Operation exceeded timeout"
+        },
+        "rate_limit_error": {
+            "severity": "warning",
+            "alert": false,
+            "description": "Rate limit exceeded"
+        }
+    },
+    "frontend_error_boundary": {
+        "capture_points": [
+            {
+                "name": "global_error_handler",
+                "scope": "window.onerror",
+                "captures": [
+                    "uncaught_exceptions",
+                    "promise_rejections"
+                ]
+            },
+            {
+                "name": "react_error_boundary",
+                "scope": "component_tree",
+                "captures": [
+                    "render_errors",
+                    "lifecycle_errors"
+                ]
+            },
+            {
+                "name": "api_error_handler",
+                "scope": "fetch_wrapper",
+                "captures": [
+                    "network_errors",
+                    "api_errors"
+                ]
+            }
+        ],
+        "required_metadata": [
+            "component_stack",
+            "route_path",
+            "user_role",
+            "session_id",
+            "browser_info"
+        ],
+        "excluded_errors": [
+            "ResizeObserver loop limit exceeded",
+            "Script error",
+            "Loading chunk failed"
+        ]
+    },
+    "backend_exception_handler": {
+        "capture_points": [
+            {
+                "name": "express_error_middleware",
+                "scope": "global",
+                "captures": [
+                    "unhandled_routes",
+                    "middleware_errors"
+                ]
+            },
+            {
+                "name": "async_handler_wrapper",
+                "scope": "route_handlers",
+                "captures": [
+                    "async_rejection",
+                    "thrown_errors"
+                ]
+            },
+            {
+                "name": "firebase_function_wrapper",
+                "scope": "cloud_functions",
+                "captures": [
+                    "function_errors",
+                    "timeout_errors"
+                ]
+            }
+        ],
+        "required_metadata": [
+            "function_name",
+            "execution_id",
+            "request_id",
+            "trigger_type"
+        ]
+    },
+    "deployment_correlation": {
+        "enabled": true,
+        "fields_to_capture": [
+            "deployment_version",
+            "deployment_timestamp",
+            "git_commit_sha",
+            "git_branch"
+        ],
+        "regression_detection": {
+            "enabled": true,
+            "compare_error_rates_post_deploy": true,
+            "threshold_increase_percentage": 10,
+            "alert_on_regression": true
+        }
+    },
+    "ai_change_correlation": {
+        "enabled": true,
+        "fields_to_capture": [
+            "last_ai_change_id",
+            "last_ai_change_timestamp",
+            "ai_affected_components"
+        ],
+        "description": "Correlate errors to recent AI-driven changes"
+    },
+    "reproduction_context": {
+        "required_fields": [
+            "steps_leading_to_error",
+            "request_payload_schema",
+            "system_state_at_error"
+        ],
+        "excluded_fields": [
+            "actual_payload_values",
+            "user_data"
+        ]
+    },
+    "error_grouping": {
+        "strategy": "fingerprint",
+        "fingerprint_components": [
+            "error_type",
+            "error_message_normalized",
+            "top_stack_frame",
+            "endpoint"
+        ],
+        "merge_similar_errors": true
+    },
+    "rejection_criteria": [
+        "Error without stack trace (if runtime supports)",
+        "Error without request_id",
+        "Error without environment context",
+        "Error with PII in message or context",
+        "Error that cannot be traced to source file"
+    ],
+    "example_error_payload": {
+        "id": "err_550e8400-e29b-41d4-a716-446655440000",
+        "timestamp": "2026-02-05T10:05:00.123Z",
+        "type": "unhandled_exception",
+        "message": "Cannot read property 'id' of undefined",
+        "stack_trace": [
+            {
+                "file": "order-service.js",
+                "line": 42,
+                "function": "processOrder",
+                "context": [
+                    "// ... source lines ..."
+                ]
+            }
+        ],
+        "request_context": {
+            "request_id": "550e8400-e29b-41d4-a716-446655440000",
+            "method": "POST",
+            "endpoint": "/api/orders",
+            "status": 500
+        },
+        "user_context": {
+            "role": "user",
+            "session_age_seconds": 1234,
+            "action": "checkout"
+        },
+        "environment": {
+            "run_mode": "production",
+            "version": "1.2.3",
+            "commit": "abc123"
+        }
+    }
+}

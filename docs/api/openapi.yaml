@@ -1,0 +1,436 @@
+openapi: 3.0.3
+info:
+  title: 3D Commerce API
+  description: REST API for 3D Commerce e-commerce platform
+  version: 1.0.0
+  contact:
+    email: api@3dcommerce.example.com
+
+servers:
+  - url: https://api.3dcommerce.example.com
+    description: Production
+  - url: https://api-staging.3dcommerce.example.com
+    description: Staging
+  - url: http://localhost:8080/api
+    description: Local development
+
+security:
+  - BearerAuth: []
+
+paths:
+  /health:
+    get:
+      summary: Health check
+      security: []
+      responses:
+        '200':
+          description: System healthy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+
+  /auth/verify:
+    post:
+      summary: Verify authentication
+      tags: [Auth]
+      responses:
+        '200':
+          description: Authentication valid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthVerifyResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /products:
+    get:
+      summary: List products
+      tags: [Products]
+      security: []
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 20
+            maximum: 100
+        - name: cursor
+          in: query
+          schema:
+            type: string
+        - name: category
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Product list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductList'
+
+    post:
+      summary: Create product
+      tags: [Products]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateProductRequest'
+      responses:
+        '201':
+          description: Product created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+
+  /products/{id}:
+    get:
+      summary: Get product by ID
+      tags: [Products]
+      security: []
+      parameters:
+        - $ref: '#/components/parameters/ProductId'
+      responses:
+        '200':
+          description: Product details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /cart:
+    get:
+      summary: Get current cart
+      tags: [Cart]
+      responses:
+        '200':
+          description: Cart contents
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cart'
+
+  /cart/add:
+    post:
+      summary: Add item to cart
+      tags: [Cart]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddToCartRequest'
+      responses:
+        '200':
+          description: Item added
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cart'
+
+  /orders:
+    get:
+      summary: List user orders
+      tags: [Orders]
+      responses:
+        '200':
+          description: Order list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderList'
+
+  /orders/checkout:
+    post:
+      summary: Create checkout session
+      tags: [Orders]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CheckoutRequest'
+      responses:
+        '200':
+          description: Checkout URL
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CheckoutResponse'
+
+  /ai/suggest-layout:
+    post:
+      summary: Get AI layout suggestions
+      tags: [AI]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AILayoutRequest'
+      responses:
+        '200':
+          description: Layout suggestions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AILayoutResponse'
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Firebase ID token
+
+  parameters:
+    ProductId:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: string
+
+  responses:
+    Unauthorized:
+      description: Authentication required
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Forbidden:
+      description: Insufficient permissions
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+  schemas:
+    HealthResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [healthy, degraded, unhealthy]
+        timestamp:
+          type: string
+          format: date-time
+        version:
+          type: string
+
+    AuthVerifyResponse:
+      type: object
+      properties:
+        authenticated:
+          type: boolean
+        user:
+          $ref: '#/components/schemas/User'
+
+    User:
+      type: object
+      properties:
+        uid:
+          type: string
+        email:
+          type: string
+        role:
+          type: string
+          enum: [customer, operator, admin]
+
+    Product:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        price:
+          type: number
+        files:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductFile'
+
+    ProductFile:
+      type: object
+      properties:
+        type:
+          type: string
+          enum: [model, thumbnail, preview]
+        path:
+          type: string
+        format:
+          type: string
+
+    ProductList:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Product'
+        nextCursor:
+          type: string
+        hasMore:
+          type: boolean
+
+    CreateProductRequest:
+      type: object
+      required: [name, price]
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        price:
+          type: number
+        categoryId:
+          type: string
+
+    Cart:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/CartItem'
+        total:
+          type: number
+
+    CartItem:
+      type: object
+      properties:
+        productId:
+          type: string
+        quantity:
+          type: integer
+        price:
+          type: number
+
+    AddToCartRequest:
+      type: object
+      required: [productId, quantity]
+      properties:
+        productId:
+          type: string
+        quantity:
+          type: integer
+          minimum: 1
+
+    OrderList:
+      type: object
+      properties:
+        orders:
+          type: array
+          items:
+            $ref: '#/components/schemas/Order'
+
+    Order:
+      type: object
+      properties:
+        id:
+          type: string
+        status:
+          type: string
+          enum: [pending, paid, processing, shipped, delivered, cancelled]
+        total:
+          type: number
+        createdAt:
+          type: string
+          format: date-time
+
+    CheckoutRequest:
+      type: object
+      required: [cartId]
+      properties:
+        cartId:
+          type: string
+        shippingAddress:
+          $ref: '#/components/schemas/Address'
+
+    CheckoutResponse:
+      type: object
+      properties:
+        checkoutUrl:
+          type: string
+          format: uri
+
+    Address:
+      type: object
+      properties:
+        line1:
+          type: string
+        line2:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+        postalCode:
+          type: string
+        country:
+          type: string
+
+    AILayoutRequest:
+      type: object
+      properties:
+        currentLayout:
+          type: object
+        goals:
+          type: array
+          items:
+            type: string
+
+    AILayoutResponse:
+      type: object
+      properties:
+        suggestions:
+          type: array
+          items:
+            $ref: '#/components/schemas/AISuggestion'
+        cost:
+          type: number
+
+    AISuggestion:
+      type: object
+      properties:
+        action:
+          type: string
+        target:
+          type: string
+        reasoning:
+          type: string
+
+    Error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+            message:
+              type: string
+            details:
+              type: array
+              items:
+                type: object

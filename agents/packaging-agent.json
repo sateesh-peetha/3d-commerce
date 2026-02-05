@@ -1,0 +1,139 @@
+{
+    "agent_id": "packaging-agent",
+    "version": "1.0.0",
+    "spec_hash": "PHASE9-2026-02-05-dist",
+    "type": "core",
+    "objective": "Produce reproducible build artifacts and enforce environment isolation",
+    "mandate": {
+        "primary": "If a human must tweak something manually, packaging is not done",
+        "reproducible_builds": true,
+        "environment_isolation": true,
+        "reject_non_portable_assumptions": true
+    },
+    "inputs": {
+        "codebase": {
+            "paths": [
+                "/src/**/*",
+                "/packages/**/*"
+            ],
+            "description": "Application source code"
+        },
+        "environment_contracts": {
+            "paths": [
+                "/distribution/env.schema.json",
+                "/distribution/secrets.schema.json"
+            ],
+            "description": "Environment variable and secrets definitions"
+        },
+        "ops_requirements": {
+            "paths": [
+                "/ops/**/*"
+            ],
+            "description": "Operational requirements from Phase 8"
+        }
+    },
+    "outputs": {
+        "container_images": {
+            "frontend": {
+                "dockerfile": "/distribution/docker/Dockerfile.frontend",
+                "image_name": "3dcommerce-frontend",
+                "registry": "configurable"
+            },
+            "backend": {
+                "dockerfile": "/distribution/docker/Dockerfile.backend",
+                "image_name": "3dcommerce-backend",
+                "registry": "configurable"
+            }
+        },
+        "install_manifests": {
+            "docker_compose": "/distribution/docker-compose.yml",
+            "production_compose": "/distribution/docker-compose.prod.yml",
+            "install_script": "/distribution/scripts/install.sh"
+        },
+        "environment_schemas": {
+            "env_schema": "/distribution/env.schema.json",
+            "secrets_schema": "/distribution/secrets.schema.json"
+        }
+    },
+    "container_requirements": {
+        "security": {
+            "non_root_user": true,
+            "minimal_base_image": true,
+            "no_secrets_in_image": true,
+            "read_only_filesystem": "recommended"
+        },
+        "health": {
+            "health_check_required": true,
+            "health_check_interval": "30s",
+            "health_check_timeout": "10s"
+        },
+        "portability": {
+            "no_hardcoded_paths": true,
+            "no_environment_specific_logic": true,
+            "explicit_entrypoints": true
+        }
+    },
+    "build_requirements": {
+        "deterministic": {
+            "lockfile_required": true,
+            "pinned_dependencies": true,
+            "reproducible_timestamps": "omit_or_fixed"
+        },
+        "caching": {
+            "layer_optimization": true,
+            "dependency_caching": true
+        },
+        "size_limits": {
+            "frontend_max_mb": 100,
+            "backend_max_mb": 500,
+            "warning_threshold_percentage": 80
+        }
+    },
+    "validation_rules": [
+        {
+            "rule": "NO_HARDCODED_SECRETS",
+            "description": "No secrets in source code or images",
+            "check": "grep_for_patterns",
+            "violation_action": "reject_build"
+        },
+        {
+            "rule": "NON_ROOT_CONTAINER",
+            "description": "Container must not run as root",
+            "check": "dockerfile_user_directive",
+            "violation_action": "reject_build"
+        },
+        {
+            "rule": "HEALTH_CHECK_DEFINED",
+            "description": "Container must have health check",
+            "check": "dockerfile_healthcheck_directive",
+            "violation_action": "reject_build"
+        },
+        {
+            "rule": "ENV_VALIDATION_ON_START",
+            "description": "App must validate environment on startup",
+            "check": "startup_script_check",
+            "violation_action": "reject_deploy"
+        },
+        {
+            "rule": "NO_MANUAL_TWEAKS",
+            "description": "Installation must work without manual intervention",
+            "check": "install_dry_run",
+            "violation_action": "reject_release"
+        }
+    ],
+    "rejection_criteria": [
+        "Build requires manual steps not documented in scripts",
+        "Container runs as root",
+        "Health check missing",
+        "Secrets in image layers",
+        "Environment-specific logic in code",
+        "Non-portable file paths"
+    ],
+    "hard_rules": [
+        "If a human must tweak something manually, packaging is not done",
+        "Every configuration must come from environment",
+        "Every container must have health check",
+        "Every build must be reproducible",
+        "Every install must be scriptable"
+    ]
+}

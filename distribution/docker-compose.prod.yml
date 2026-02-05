@@ -1,0 +1,88 @@
+# Docker Compose for production deployment
+# Usage: docker-compose -f docker-compose.prod.yml up -d
+
+version: "3.8"
+
+services:
+  frontend:
+    image: ${REGISTRY:-}3dcommerce-frontend:${VERSION:-latest}
+    container_name: 3dcommerce-frontend
+    ports:
+      - "80:8080"
+      - "443:8443"
+    environment:
+      - NODE_ENV=production
+    depends_on:
+      backend:
+        condition: service_healthy
+    restart: always
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 256M
+        reservations:
+          cpus: "0.1"
+          memory: 64M
+      replicas: 2
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  backend:
+    image: ${REGISTRY:-}3dcommerce-backend:${VERSION:-latest}
+    container_name: 3dcommerce-backend
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env.production
+    environment:
+      - NODE_ENV=production
+      - RUN_MODE=production
+      - PORT=8080
+    restart: always
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: 512M
+        reservations:
+          cpus: "0.25"
+          memory: 128M
+      replicas: 2
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:8080/api/health', (r) => process.exit(r.statusCode === 200 ? 0 : 1))"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "5"
+    secrets:
+      - stripe_secret_key
+      - firebase_service_account
+      - session_secret
+
+secrets:
+  stripe_secret_key:
+    external: true
+  firebase_service_account:
+    external: true
+  session_secret:
+    external: true
+
+networks:
+  default:
+    name: 3dcommerce-production
+    driver: bridge

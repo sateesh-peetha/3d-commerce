@@ -1,0 +1,269 @@
+{
+    "version": "1.0.0",
+    "created": "2026-02-05T10:27:00Z",
+    "description": "Deployment topology defining component boundaries and relationships",
+    "components": {
+        "frontend_web": {
+            "id": "frontend-web",
+            "name": "Web Frontend",
+            "type": "static_spa",
+            "technology": "React 18",
+            "description": "Single-page application for web browsers",
+            "responsibilities": [
+                "User interface rendering",
+                "Client-side routing",
+                "State management",
+                "API communication"
+            ],
+            "dependencies": [
+                "backend_api",
+                "auth_integration"
+            ],
+            "deployment_options": [
+                "firebase_hosting",
+                "vercel",
+                "nginx_container",
+                "cloudflare_pages"
+            ],
+            "resources": {
+                "min_instances": 0,
+                "max_instances": "auto",
+                "memory_mb": 128,
+                "storage_mb": 100
+            },
+            "health_check": {
+                "endpoint": "/",
+                "expected_status": 200
+            }
+        },
+        "backend_api": {
+            "id": "backend-api",
+            "name": "Backend API",
+            "type": "serverless_functions",
+            "technology": "Node.js 20",
+            "description": "REST API handling business logic",
+            "responsibilities": [
+                "Request handling",
+                "Business logic",
+                "Data validation",
+                "Database operations",
+                "External integrations"
+            ],
+            "dependencies": [
+                "database",
+                "storage",
+                "auth_integration",
+                "payment_provider"
+            ],
+            "deployment_options": [
+                "firebase_functions",
+                "gcp_cloud_run",
+                "aws_lambda",
+                "docker_container"
+            ],
+            "resources": {
+                "min_instances": 0,
+                "max_instances": 100,
+                "memory_mb": 512,
+                "timeout_seconds": 60
+            },
+            "health_check": {
+                "endpoint": "/api/health",
+                "expected_status": 200
+            }
+        },
+        "database": {
+            "id": "database",
+            "name": "Database",
+            "type": "document_database",
+            "technology": "Firestore",
+            "description": "Primary data store",
+            "responsibilities": [
+                "Data persistence",
+                "Real-time sync",
+                "Security rules enforcement"
+            ],
+            "dependencies": [],
+            "deployment_options": [
+                "firebase_firestore",
+                "gcp_firestore"
+            ],
+            "managed": true,
+            "resources": {
+                "tier": "production",
+                "backup_enabled": true
+            }
+        },
+        "storage": {
+            "id": "storage",
+            "name": "Object Storage",
+            "type": "object_storage",
+            "technology": "Cloud Storage",
+            "description": "File storage for 3D models and assets",
+            "responsibilities": [
+                "File storage",
+                "Signed URL generation",
+                "CDN integration"
+            ],
+            "dependencies": [],
+            "deployment_options": [
+                "gcp_cloud_storage",
+                "aws_s3",
+                "azure_blob"
+            ],
+            "managed": true,
+            "buckets": [
+                "3d-models",
+                "thumbnails",
+                "exports"
+            ]
+        },
+        "auth_integration": {
+            "id": "auth",
+            "name": "Authentication",
+            "type": "identity_provider",
+            "technology": "Firebase Auth",
+            "description": "User authentication and session management",
+            "responsibilities": [
+                "User authentication",
+                "Session management",
+                "OAuth provider integration",
+                "MFA handling"
+            ],
+            "dependencies": [],
+            "deployment_options": [
+                "firebase_auth",
+                "auth0",
+                "okta"
+            ],
+            "managed": true
+        },
+        "payment_provider": {
+            "id": "payments",
+            "name": "Payment Processing",
+            "type": "payment_gateway",
+            "technology": "Stripe",
+            "description": "Payment processing and webhooks",
+            "responsibilities": [
+                "Payment processing",
+                "Webhook handling",
+                "Refund processing"
+            ],
+            "dependencies": [],
+            "external": true,
+            "webhook_endpoint": "/api/webhooks/stripe"
+        },
+        "ai_integration": {
+            "id": "ai",
+            "name": "AI Services",
+            "type": "ai_provider",
+            "technology": "Gemini/OpenAI",
+            "description": "AI-powered layout suggestions",
+            "responsibilities": [
+                "Layout generation",
+                "UI suggestions",
+                "Content assistance"
+            ],
+            "dependencies": [],
+            "external": true,
+            "graceful_degradation": true
+        },
+        "plugin_subsystem": {
+            "id": "plugins",
+            "name": "Plugin System",
+            "type": "extension_runtime",
+            "technology": "Sandboxed JS",
+            "description": "Third-party plugin execution",
+            "responsibilities": [
+                "Plugin lifecycle",
+                "Sandboxed execution",
+                "Permission enforcement"
+            ],
+            "dependencies": [
+                "backend_api"
+            ],
+            "embedded": true,
+            "security": {
+                "sandboxed": true,
+                "resource_limits": true
+            }
+        },
+        "observability": {
+            "id": "observability",
+            "name": "Observability Stack",
+            "type": "monitoring",
+            "technology": "Cloud Logging/Monitoring",
+            "description": "Logs, metrics, and alerts",
+            "responsibilities": [
+                "Log aggregation",
+                "Metrics collection",
+                "Alerting"
+            ],
+            "dependencies": [],
+            "deployment_options": [
+                "gcp_cloud_logging",
+                "datadog",
+                "grafana_stack"
+            ],
+            "managed": true
+        }
+    },
+    "deployment_order": [
+        {
+            "phase": 1,
+            "components": [
+                "database",
+                "storage",
+                "auth_integration"
+            ],
+            "description": "Infrastructure prerequisites"
+        },
+        {
+            "phase": 2,
+            "components": [
+                "backend_api"
+            ],
+            "description": "Backend services"
+        },
+        {
+            "phase": 3,
+            "components": [
+                "frontend_web"
+            ],
+            "description": "Frontend applications"
+        },
+        {
+            "phase": 4,
+            "components": [
+                "observability"
+            ],
+            "description": "Monitoring and alerting"
+        }
+    ],
+    "network_topology": {
+        "frontend_to_backend": {
+            "protocol": "HTTPS",
+            "authentication": "Bearer token"
+        },
+        "backend_to_database": {
+            "protocol": "gRPC",
+            "authentication": "Service account"
+        },
+        "backend_to_storage": {
+            "protocol": "HTTPS",
+            "authentication": "Service account"
+        },
+        "external_webhooks": {
+            "stripe": {
+                "endpoint": "/api/webhooks/stripe",
+                "verification": "Signature"
+            }
+        }
+    },
+    "scaling_rules": {
+        "frontend": "CDN-based, infinite scale",
+        "backend": "Auto-scale 0-100 instances",
+        "database": "Managed, auto-scale",
+        "storage": "Managed, infinite scale"
+    }
+}

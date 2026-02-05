@@ -1,0 +1,209 @@
+{
+    "version": "1.0.0",
+    "created": "2026-02-05T10:30:00Z",
+    "description": "Security scanning configuration for distribution artifacts",
+    "container_scanning": {
+        "enabled": true,
+        "scanner": "trivy",
+        "configuration": {
+            "severity_threshold": "HIGH",
+            "ignore_unfixed": false,
+            "scan_layers": true
+        },
+        "blocking_severities": [
+            "CRITICAL",
+            "HIGH"
+        ],
+        "allowed_exceptions": [],
+        "scan_schedule": "on_build_and_daily"
+    },
+    "dependency_scanning": {
+        "enabled": true,
+        "tools": [
+            {
+                "name": "npm_audit",
+                "command": "npm audit --json",
+                "blocking_severities": [
+                    "critical",
+                    "high"
+                ]
+            },
+            {
+                "name": "snyk",
+                "command": "snyk test --json",
+                "optional": true
+            }
+        ],
+        "scan_on": [
+            "push",
+            "pull_request",
+            "release"
+        ],
+        "auto_fix": {
+            "enabled": true,
+            "command": "npm audit fix",
+            "auto_merge": false
+        },
+        "exceptions": {
+            "file": ".dependency-exceptions.json",
+            "required_fields": [
+                "package",
+                "reason",
+                "expiry",
+                "reviewer"
+            ]
+        }
+    },
+    "secret_scanning": {
+        "enabled": true,
+        "tools": [
+            {
+                "name": "gitleaks",
+                "config": ".gitleaks.toml"
+            },
+            {
+                "name": "trufflehog",
+                "optional": true
+            }
+        ],
+        "patterns": [
+            {
+                "name": "stripe_live_key",
+                "pattern": "sk_live_[a-zA-Z0-9]{20,}",
+                "severity": "CRITICAL"
+            },
+            {
+                "name": "stripe_test_key",
+                "pattern": "sk_test_[a-zA-Z0-9]{20,}",
+                "severity": "HIGH"
+            },
+            {
+                "name": "firebase_api_key",
+                "pattern": "AIza[0-9A-Za-z\\-_]{35}",
+                "severity": "MEDIUM",
+                "note": "May be intentionally public"
+            },
+            {
+                "name": "private_key",
+                "pattern": "-----BEGIN (RSA |EC )?PRIVATE KEY-----",
+                "severity": "CRITICAL"
+            },
+            {
+                "name": "generic_secret",
+                "pattern": "(secret|password|token|key)\\s*[:=]\\s*['\"][^'\"]{8,}['\"]",
+                "severity": "HIGH"
+            }
+        ],
+        "blocking": true,
+        "scan_history": true
+    },
+    "sast_scanning": {
+        "enabled": true,
+        "tools": [
+            {
+                "name": "semgrep",
+                "config": ".semgrep.yml",
+                "rules": [
+                    "p/typescript",
+                    "p/security-audit"
+                ]
+            }
+        ],
+        "blocking_severities": [
+            "ERROR"
+        ],
+        "scan_on": [
+            "push",
+            "pull_request"
+        ]
+    },
+    "license_scanning": {
+        "enabled": true,
+        "tool": "license-checker",
+        "allowed_licenses": [
+            "MIT",
+            "ISC",
+            "Apache-2.0",
+            "BSD-2-Clause",
+            "BSD-3-Clause",
+            "0BSD",
+            "Unlicense",
+            "CC0-1.0"
+        ],
+        "forbidden_licenses": [
+            "GPL-2.0",
+            "GPL-3.0",
+            "AGPL-3.0",
+            "LGPL-2.1",
+            "LGPL-3.0"
+        ],
+        "exceptions": {
+            "development_only": [
+                "GPL-3.0"
+            ]
+        },
+        "blocking": true
+    },
+    "image_signing": {
+        "enabled": true,
+        "method": "cosign",
+        "key_management": "gcp_kms",
+        "verification_required": true,
+        "signature_storage": "oci_registry"
+    },
+    "sbom_generation": {
+        "enabled": true,
+        "format": "spdx",
+        "include_in_release": true,
+        "output": "sbom.spdx.json"
+    },
+    "supply_chain_verification": {
+        "slsa_level": 2,
+        "provenance_generation": true,
+        "attestation_required": true,
+        "trusted_builders": [
+            "github-actions",
+            "google-cloud-build"
+        ]
+    },
+    "ci_integration": {
+        "github_actions": {
+            "workflow": ".github/workflows/security-scan.yml",
+            "required_status_check": true
+        },
+        "block_on_failure": true,
+        "report_to": [
+            "github_security_tab",
+            "security_email"
+        ]
+    },
+    "vulnerability_response": {
+        "critical": {
+            "sla_hours": 24,
+            "action": "immediate_patch",
+            "notify": [
+                "security_team",
+                "engineering_lead"
+            ]
+        },
+        "high": {
+            "sla_hours": 72,
+            "action": "scheduled_patch",
+            "notify": [
+                "security_team"
+            ]
+        },
+        "medium": {
+            "sla_days": 30,
+            "action": "next_release",
+            "notify": [
+                "engineering"
+            ]
+        },
+        "low": {
+            "sla_days": 90,
+            "action": "backlog",
+            "notify": []
+        }
+    }
+}

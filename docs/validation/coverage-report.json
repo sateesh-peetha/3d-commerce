@@ -1,0 +1,117 @@
+{
+    "version": "1.0.0",
+    "generated": "2026-02-05T11:00:00Z",
+    "description": "Documentation coverage report",
+    "coverage": {
+        "overall_percentage": 100,
+        "status": "COMPLETE"
+    },
+    "documentation_sections": {
+        "architecture": {
+            "status": "COMPLETE",
+            "documents": [
+                "docs/architecture/system-overview.md",
+                "docs/architecture/architecture-deep-dive.md",
+                "docs/architecture/adr/001-firebase-selection.md",
+                "docs/architecture/adr/002-block-based-ui.md",
+                "docs/architecture/adr/003-agentic-architecture.md",
+                "docs/architecture/adr/004-ai-governance.md"
+            ],
+            "count": 6
+        },
+        "agents": {
+            "status": "COMPLETE",
+            "documents": [
+                "docs/agents/agent-roster.md",
+                "docs/agents/agent-schemas.md",
+                "docs/agents/execution-flow.md"
+            ],
+            "count": 3
+        },
+        "api": {
+            "status": "COMPLETE",
+            "documents": [
+                "docs/api/api-reference.md",
+                "docs/api/firestore-schema.md",
+                "docs/api/openapi.yaml"
+            ],
+            "count": 3
+        },
+        "ui": {
+            "status": "COMPLETE",
+            "documents": [
+                "docs/ui/block-catalog.md",
+                "docs/ui/theme-system.md",
+                "docs/ui/plugin-ui-injection.md"
+            ],
+            "count": 3
+        },
+        "plugins": {
+            "status": "COMPLETE",
+            "documents": [
+                "docs/plugins/plugin-developer-guide.md",
+                "docs/plugins/security-boundaries.md",
+                "docs/plugins/plugin-templates/hello-world/"
+            ],
+            "count": 3
+        },
+        "ai_governance": {
+            "status": "COMPLETE",
+            "documents": [
+                "docs/ai/ai-capability-matrix.md",
+                "docs/ai/ai-governance-guide.md",
+                "docs/ai/cost-controls.md"
+            ],
+            "count": 3
+        },
+        "getting_started": {
+            "status": "COMPLETE",
+            "documents": [
+                "docs/getting-started/installation-guide.md",
+                "docs/getting-started/configuration-reference.md",
+                "docs/getting-started/troubleshooting-guide.md",
+                "docs/getting-started/runbook-index.md"
+            ],
+            "count": 4
+        },
+        "validation": {
+            "status": "COMPLETE",
+            "documents": [
+                "docs/validation/onboarding-checklist.md",
+                "docs/validation/operator-checklist.md"
+            ],
+            "count": 2
+        }
+    },
+    "totals": {
+        "total_documents": 27,
+        "by_category": {
+            "architecture": 6,
+            "agents": 3,
+            "api": 3,
+            "ui": 3,
+            "plugins": 3,
+            "ai": 3,
+            "getting_started": 4,
+            "validation": 2
+        }
+    },
+    "quality_checks": {
+        "all_sections_have_audience_tag": true,
+        "all_links_valid": true,
+        "code_examples_present": true,
+        "diagrams_included": true,
+        "cross_references_complete": true
+    },
+    "validation_status": {
+        "developer_onboarding_validated": false,
+        "operator_incident_validated": false,
+        "plugin_development_validated": false
+    },
+    "notes": [
+        "All major subsystems documented",
+        "ADRs cover key architecture decisions",
+        "Runbooks include recovery verification",
+        "Validation checklists created for dry-run"
+    ]
+}

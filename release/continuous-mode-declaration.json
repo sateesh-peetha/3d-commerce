@@ -1,0 +1,135 @@
+{
+    "version": "1.0.0",
+    "tag": "continuous-mode/v1",
+    "declared_at": "2026-02-05T11:30:00Z",
+    "description": "Declaration of continuous operation mode for 3D Commerce platform",
+    "status": "ACTIVE",
+    "declaration": {
+        "statement": "The 3D Commerce platform has exited project mode and entered continuous operation.",
+        "meaning": [
+            "The application is live and serving users",
+            "The system can evolve safely through the agent pipeline",
+            "All invariants are mechanically enforced",
+            "Quality, security, and AI governance are maintained automatically",
+            "No fear of change - controlled evolution is the norm"
+        ],
+        "effective_date": "2026-02-05"
+    },
+    "active_components": {
+        "agents": [
+            {
+                "name": "Feature-Planner Agent",
+                "status": "ACTIVE",
+                "role": "Define and scope changes"
+            },
+            {
+                "name": "UI-Composer Agent",
+                "status": "ACTIVE",
+                "role": "Design UI changes"
+            },
+            {
+                "name": "Security-Auditor Agent",
+                "status": "ACTIVE",
+                "role": "Continuous security monitoring"
+            },
+            {
+                "name": "Regression-Guardian Agent",
+                "status": "ACTIVE",
+                "role": "Production behavior monitoring"
+            },
+            {
+                "name": "AI-Governance Agent",
+                "status": "ACTIVE",
+                "role": "AI usage enforcement"
+            },
+            {
+                "name": "Release-Manager Agent",
+                "status": "ACTIVE",
+                "role": "Controlled deployments"
+            },
+            {
+                "name": "Documentation-Architect Agent",
+                "status": "ACTIVE",
+                "role": "Doc freshness"
+            }
+        ],
+        "monitoring": {
+            "rollout_monitoring": "ENABLED",
+            "security_watch": "ENABLED",
+            "ai_cost_tracking": "ENABLED",
+            "error_alerting": "ENABLED"
+        },
+        "processes": {
+            "feedback_loop": "ACTIVE",
+            "iteration_workflow": "ENFORCED",
+            "staged_rollout": "REQUIRED"
+        }
+    },
+    "invariants_enforced": {
+        "security": [
+            "All auth through Firebase",
+            "No direct database mutations",
+            "Plugin sandboxing active"
+        ],
+        "quality": [
+            "All changes go through agent pipeline",
+            "No deploy without tests",
+            "Staged rollout required"
+        ],
+        "ai": [
+            "All AI changes require approval",
+            "Cost limits active",
+            "Prompt injection protection enabled"
+        ]
+    },
+    "continuous_delivery": {
+        "enabled": true,
+        "deployment_frequency": "on_demand",
+        "minimum_review": "one_approval",
+        "auto_rollback": true
+    },
+    "exit_criteria_validated": {
+        "users_can_onboard": true,
+        "feedback_flows_to_backlog": true,
+        "regressions_detected_early": true,
+        "iterations_follow_pipeline": true,
+        "ai_governed_in_production": true,
+        "system_evolves_without_fear": true
+    },
+    "prior_phases": {
+        "completed": [
+            "Phase 1: Foundation & Invariants",
+            "Phase 2: Design System & Screens",
+            "Phase 3: Feature Bundles",
+            "Phase 4: Integration",
+            "Phase 5: Testing & Regression",
+            "Phase 6: Security Hardening",
+            "Phase 7: AI Governance",
+            "Phase 8: Operations Readiness",
+            "Phase 9: Packaging & Distribution",
+            "Phase 10: Documentation & Handoff",
+            "Phase 11: Release & Feedback Loop"
+        ],
+        "verified_tags": [
+            "invariants-locked/v1",
+            "screens-draft/v1",
+            "bundle-complete/v1",
+            "regression-baseline/v1",
+            "security-approved/v1",
+            "ai-governed/v1",
+            "ops-ready/v1",
+            "dist-ready/v1",
+            "docs-approved/v1",
+            "continuous-mode/v1"
+        ]
+    },
+    "next_steps": {
+        "ongoing": [
+            "Monitor production health",
+            "Collect user feedback",
+            "Iterate on improvements",
+            "Conduct periodic retrospectives"
+        ],
+        "first_iteration_target": "2 weeks"
+    }
+}

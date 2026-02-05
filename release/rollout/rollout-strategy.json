@@ -1,0 +1,118 @@
+{
+    "version": "1.0.0",
+    "created": "2026-02-05T11:00:00Z",
+    "description": "Staged rollout configuration for controlled release",
+    "strategy": "canary",
+    "stages": [
+        {
+            "name": "canary",
+            "percentage": 1,
+            "duration_hours": 2,
+            "success_criteria": {
+                "error_rate_below": 0.01,
+                "latency_p95_below_ms": 500,
+                "no_critical_alerts": true
+            },
+            "auto_proceed": false,
+            "require_approval": true
+        },
+        {
+            "name": "early_adopter",
+            "percentage": 10,
+            "duration_hours": 24,
+            "success_criteria": {
+                "error_rate_below": 0.02,
+                "latency_p95_below_ms": 600,
+                "user_complaints_below": 5,
+                "no_critical_alerts": true
+            },
+            "auto_proceed": false,
+            "require_approval": true
+        },
+        {
+            "name": "expansion",
+            "percentage": 50,
+            "duration_hours": 48,
+            "success_criteria": {
+                "error_rate_below": 0.02,
+                "latency_p95_below_ms": 700,
+                "checkout_success_rate_above": 0.95,
+                "no_critical_alerts": true
+            },
+            "auto_proceed": false,
+            "require_approval": true
+        },
+        {
+            "name": "general_availability",
+            "percentage": 100,
+            "duration_hours": null,
+            "success_criteria": {
+                "all_prior_stages_stable": true
+            },
+            "auto_proceed": false,
+            "require_approval": true
+        }
+    ],
+    "feature_flags": {
+        "ai_suggestions": {
+            "enabled": true,
+            "rollout_stage": "early_adopter",
+            "description": "AI layout suggestions"
+        },
+        "plugin_system": {
+            "enabled": true,
+            "rollout_stage": "expansion",
+            "description": "Third-party plugins"
+        },
+        "advanced_analytics": {
+            "enabled": false,
+            "rollout_stage": "general_availability",
+            "description": "Detailed analytics dashboard"
+        }
+    },
+    "halt_criteria": {
+        "immediate_halt": [
+            "Error rate exceeds 5%",
+            "Security incident detected",
+            "Data integrity issue",
+            "Payment processing failure rate > 1%"
+        ],
+        "pause_for_review": [
+            "Error rate exceeds 2%",
+            "P95 latency exceeds 2000ms",
+            "More than 10 user complaints in 1 hour",
+            "AI cost exceeds daily budget"
+        ],
+        "response": {
+            "immediate_halt": "Auto-rollback triggered",
+            "pause_for_review": "Alert on-call, manual decision"
+        }
+    },
+    "rollback": {
+        "trigger": "automatic_on_halt",
+        "target": "previous_stable_version",
+        "max_time_minutes": 15,
+        "verification": [
+            "Health check passes",
+            "Error rate drops below threshold",
+            "User traffic resumes"
+        ]
+    },
+    "monitoring_during_rollout": {
+        "frequency_seconds": 30,
+        "metrics": [
+            "error_rate",
+            "latency_p50",
+            "latency_p95",
+            "latency_p99",
+            "throughput",
+            "active_users",
+            "checkout_attempts",
+            "checkout_success"
+        ],
+        "alerts_to": [
+            "on_call",
+            "release_manager"
+        ]
+    }
+}

@@ -1,0 +1,188 @@
+{
+    "version": "1.0.0",
+    "created": "2026-02-05T10:05:00Z",
+    "description": "Backup strategy and requirements for data survival",
+    "backup_requirements": {
+        "automated": true,
+        "versioned": true,
+        "immutable_storage": true,
+        "separate_project": true,
+        "encryption": {
+            "at_rest": true,
+            "in_transit": true,
+            "key_management": "cloud_kms"
+        }
+    },
+    "backup_schedules": {
+        "firestore": {
+            "collections": [
+                {
+                    "name": "users",
+                    "priority": "critical",
+                    "frequency": "every_6_hours",
+                    "retention_days": 90
+                },
+                {
+                    "name": "orders",
+                    "priority": "critical",
+                    "frequency": "every_6_hours",
+                    "retention_days": 365
+                },
+                {
+                    "name": "products",
+                    "priority": "high",
+                    "frequency": "daily",
+                    "retention_days": 90
+                },
+                {
+                    "name": "carts",
+                    "priority": "medium",
+                    "frequency": "daily",
+                    "retention_days": 30
+                },
+                {
+                    "name": "files",
+                    "priority": "high",
+                    "frequency": "daily",
+                    "retention_days": 90
+                },
+                {
+                    "name": "plugins",
+                    "priority": "medium",
+                    "frequency": "daily",
+                    "retention_days": 60
+                },
+                {
+                    "name": "themes",
+                    "priority": "medium",
+                    "frequency": "daily",
+                    "retention_days": 60
+                },
+                {
+                    "name": "aiChanges",
+                    "priority": "low",
+                    "frequency": "daily",
+                    "retention_days": 30
+                },
+                {
+                    "name": "auditLogs",
+                    "priority": "critical",
+                    "frequency": "daily",
+                    "retention_days": 730,
+                    "note": "2 years for compliance"
+                }
+            ],
+            "method": "firestore_export",
+            "destination": "gs://3dcommerce-backups/firestore/"
+        },
+        "storage_buckets": {
+            "buckets": [
+                {
+                    "name": "3d-models",
+                    "priority": "critical",
+                    "frequency": "daily",
+                    "retention_days": 90,
+                    "versioning_enabled": true
+                },
+                {
+                    "name": "thumbnails",
+                    "priority": "medium",
+                    "frequency": "weekly",
+                    "retention_days": 30,
+                    "regeneratable": true
+                },
+                {
+                    "name": "exports",
+                    "priority": "low",
+                    "frequency": "weekly",
+                    "retention_days": 14,
+                    "regeneratable": true
+                }
+            ],
+            "method": "gcs_transfer",
+            "destination": "gs://3dcommerce-backups/storage/"
+        },
+        "configuration": {
+            "items": [
+                "firestore_rules",
+                "storage_rules",
+                "cloud_functions_config",
+                "environment_variables"
+            ],
+            "frequency": "on_change",
+            "destination": "gs://3dcommerce-backups/config/",
+            "retention_days": 365
+        }
+    },
+    "backup_verification": {
+        "frequency": "weekly",
+        "checks": [
+            {
+                "name": "backup_exists",
+                "description": "Verify backup file exists for each scheduled backup"
+            },
+            {
+                "name": "backup_size",
+                "description": "Verify backup size is within expected range"
+            },
+            {
+                "name": "backup_age",
+                "description": "Verify latest backup is not older than schedule"
+            },
+            {
+                "name": "backup_integrity",
+                "description": "Verify backup file checksum"
+            },
+            {
+                "name": "sample_restore",
+                "description": "Restore sample records to verify readability",
+                "frequency": "monthly"
+            }
+        ],
+        "alert_on_failure": true,
+        "alert_severity": "high"
+    },
+    "immutable_storage_config": {
+        "enabled": true,
+        "bucket_lock": {
+            "retention_period_days": 30,
+            "mode": "governance"
+        },
+        "object_versioning": true,
+        "lifecycle_rules": [
+            {
+                "action": "delete",
+                "condition": "age > retention_days AND versions > 3"
+            }
+        ]
+    },
+    "cross_region_replication": {
+        "enabled": true,
+        "primary_region": "us-central1",
+        "backup_region": "us-east1",
+        "replication_lag_target_minutes": 15
+    },
+    "access_control": {
+        "backup_readers": [
+            "incident_responder",
+            "dba"
+        ],
+        "restore_permissions": [
+            "incident_responder"
+        ],
+        "backup_delete_permissions": [],
+        "note": "No one can delete backups manually"
+    },
+    "cost_estimation": {
+        "storage_class": "nearline",
+        "estimated_monthly_cost_usd": 50,
+        "notes": "Based on 100GB data with 90-day retention"
+    },
+    "hard_rules": [
+        "Backups must be automated - no manual only",
+        "Backups must be versioned",
+        "Backups must be stored in separate project",
+        "Backup deletion must be impossible for individuals",
+        "Restore must be tested monthly"
+    ]
+}

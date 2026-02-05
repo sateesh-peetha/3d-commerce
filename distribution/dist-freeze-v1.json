@@ -1,0 +1,103 @@
+{
+    "version": "1.0.0",
+    "tag": "dist-freeze/v1",
+    "frozen_date": "2026-02-05T10:27:00Z",
+    "status": "FROZEN",
+    "description": "Distribution surface freeze for Phase 9 packaging. No structural changes allowed until Phase 9 completes.",
+    "frozen_surfaces": {
+        "runtime_architecture": {
+            "frontend": {
+                "type": "react_spa",
+                "rendering": "client_side",
+                "hosting": [
+                    "firebase_hosting",
+                    "vercel",
+                    "nginx"
+                ],
+                "changes_allowed": false
+            },
+            "backend": {
+                "type": "serverless_functions",
+                "runtime": "nodejs_20",
+                "platforms": [
+                    "firebase_functions",
+                    "cloud_run",
+                    "docker"
+                ],
+                "changes_allowed": false
+            },
+            "database": {
+                "type": "firestore",
+                "mode": "native",
+                "changes_allowed": false
+            },
+            "storage": {
+                "type": "cloud_storage",
+                "access": "signed_urls",
+                "changes_allowed": false
+            }
+        },
+        "api_contracts": {
+            "total_endpoints": 65,
+            "public_endpoints": 2,
+            "authenticated_endpoints": 63,
+            "admin_endpoints": 15,
+            "contract_schema": "/contracts/api-contract.schema.json",
+            "changes_allowed": false
+        },
+        "plugin_sdk_surface": {
+            "version": "1.0.0",
+            "api_methods": [
+                "registerPlugin",
+                "onInstall",
+                "onEnable",
+                "onDisable",
+                "getConfig",
+                "setConfig",
+                "injectUI",
+                "callAPI"
+            ],
+            "permissions_model": "/security/freeze-v1.json#plugin_permissions",
+            "changes_allowed": false
+        },
+        "ai_governance_rules": {
+            "version": "1.0.0",
+            "allowed_operations": [
+                "reorder_block",
+                "toggle_visibility",
+                "change_zone"
+            ],
+            "forbidden_operations": [
+                "create_block",
+                "modify_security",
+                "change_schema",
+                "alter_permissions"
+            ],
+            "guardrails_config": "/contracts/ai-hardening-rules.json",
+            "changes_allowed": false
+        },
+        "observability_hooks": {
+            "version": "1.0.0",
+            "logging_schema": "/ops/logging-config.json",
+            "metrics_schema": "/ops/metrics-config.json",
+            "health_endpoints": "/ops/health-check-spec.json",
+            "alert_policies": "/ops/alert-policies.json",
+            "changes_allowed": false
+        }
+    },
+    "dependencies_locked": {
+        "node_version": "20.x",
+        "npm_version": "10.x",
+        "major_dependencies": {
+            "react": "18.x",
+            "firebase": "10.x",
+            "stripe": "14.x"
+        }
+    },
+    "enforcement": {
+        "pre_commit_hook": true,
+        "ci_blocking": true,
+        "manual_override": "PROHIBITED"
+    },
+    "release_condition": "Phase 9 complete with dist-ready/v1 tag"
+}

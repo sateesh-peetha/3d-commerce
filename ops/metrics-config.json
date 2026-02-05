@@ -1,0 +1,319 @@
+{
+    "version": "1.0.0",
+    "created": "2026-02-05T10:05:00Z",
+    "description": "Core metrics definitions for system health monitoring",
+    "metrics": {
+        "request_metrics": {
+            "request_latency_ms": {
+                "type": "histogram",
+                "description": "Request latency in milliseconds",
+                "labels": [
+                    "service",
+                    "endpoint",
+                    "method",
+                    "status_code"
+                ],
+                "buckets": [
+                    10,
+                    25,
+                    50,
+                    100,
+                    250,
+                    500,
+                    1000,
+                    2500,
+                    5000,
+                    10000
+                ]
+            },
+            "request_count": {
+                "type": "counter",
+                "description": "Total number of requests",
+                "labels": [
+                    "service",
+                    "endpoint",
+                    "method",
+                    "status_code"
+                ]
+            },
+            "request_in_flight": {
+                "type": "gauge",
+                "description": "Number of requests currently being processed",
+                "labels": [
+                    "service"
+                ]
+            }
+        },
+        "error_metrics": {
+            "error_count": {
+                "type": "counter",
+                "description": "Total number of errors",
+                "labels": [
+                    "service",
+                    "error_type",
+                    "severity"
+                ]
+            },
+            "error_rate": {
+                "type": "gauge",
+                "description": "Error rate percentage (5-minute window)",
+                "labels": [
+                    "service",
+                    "endpoint"
+                ],
+                "alert_thresholds": {
+                    "warning": 1.0,
+                    "critical": 5.0
+                }
+            }
+        },
+        "upload_metrics": {
+            "upload_success_count": {
+                "type": "counter",
+                "description": "Successful file uploads",
+                "labels": [
+                    "file_type"
+                ]
+            },
+            "upload_failure_count": {
+                "type": "counter",
+                "description": "Failed file uploads",
+                "labels": [
+                    "file_type",
+                    "failure_reason"
+                ]
+            },
+            "upload_size_bytes": {
+                "type": "histogram",
+                "description": "Upload file sizes",
+                "buckets": [
+                    1024,
+                    10240,
+                    102400,
+                    1048576,
+                    10485760,
+                    104857600
+                ]
+            },
+            "upload_duration_ms": {
+                "type": "histogram",
+                "description": "Upload duration",
+                "buckets": [
+                    100,
+                    500,
+                    1000,
+                    5000,
+                    10000,
+                    30000,
+                    60000
+                ]
+            }
+        },
+        "order_metrics": {
+            "order_success_count": {
+                "type": "counter",
+                "description": "Successful orders placed"
+            },
+            "order_failure_count": {
+                "type": "counter",
+                "description": "Failed orders",
+                "labels": [
+                    "failure_stage"
+                ]
+            },
+            "order_success_rate": {
+                "type": "gauge",
+                "description": "Order success rate percentage",
+                "alert_thresholds": {
+                    "warning": 95.0,
+                    "critical": 90.0
+                }
+            },
+            "order_value_usd": {
+                "type": "histogram",
+                "description": "Order values in USD",
+                "buckets": [
+                    10,
+                    25,
+                    50,
+                    100,
+                    250,
+                    500,
+                    1000,
+                    2500
+                ]
+            }
+        },
+        "ai_metrics": {
+            "ai_call_count": {
+                "type": "counter",
+                "description": "Total AI API calls",
+                "labels": [
+                    "provider",
+                    "model",
+                    "operation"
+                ]
+            },
+            "ai_call_success_rate": {
+                "type": "gauge",
+                "description": "AI call success rate",
+                "alert_thresholds": {
+                    "warning": 95.0,
+                    "critical": 90.0
+                }
+            },
+            "ai_latency_ms": {
+                "type": "histogram",
+                "description": "AI call latency",
+                "labels": [
+                    "provider",
+                    "model"
+                ],
+                "buckets": [
+                    100,
+                    500,
+                    1000,
+                    2000,
+                    5000,
+                    10000,
+                    30000
+                ]
+            },
+            "ai_tokens_used": {
+                "type": "counter",
+                "description": "Total tokens consumed",
+                "labels": [
+                    "provider",
+                    "model",
+                    "token_type"
+                ]
+            },
+            "ai_cost_usd": {
+                "type": "counter",
+                "description": "Cumulative AI cost in USD",
+                "labels": [
+                    "provider",
+                    "model"
+                ]
+            },
+            "ai_daily_cost_usd": {
+                "type": "gauge",
+                "description": "Daily AI cost",
+                "alert_thresholds": {
+                    "warning": 20.0,
+                    "critical": 25.0
+                }
+            }
+        },
+        "plugin_metrics": {
+            "plugin_execution_count": {
+                "type": "counter",
+                "description": "Plugin execution count",
+                "labels": [
+                    "plugin_id",
+                    "status"
+                ]
+            },
+            "plugin_execution_time_ms": {
+                "type": "histogram",
+                "description": "Plugin execution duration",
+                "labels": [
+                    "plugin_id"
+                ],
+                "buckets": [
+                    10,
+                    50,
+                    100,
+                    500,
+                    1000,
+                    5000,
+                    10000
+                ]
+            },
+            "plugin_error_count": {
+                "type": "counter",
+                "description": "Plugin errors",
+                "labels": [
+                    "plugin_id",
+                    "error_type"
+                ]
+            },
+            "plugin_memory_usage_mb": {
+                "type": "gauge",
+                "description": "Plugin memory consumption",
+                "labels": [
+                    "plugin_id"
+                ]
+            }
+        },
+        "storage_metrics": {
+            "storage_used_bytes": {
+                "type": "gauge",
+                "description": "Total storage used",
+                "labels": [
+                    "bucket"
+                ]
+            },
+            "storage_cost_usd": {
+                "type": "gauge",
+                "description": "Monthly storage cost estimate"
+            }
+        },
+        "system_metrics": {
+            "db_connection_pool_size": {
+                "type": "gauge",
+                "description": "Active database connections"
+            },
+            "db_query_duration_ms": {
+                "type": "histogram",
+                "description": "Database query duration",
+                "labels": [
+                    "collection",
+                    "operation"
+                ],
+                "buckets": [
+                    1,
+                    5,
+                    10,
+                    25,
+                    50,
+                    100,
+                    250,
+                    500,
+                    1000
+                ]
+            },
+            "cache_hit_rate": {
+                "type": "gauge",
+                "description": "Cache hit rate percentage"
+            }
+        }
+    },
+    "slo_definitions": {
+        "api_availability": {
+            "description": "API returns non-5xx response",
+            "target": 99.9,
+            "window": "30d"
+        },
+        "api_latency_p99": {
+            "description": "99th percentile request latency",
+            "target_ms": 1000,
+            "window": "30d"
+        },
+        "upload_success_rate": {
+            "description": "File uploads succeed",
+            "target": 99.5,
+            "window": "7d"
+        },
+        "order_success_rate": {
+            "description": "Orders complete successfully",
+            "target": 99.0,
+            "window": "7d"
+        }
+    },
+    "metric_export": {
+        "format": "prometheus",
+        "endpoint": "/metrics",
+        "scrape_interval_seconds": 15
+    }
+}

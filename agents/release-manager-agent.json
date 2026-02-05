@@ -1,0 +1,158 @@
+{
+    "id": "release-manager-agent",
+    "name": "Release Manager Agent",
+    "version": "1.0.0",
+    "created": "2026-02-05T11:00:00Z",
+    "type": "core",
+    "mandate": "Orchestrate releases safely, enforce gates, coordinate rollback",
+    "description": "Ensures no release proceeds without explicit approval and all prerequisites met",
+    "inputs": {
+        "test_results": {
+            "source": "testing/",
+            "required": true,
+            "validation": "All tests passing"
+        },
+        "security_signoff": {
+            "source": "security/security-signoff.json",
+            "required": true,
+            "validation": "Approved status"
+        },
+        "ops_readiness": {
+            "source": "ops/ops-readiness.json",
+            "required": true,
+            "validation": "GREEN status"
+        },
+        "distribution_artifacts": {
+            "source": "distribution/",
+            "required": true,
+            "validation": "dist-ready tag present"
+        },
+        "documentation": {
+            "source": "docs/",
+            "required": true,
+            "validation": "docs-approved tag present"
+        }
+    },
+    "outputs": {
+        "release_readiness_report": {
+            "description": "Comprehensive release readiness assessment",
+            "schema": {
+                "gates_passed": "boolean[]",
+                "risk_level": "low|medium|high",
+                "recommendation": "go|no-go|conditional"
+            }
+        },
+        "go_nogo_decision": {
+            "description": "Explicit release decision",
+            "values": [
+                "GO",
+                "NO-GO",
+                "CONDITIONAL"
+            ],
+            "requires_human_override": true
+        },
+        "rollback_plan": {
+            "description": "Ready-to-execute rollback procedure",
+            "includes": [
+                "trigger_conditions",
+                "steps",
+                "verification"
+            ]
+        }
+    },
+    "hard_rules": [
+        "No release proceeds without explicit GO decision",
+        "All phase tags must be verified before release",
+        "Any HIGH/CRITICAL open issue blocks release",
+        "Rollback plan must exist before release",
+        "Human approval required for production releases"
+    ],
+    "gates": {
+        "phase_verification": {
+            "description": "Verify all prior phases complete",
+            "required_tags": [
+                "invariants-locked/v1",
+                "bundle-complete/v1",
+                "regression-baseline/v1",
+                "security-approved/v1",
+                "ai-governed/v1",
+                "ops-ready/v1",
+                "dist-ready/v1",
+                "docs-approved/v1"
+            ],
+            "action_on_fail": "BLOCK"
+        },
+        "issue_check": {
+            "description": "No blocking issues open",
+            "critical_issues_allowed": 0,
+            "high_issues_allowed": 0,
+            "action_on_fail": "BLOCK"
+        },
+        "metric_thresholds": {
+            "description": "Performance meets requirements",
+            "error_rate_max": 0.01,
+            "response_time_p95_max_ms": 500,
+            "test_coverage_min": 0.8,
+            "action_on_fail": "WARN"
+        }
+    },
+    "decision_matrix": {
+        "GO": {
+            "conditions": [
+                "All gates PASS",
+                "No blocking issues",
+                "All metrics in range",
+                "Rollback plan verified"
+            ]
+        },
+        "CONDITIONAL": {
+            "conditions": [
+                "Minor warnings present",
+                "Documented risk acceptance",
+                "Enhanced monitoring in place"
+            ],
+            "requires": "Engineering Lead approval"
+        },
+        "NO-GO": {
+            "conditions": [
+                "Any gate FAIL",
+                "Critical issue open",
+                "Missing rollback plan"
+            ]
+        }
+    },
+    "workflows": {
+        "pre_release": [
+            "Verify all phase tags",
+            "Check open issues",
+            "Validate metrics",
+            "Confirm rollback plan",
+            "Generate readiness report"
+        ],
+        "release": [
+            "Lock for release",
+            "Execute staged rollout",
+            "Monitor error rates",
+            "Watch performance metrics",
+            "Report status"
+        ],
+        "post_release": [
+            "Confirm deployment stable",
+            "Monitor for 30 minutes",
+            "Unlock for changes",
+            "Generate release report"
+        ]
+    },
+    "integration": {
+        "triggers_on": [
+            "release_requested"
+        ],
+        "blocks": [
+            "deployment"
+        ],
+        "notifies": [
+            "engineering_lead",
+            "ops_team"
+        ]
+    }
+}

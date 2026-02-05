@@ -1,0 +1,74 @@
+# Docker Compose for local development
+# Usage: docker-compose up -d
+
+version: "3.8"
+
+services:
+  frontend:
+    build:
+      context: ../..
+      dockerfile: distribution/docker/Dockerfile.frontend
+    image: 3dcommerce-frontend:dev
+    container_name: 3dcommerce-frontend
+    ports:
+      - "3000:8080"
+    environment:
+      - NODE_ENV=development
+    depends_on:
+      backend:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+  backend:
+    build:
+      context: ../..
+      dockerfile: distribution/docker/Dockerfile.backend
+    image: 3dcommerce-backend:dev
+    container_name: 3dcommerce-backend
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env.local
+    environment:
+      - NODE_ENV=development
+      - RUN_MODE=development
+      - PORT=8080
+      - LOG_LEVEL=debug
+    volumes:
+      # Mount for hot-reload during development (optional)
+      - ../../packages/functions/src:/app/src:ro
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:8080/api/health', (r) => process.exit(r.statusCode === 200 ? 0 : 1))"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+  # Firebase emulators for local development
+  firebase-emulators:
+    image: ghcr.io/nickklos/firebase-emulator:latest
+    container_name: firebase-emulators
+    ports:
+      - "4000:4000"   # Emulator Suite UI
+      - "5001:5001"   # Functions
+      - "8082:8080"   # Firestore
+      - "9099:9099"   # Auth
+      - "9199:9199"   # Storage
+    environment:
+      - FIREBASE_PROJECT_ID=demo-3dcommerce
+    restart: unless-stopped
+
+networks:
+  default:
+    name: 3dcommerce-network
+
+volumes:
+  firebase-data:
+    name: 3dcommerce-firebase-data

@@ -1,0 +1,107 @@
+{
+    "version": "1.0.0",
+    "generated": "2026-02-05T11:00:00Z",
+    "description": "Pre-release gate verification checklist",
+    "overall_status": "PENDING",
+    "gates": {
+        "phase_1_foundation": {
+            "tag": "invariants-locked/v1",
+            "status": "VERIFIED",
+            "verified_at": "2026-02-01T10:00:00Z",
+            "evidence": "invariants/system-invariants.json"
+        },
+        "phase_2_ui": {
+            "tag": "screens-draft/v1",
+            "status": "VERIFIED",
+            "verified_at": "2026-02-01T12:00:00Z",
+            "evidence": "design-system/"
+        },
+        "phase_3_features": {
+            "tag": "bundle-complete/v1",
+            "status": "VERIFIED",
+            "verified_at": "2026-02-02T10:00:00Z",
+            "evidence": "features/"
+        },
+        "phase_4_integration": {
+            "tag": "phase-4-integrated/v1",
+            "status": "VERIFIED",
+            "verified_at": "2026-02-02T14:00:00Z",
+            "evidence": "integration/"
+        },
+        "phase_5_testing": {
+            "tag": "regression-baseline/v1",
+            "status": "VERIFIED",
+            "verified_at": "2026-02-03T10:00:00Z",
+            "evidence": "testing/"
+        },
+        "phase_6_security": {
+            "tag": "security-approved/v1",
+            "status": "VERIFIED",
+            "verified_at": "2026-02-03T16:00:00Z",
+            "evidence": "security/security-signoff.json"
+        },
+        "phase_7_ai_governance": {
+            "tag": "ai-governed/v1",
+            "status": "VERIFIED",
+            "verified_at": "2026-02-04T10:00:00Z",
+            "evidence": "ai-governance/"
+        },
+        "phase_8_ops": {
+            "tag": "ops-ready/v1",
+            "status": "VERIFIED",
+            "verified_at": "2026-02-04T16:00:00Z",
+            "evidence": "ops/ops-readiness.json"
+        },
+        "phase_9_distribution": {
+            "tag": "dist-ready/v1",
+            "status": "VERIFIED",
+            "verified_at": "2026-02-05T10:00:00Z",
+            "evidence": "distribution/dist-readiness-report.json"
+        },
+        "phase_10_documentation": {
+            "tag": "docs-approved/v1",
+            "status": "VERIFIED",
+            "verified_at": "2026-02-05T11:00:00Z",
+            "evidence": "docs/docs-readiness-report.json"
+        }
+    },
+    "issue_check": {
+        "critical_issues": 0,
+        "high_issues": 0,
+        "medium_issues": 0,
+        "status": "PASS"
+    },
+    "metric_check": {
+        "test_pass_rate": {
+            "value": 1.0,
+            "threshold": 1.0,
+            "status": "PASS"
+        },
+        "error_rate": {
+            "value": 0.002,
+            "threshold": 0.01,
+            "status": "PASS"
+        },
+        "response_time_p95_ms": {
+            "value": 320,
+            "threshold": 500,
+            "status": "PASS"
+        }
+    },
+    "rollback_plan": {
+        "exists": true,
+        "tested": true,
+        "documented_at": "release/rollback-plan.json"
+    },
+    "decision": {
+        "recommendation": "GO",
+        "conditions_met": [
+            "All phase gates verified",
+            "No blocking issues",
+            "All metrics within threshold",
+            "Rollback plan exists and tested"
+        ],
+        "warnings": [],
+        "requires_approval": "Engineering Lead"
+    }
+}

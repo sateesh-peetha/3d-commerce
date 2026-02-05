@@ -1,0 +1,278 @@
+{
+    "version": "1.0.0",
+    "created": "2026-02-05T10:05:00Z",
+    "description": "Health check endpoint specifications for all services",
+    "health_endpoints": {
+        "api_readiness": {
+            "endpoint": "/api/health/ready",
+            "method": "GET",
+            "purpose": "Indicates service is ready to accept traffic",
+            "checks": [
+                {
+                    "name": "database_connected",
+                    "type": "dependency",
+                    "target": "firestore",
+                    "timeout_ms": 5000,
+                    "critical": true
+                },
+                {
+                    "name": "configuration_loaded",
+                    "type": "internal",
+                    "critical": true
+                }
+            ],
+            "response": {
+                "success": {
+                    "status_code": 200,
+                    "body": {
+                        "status": "ready",
+                        "checks": {}
+                    }
+                },
+                "failure": {
+                    "status_code": 503,
+                    "body": {
+                        "status": "not_ready",
+                        "failing_checks": []
+                    }
+                }
+            }
+        },
+        "api_liveness": {
+            "endpoint": "/api/health/live",
+            "method": "GET",
+            "purpose": "Indicates service process is running",
+            "checks": [
+                {
+                    "name": "process_responsive",
+                    "type": "internal",
+                    "critical": true
+                }
+            ],
+            "response": {
+                "success": {
+                    "status_code": 200,
+                    "body": {
+                        "status": "alive"
+                    }
+                }
+            }
+        },
+        "database_connectivity": {
+            "endpoint": "/api/health/db",
+            "method": "GET",
+            "purpose": "Verifies Firestore connectivity",
+            "checks": [
+                {
+                    "name": "firestore_ping",
+                    "type": "dependency",
+                    "target": "firestore",
+                    "timeout_ms": 3000,
+                    "test_query": "SELECT 1"
+                },
+                {
+                    "name": "firestore_write",
+                    "type": "dependency",
+                    "target": "firestore",
+                    "timeout_ms": 5000,
+                    "test_collection": "_health_checks"
+                }
+            ],
+            "response": {
+                "success": {
+                    "status_code": 200,
+                    "body": {
+                        "status": "connected",
+                        "latency_ms": 0
+                    }
+                }
+            }
+        },
+        "storage_availability": {
+            "endpoint": "/api/health/storage",
+            "method": "GET",
+            "purpose": "Verifies Cloud Storage availability",
+            "checks": [
+                {
+                    "name": "bucket_accessible",
+                    "type": "dependency",
+                    "target": "gcs",
+                    "timeout_ms": 5000,
+                    "buckets": [
+                        "3d-models",
+                        "thumbnails",
+                        "exports"
+                    ]
+                },
+                {
+                    "name": "bucket_writable",
+                    "type": "dependency",
+                    "target": "gcs",
+                    "timeout_ms": 10000,
+                    "test_file": "_health_check.txt"
+                }
+            ],
+            "response": {
+                "success": {
+                    "status_code": 200,
+                    "body": {
+                        "status": "available",
+                        "buckets": {}
+                    }
+                }
+            }
+        },
+        "ai_provider_reachability": {
+            "endpoint": "/api/health/ai",
+            "method": "GET",
+            "purpose": "Verifies AI provider connectivity",
+            "checks": [
+                {
+                    "name": "gemini_reachable",
+                    "type": "external",
+                    "target": "gemini_api",
+                    "timeout_ms": 5000,
+                    "critical": false
+                },
+                {
+                    "name": "openai_reachable",
+                    "type": "external",
+                    "target": "openai_api",
+                    "timeout_ms": 5000,
+                    "critical": false
+                }
+            ],
+            "response": {
+                "success": {
+                    "status_code": 200,
+                    "body": {
+                        "status": "available",
+                        "providers": {}
+                    }
+                },
+                "degraded": {
+                    "status_code": 200,
+                    "body": {
+                        "status": "degraded",
+                        "available_providers": [],
+                        "unavailable_providers": []
+                    }
+                }
+            }
+        },
+        "plugin_system": {
+            "endpoint": "/api/health/plugins",
+            "method": "GET",
+            "purpose": "Verifies plugin system operational",
+            "checks": [
+                {
+                    "name": "plugin_registry_loaded",
+                    "type": "internal",
+                    "critical": true
+                },
+                {
+                    "name": "sandbox_available",
+                    "type": "internal",
+                    "critical": true
+                }
+            ],
+            "response": {
+                "success": {
+                    "status_code": 200,
+                    "body": {
+                        "status": "operational",
+                        "enabled_plugins": 0,
+                        "healthy_plugins": 0
+                    }
+                }
+            }
+        },
+        "auth_provider": {
+            "endpoint": "/api/health/auth",
+            "method": "GET",
+            "purpose": "Verifies authentication provider connectivity",
+            "checks": [
+                {
+                    "name": "firebase_auth_reachable",
+                    "type": "external",
+                    "target": "firebase_auth",
+                    "timeout_ms": 5000,
+                    "critical": true
+                }
+            ],
+            "response": {
+                "success": {
+                    "status_code": 200,
+                    "body": {
+                        "status": "available"
+                    }
+                }
+            }
+        },
+        "payment_provider": {
+            "endpoint": "/api/health/payments",
+            "method": "GET",
+            "purpose": "Verifies payment provider connectivity",
+            "checks": [
+                {
+                    "name": "stripe_reachable",
+                    "type": "external",
+                    "target": "stripe_api",
+                    "timeout_ms": 5000,
+                    "critical": true
+                }
+            ],
+            "response": {
+                "success": {
+                    "status_code": 200,
+                    "body": {
+                        "status": "available",
+                        "mode": "live/test"
+                    }
+                }
+            }
+        }
+    },
+    "aggregate_health": {
+        "endpoint": "/api/health",
+        "method": "GET",
+        "purpose": "Combined health status of all systems",
+        "aggregation": {
+            "all_critical_pass": "healthy",
+            "some_non_critical_fail": "degraded",
+            "any_critical_fail": "unhealthy"
+        },
+        "response": {
+            "success": {
+                "status_code": 200,
+                "body": {
+                    "status": "healthy",
+                    "version": "1.0.0",
+                    "environment": "production",
+                    "timestamp": "2026-02-05T10:05:00.000Z",
+                    "checks": {
+                        "database": "ok",
+                        "storage": "ok",
+                        "ai": "ok",
+                        "auth": "ok",
+                        "payments": "ok",
+                        "plugins": "ok"
+                    }
+                }
+            }
+        }
+    },
+    "health_check_rules": {
+        "cache_duration_seconds": 30,
+        "timeout_grace_period_ms": 1000,
+        "retry_on_failure": true,
+        "max_retries": 1,
+        "include_details_in_development": true,
+        "include_details_in_production": false
+    },
+    "kubernetes_compatibility": {
+        "readiness_probe": "/api/health/ready",
+        "liveness_probe": "/api/health/live",
+        "startup_probe": "/api/health/ready"
+    }
+}

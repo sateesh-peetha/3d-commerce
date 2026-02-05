@@ -1,0 +1,207 @@
+{
+    "version": "1.0.0",
+    "created": "2026-02-05T11:00:00Z",
+    "description": "Post-release security and AI monitoring configuration",
+    "security_patterns": {
+        "auth_abuse": {
+            "description": "Detect authentication abuse patterns",
+            "patterns": [
+                {
+                    "name": "brute_force",
+                    "rules": {
+                        "failed_attempts": 10,
+                        "window_minutes": 5,
+                        "action": "temporary_lockout"
+                    }
+                },
+                {
+                    "name": "credential_stuffing",
+                    "rules": {
+                        "unique_emails_per_ip": 20,
+                        "window_minutes": 10,
+                        "action": "ip_block"
+                    }
+                },
+                {
+                    "name": "account_takeover",
+                    "rules": {
+                        "password_change_after_unusual_login": true,
+                        "action": "require_verification"
+                    }
+                }
+            ]
+        },
+        "data_access": {
+            "description": "Monitor unusual data access patterns",
+            "patterns": [
+                {
+                    "name": "bulk_export",
+                    "rules": {
+                        "records_accessed": 1000,
+                        "window_minutes": 5,
+                        "action": "alert_and_log"
+                    }
+                },
+                {
+                    "name": "sensitive_field_access",
+                    "rules": {
+                        "fields": [
+                            "email",
+                            "address",
+                            "payment_info"
+                        ],
+                        "unusual_frequency_threshold": 3,
+                        "action": "alert"
+                    }
+                },
+                {
+                    "name": "cross_tenant_attempt",
+                    "rules": {
+                        "tenant_id_mismatch": true,
+                        "action": "block_and_alert"
+                    }
+                }
+            ]
+        },
+        "api_abuse": {
+            "description": "Detect API abuse patterns",
+            "patterns": [
+                {
+                    "name": "rate_limit_evasion",
+                    "rules": {
+                        "requests_from_rotating_ips": 100,
+                        "window_minutes": 1,
+                        "action": "block_pattern"
+                    }
+                },
+                {
+                    "name": "enumeration_attack",
+                    "rules": {
+                        "sequential_ids_requested": 50,
+                        "window_minutes": 1,
+                        "action": "block_and_alert"
+                    }
+                }
+            ]
+        }
+    },
+    "ai_monitoring": {
+        "prompt_abuse": {
+            "description": "Detect AI prompt injection or abuse",
+            "patterns": [
+                {
+                    "name": "injection_attempt",
+                    "rules": {
+                        "keywords": [
+                            "ignore previous",
+                            "system prompt",
+                            "role:"
+                        ],
+                        "action": "reject_and_log"
+                    }
+                },
+                {
+                    "name": "excessive_requests",
+                    "rules": {
+                        "requests_per_minute": 20,
+                        "action": "rate_limit"
+                    }
+                },
+                {
+                    "name": "cost_spike",
+                    "rules": {
+                        "cost_increase_percentage": 500,
+                        "window_hours": 1,
+                        "action": "alert_and_throttle"
+                    }
+                }
+            ]
+        },
+        "output_monitoring": {
+            "description": "Monitor AI outputs for quality",
+            "checks": [
+                {
+                    "name": "rejection_rate_spike",
+                    "threshold": 0.5,
+                    "action": "alert_engineering"
+                },
+                {
+                    "name": "unusual_suggestions",
+                    "detection": "anomaly_detection",
+                    "action": "log_for_review"
+                }
+            ]
+        }
+    },
+    "plugin_monitoring": {
+        "misuse_patterns": [
+            {
+                "name": "excessive_api_calls",
+                "threshold_per_minute": 100,
+                "action": "throttle"
+            },
+            {
+                "name": "data_exfiltration_attempt",
+                "pattern": "bulk_reads_without_writes",
+                "action": "block_and_alert"
+            },
+            {
+                "name": "resource_abuse",
+                "cpu_threshold_percentage": 90,
+                "memory_threshold_percentage": 90,
+                "action": "terminate_and_disable"
+            }
+        ]
+    },
+    "response_actions": {
+        "alert": {
+            "channels": [
+                "security_team",
+                "on_call"
+            ],
+            "severity": "medium"
+        },
+        "block_and_alert": {
+            "auto_block": true,
+            "channels": [
+                "security_team",
+                "engineering_lead"
+            ],
+            "severity": "high"
+        },
+        "temporary_lockout": {
+            "duration_minutes": 30,
+            "requires_manual_unlock": false
+        },
+        "ip_block": {
+            "duration_hours": 24,
+            "requires_manual_review": true
+        }
+    },
+    "mitigation_process": {
+        "automated": {
+            "actions": [
+                "temporary_lockout",
+                "rate_limit",
+                "throttle"
+            ],
+            "requires_human_review": true
+        },
+        "manual": {
+            "actions": [
+                "permanent_ban",
+                "account_disable",
+                "policy_change"
+            ],
+            "requires": [
+                "security_team_approval"
+            ]
+        }
+    },
+    "reporting": {
+        "real_time_dashboard": true,
+        "daily_digest": true,
+        "weekly_summary": true,
+        "incident_report": "on_any_high_severity"
+    }
+}

@@ -1,0 +1,210 @@
+{
+    "version": "1.0.0",
+    "created": "2026-02-05T10:05:00Z",
+    "description": "Deployment observability for safe releases and fast rollbacks",
+    "deployment_markers": {
+        "required_fields": [
+            {
+                "name": "deployment_id",
+                "type": "string",
+                "format": "deploy-{timestamp}-{short_sha}"
+            },
+            {
+                "name": "deployment_timestamp",
+                "type": "string",
+                "format": "ISO8601"
+            },
+            {
+                "name": "git_commit_sha",
+                "type": "string"
+            },
+            {
+                "name": "git_branch",
+                "type": "string"
+            },
+            {
+                "name": "deployer",
+                "type": "string",
+                "description": "User or CI system that triggered deploy"
+            },
+            {
+                "name": "environment",
+                "type": "string",
+                "enum": [
+                    "staging",
+                    "production"
+                ]
+            }
+        ],
+        "injection_points": {
+            "logs": {
+                "enabled": true,
+                "field": "deployment_version"
+            },
+            "metrics": {
+                "enabled": true,
+                "label": "deployment_version"
+            },
+            "errors": {
+                "enabled": true,
+                "field": "deployment_version"
+            }
+        },
+        "emit_events": [
+            "deployment_started",
+            "deployment_completed",
+            "deployment_failed",
+            "rollback_initiated"
+        ]
+    },
+    "canary_rollout": {
+        "enabled": true,
+        "stages": [
+            {
+                "name": "canary",
+                "percentage": 5,
+                "duration_minutes": 15,
+                "auto_promote": false
+            },
+            {
+                "name": "partial",
+                "percentage": 25,
+                "duration_minutes": 30,
+                "auto_promote": false
+            },
+            {
+                "name": "majority",
+                "percentage": 75,
+                "duration_minutes": 30,
+                "auto_promote": false
+            },
+            {
+                "name": "full",
+                "percentage": 100,
+                "duration_minutes": null,
+                "auto_promote": false
+            }
+        ],
+        "traffic_routing": "firebase_hosting_traffic_split",
+        "monitoring_during_canary": {
+            "metrics_to_compare": [
+                "error_rate",
+                "latency_p99",
+                "order_success_rate"
+            ],
+            "comparison_window_minutes": 15
+        }
+    },
+    "automatic_rollback": {
+        "enabled": true,
+        "triggers": [
+            {
+                "name": "error_rate_spike",
+                "condition": "error_rate > baseline * 3",
+                "window_minutes": 5,
+                "action": "immediate_rollback"
+            },
+            {
+                "name": "latency_spike",
+                "condition": "latency_p99 > baseline * 2",
+                "window_minutes": 10,
+                "action": "halt_rollout"
+            },
+            {
+                "name": "critical_alert",
+                "condition": "any_critical_alert_fired",
+                "window_minutes": 15,
+                "action": "immediate_rollback"
+            },
+            {
+                "name": "order_success_drop",
+                "condition": "order_success_rate < 90%",
+                "window_minutes": 10,
+                "action": "immediate_rollback"
+            }
+        ],
+        "rollback_procedure": {
+            "steps": [
+                "Halt traffic shift",
+                "Route all traffic to previous version",
+                "Alert on-call",
+                "Log rollback event",
+                "Generate incident ticket"
+            ],
+            "timeout_minutes": 2
+        }
+    },
+    "deployment_verification": {
+        "pre_deploy_checks": [
+            {
+                "name": "health_check_baseline",
+                "description": "Record current health status"
+            },
+            {
+                "name": "metrics_baseline",
+                "description": "Record current metrics for comparison"
+            },
+            {
+                "name": "backup_verified",
+                "description": "Confirm recent backup exists"
+            }
+        ],
+        "post_deploy_checks": [
+            {
+                "name": "health_endpoints_pass",
+                "description": "All health endpoints return healthy",
+                "timeout_seconds": 60
+            },
+            {
+                "name": "smoke_tests_pass",
+                "description": "Critical path smoke tests succeed"
+            },
+            {
+                "name": "error_rate_stable",
+                "description": "Error rate not elevated vs baseline",
+                "window_minutes": 5
+            },
+            {
+                "name": "no_critical_alerts",
+                "description": "No critical alerts fired",
+                "window_minutes": 15
+            }
+        ]
+    },
+    "version_correlation": {
+        "enabled": true,
+        "queries": {
+            "errors_by_version": "SELECT version, COUNT(*) FROM errors GROUP BY version",
+            "latency_by_version": "SELECT version, P99(latency) FROM requests GROUP BY version",
+            "success_rate_by_version": "SELECT version, SUM(success)/COUNT(*) FROM orders GROUP BY version"
+        },
+        "alerts": {
+            "new_error_type": {
+                "condition": "error_type first seen in current deployment",
+                "severity": "high"
+            },
+            "regression": {
+                "condition": "metric worse than previous version by threshold",
+                "threshold_percentage": 10,
+                "severity": "high"
+            }
+        }
+    },
+    "release_notes_integration": {
+        "auto_generate": true,
+        "include": [
+            "git_commits_since_last_deploy",
+            "changed_files_count",
+            "test_results",
+            "security_scan_results"
+        ],
+        "destination": "/ops/releases/{deployment_id}.md"
+    },
+    "hard_rules": [
+        "Every deployment must have a unique version marker",
+        "Metrics must be comparable between versions",
+        "Rollback must complete in under 2 minutes",
+        "No deploy without deployment marker injection",
+        "Bad release must be detectable within 15 minutes"
+    ]
+}

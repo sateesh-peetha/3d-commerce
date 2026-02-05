@@ -1,0 +1,25 @@
+{
+    "id": "hello-world",
+    "name": "Hello World Plugin",
+    "version": "1.0.0",
+    "description": "A simple starter plugin template",
+    "author": "3D Commerce",
+    "compatibility": {
+        "platform": ">=1.0.0"
+    },
+    "permissions": [
+        "inject_ui"
+    ],
+    "ui": {
+        "injections": [
+            {
+                "slot": "admin-dashboard-widget",
+                "component": "./components/HelloWidget.jsx",
+                "priority": 100
+            }
+        ]
+    },
+    "hooks": {
+        "events": []
+    }
+}

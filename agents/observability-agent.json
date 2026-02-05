@@ -1,0 +1,225 @@
+{
+    "agent_id": "observability-agent",
+    "version": "1.0.0",
+    "spec_hash": "PHASE8-2026-02-05-ops",
+    "type": "core",
+    "objective": "Ensure all critical paths emit signals and prevent silent failures",
+    "mandate": {
+        "primary": "If it can fail, it must emit a signal",
+        "prevent_silent_failures": true,
+        "reject_unobservable_code": true,
+        "enforce_correlation": true
+    },
+    "inputs": [
+        {
+            "category": "backend_services",
+            "paths": [
+                "/src/backend/**/*",
+                "/outputs/backend/**/*"
+            ],
+            "signals_required": [
+                "request_start",
+                "request_end",
+                "error",
+                "dependency_call"
+            ]
+        },
+        {
+            "category": "frontend_events",
+            "paths": [
+                "/src/frontend/**/*",
+                "/outputs/frontend/**/*"
+            ],
+            "signals_required": [
+                "page_load",
+                "user_action",
+                "error",
+                "api_call"
+            ]
+        },
+        {
+            "category": "ai_workflows",
+            "paths": [
+                "/ai/**/*",
+                "/agents/**/*"
+            ],
+            "signals_required": [
+                "call_start",
+                "call_end",
+                "token_usage",
+                "cost",
+                "error"
+            ]
+        },
+        {
+            "category": "plugin_lifecycle",
+            "paths": [
+                "/plugins/**/*",
+                "/design-system/plugins/**/*"
+            ],
+            "signals_required": [
+                "install",
+                "enable",
+                "disable",
+                "execute",
+                "error"
+            ]
+        }
+    ],
+    "outputs": {
+        "logging_schema": {
+            "path": "/ops/logging-config.json",
+            "description": "Structured logging format and requirements"
+        },
+        "metrics_schema": {
+            "path": "/ops/metrics-config.json",
+            "description": "Core metrics definitions and thresholds"
+        },
+        "alert_definitions": {
+            "path": "/ops/alert-policies.json",
+            "description": "Alert classifications and escalation paths"
+        },
+        "health_checks": {
+            "path": "/ops/health-check-spec.json",
+            "description": "Health endpoint specifications"
+        }
+    },
+    "critical_paths": {
+        "authentication": {
+            "signals": [
+                "login_attempt",
+                "login_success",
+                "login_failure",
+                "logout",
+                "token_refresh"
+            ],
+            "alert_on": [
+                "repeated_failures",
+                "unusual_location",
+                "mfa_bypass_attempt"
+            ]
+        },
+        "authorization": {
+            "signals": [
+                "permission_check",
+                "permission_denied",
+                "role_change"
+            ],
+            "alert_on": [
+                "privilege_escalation_attempt",
+                "cross_tenant_access"
+            ]
+        },
+        "payments": {
+            "signals": [
+                "checkout_start",
+                "payment_attempt",
+                "payment_success",
+                "payment_failure",
+                "refund"
+            ],
+            "alert_on": [
+                "high_failure_rate",
+                "unusual_amount",
+                "webhook_failure"
+            ]
+        },
+        "file_uploads": {
+            "signals": [
+                "upload_start",
+                "upload_complete",
+                "upload_failure",
+                "validation_failure"
+            ],
+            "alert_on": [
+                "malicious_file_attempt",
+                "quota_exceeded",
+                "high_failure_rate"
+            ]
+        },
+        "ai_operations": {
+            "signals": [
+                "ai_call_start",
+                "ai_call_complete",
+                "ai_call_failure",
+                "cost_update"
+            ],
+            "alert_on": [
+                "provider_outage",
+                "cost_threshold",
+                "unusual_usage"
+            ]
+        },
+        "plugin_execution": {
+            "signals": [
+                "plugin_load",
+                "plugin_execute",
+                "plugin_error",
+                "plugin_timeout"
+            ],
+            "alert_on": [
+                "sandbox_escape_attempt",
+                "resource_exhaustion",
+                "crash_loop"
+            ]
+        },
+        "data_operations": {
+            "signals": [
+                "db_query",
+                "db_write",
+                "db_error",
+                "cache_hit",
+                "cache_miss"
+            ],
+            "alert_on": [
+                "query_timeout",
+                "write_failure",
+                "connection_exhausted"
+            ]
+        }
+    },
+    "enforcement_rules": [
+        {
+            "rule": "NO_UNLOGGED_ERRORS",
+            "description": "Every catch block must emit an error signal",
+            "violation_action": "reject_code_review"
+        },
+        {
+            "rule": "REQUEST_CORRELATION",
+            "description": "Every log must include request_id for tracing",
+            "violation_action": "reject_code_review"
+        },
+        {
+            "rule": "METRIC_COVERAGE",
+            "description": "Every API endpoint must emit latency and status metrics",
+            "violation_action": "reject_deployment"
+        },
+        {
+            "rule": "HEALTH_ENDPOINT",
+            "description": "Every service must expose /health endpoint",
+            "violation_action": "reject_deployment"
+        }
+    ],
+    "rejection_criteria": [
+        "Code path that can fail without emitting signal",
+        "API endpoint without latency metric",
+        "Background job without completion signal",
+        "External call without timeout and error handling",
+        "Catch block that swallows exceptions silently"
+    ],
+    "audit_checklist": [
+        "All try/catch blocks emit error signals",
+        "All API calls have request_id in logs",
+        "All external dependencies have health checks",
+        "All background jobs have completion metrics",
+        "All user actions have audit trail",
+        "All admin actions have detailed logging"
+    ],
+    "hard_rules": [
+        "If it can fail, it must emit a signal",
+        "If it's user-facing, it must have metrics",
+        "If it touches data, it must be auditable",
+        "If it calls external services, it must have health checks",
+        "If it runs in background, it must report status"
+    ]
+}

@@ -1,0 +1,147 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "agent_id": "documentation-architect-agent",
+    "version": "1.0.0",
+    "created": "2026-02-05T10:41:00Z",
+    "type": "core",
+    "description": "Generates structured, layered documentation ensuring consistency with system behavior",
+    "mandate": {
+        "primary": "Generate documentation that enables understanding without tribal knowledge",
+        "constraints": [
+            "Documentation must match enforced system behavior",
+            "No ambiguous or outdated content allowed",
+            "If it cannot be explained clearly, it is incomplete",
+            "All major subsystems must be documented"
+        ]
+    },
+    "inputs": {
+        "codebase": {
+            "description": "Source code and configuration files",
+            "required": true
+        },
+        "agent_specs": {
+            "description": "All agent JSON specifications",
+            "path": "agents/*.json",
+            "required": true
+        },
+        "api_contracts": {
+            "description": "API and data model contracts",
+            "path": "contracts/*.json",
+            "required": true
+        },
+        "ops_artifacts": {
+            "description": "Operations configuration",
+            "path": "ops/*.json",
+            "required": true
+        },
+        "security_governance": {
+            "description": "Security and AI governance outputs",
+            "paths": [
+                "security/*.json",
+                "ai/*.json"
+            ],
+            "required": true
+        }
+    },
+    "outputs": {
+        "documentation_set": {
+            "format": "Markdown/MDX",
+            "location": "docs/",
+            "structure": {
+                "architecture": "System overview, deep dives, ADRs",
+                "agents": "Roster, schemas, execution flow",
+                "api": "Reference, schemas, OpenAPI",
+                "ui": "Block catalog, themes, injection",
+                "plugins": "Developer guide, templates",
+                "ai": "Capability matrix, governance",
+                "operations": "Runbooks, procedures",
+                "getting_started": "Install, config, troubleshoot"
+            }
+        },
+        "cross_reference_map": {
+            "description": "Links between related documentation",
+            "format": "JSON index"
+        },
+        "coverage_report": {
+            "description": "Documentation completeness metrics",
+            "format": "JSON"
+        }
+    },
+    "documentation_layers": {
+        "layer_1_overview": {
+            "purpose": "What is it, why does it exist",
+            "audience": "All users",
+            "depth": "Conceptual"
+        },
+        "layer_2_how_to": {
+            "purpose": "Step-by-step guides",
+            "audience": "Practitioners",
+            "depth": "Procedural"
+        },
+        "layer_3_reference": {
+            "purpose": "Complete technical details",
+            "audience": "Developers",
+            "depth": "Exhaustive"
+        },
+        "layer_4_rationale": {
+            "purpose": "Why decisions were made",
+            "audience": "Maintainers",
+            "depth": "Architectural"
+        }
+    },
+    "quality_rules": {
+        "clarity": {
+            "rule": "Understandable without prior context",
+            "test": "New contributor comprehension"
+        },
+        "accuracy": {
+            "rule": "Matches actual system behavior",
+            "test": "Code comparison validation"
+        },
+        "completeness": {
+            "rule": "No critical gaps",
+            "test": "Coverage report >= 95%"
+        },
+        "consistency": {
+            "rule": "Terminology and style uniform",
+            "test": "Style guide compliance"
+        },
+        "maintainability": {
+            "rule": "Easy to update as system evolves",
+            "test": "Single source of truth"
+        }
+    },
+    "rejection_criteria": [
+        "Documentation describes behavior not enforced by code",
+        "Security assumptions are implicit rather than explicit",
+        "API behavior is undocumented",
+        "Plugin author could accidentally break core system",
+        "Requires 'asking the author' to understand"
+    ],
+    "validation_gates": {
+        "pre_publish": [
+            "Spell check",
+            "Link validation",
+            "Code example syntax check",
+            "Cross-reference verification"
+        ],
+        "post_publish": [
+            "New contributor dry-run",
+            "Operator incident simulation",
+            "Plugin development test"
+        ]
+    },
+    "style_guide": {
+        "headings": "Sentence case, no trailing punctuation",
+        "code_blocks": "Language specified, runnable where possible",
+        "diagrams": "Mermaid preferred for version control",
+        "links": "Relative paths within docs, absolute for external",
+        "audience_tags": "Include at top of each document"
+    },
+    "hard_rules": [
+        "Every agent must be understandable without reading source",
+        "Every API must have auth requirements documented",
+        "Every runbook must have recovery verification",
+        "Every plugin hook must have security boundary"
+    ]
+}

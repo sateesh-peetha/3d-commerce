@@ -1,0 +1,207 @@
+{
+    "version": "1.0.0",
+    "created": "2026-02-05T11:00:00Z",
+    "description": "Structured user feedback schema and processing rules",
+    "channels": {
+        "in_app": {
+            "type": "widget",
+            "triggers": [
+                "user_initiated",
+                "post_action"
+            ],
+            "fields": [
+                "rating",
+                "category",
+                "description"
+            ],
+            "priority": "high"
+        },
+        "admin_panel": {
+            "type": "form",
+            "triggers": [
+                "user_initiated"
+            ],
+            "fields": [
+                "category",
+                "severity",
+                "description",
+                "screenshots"
+            ],
+            "priority": "high"
+        },
+        "error_prompt": {
+            "type": "modal",
+            "triggers": [
+                "error_occurred"
+            ],
+            "fields": [
+                "what_happened",
+                "expected_behavior"
+            ],
+            "priority": "high"
+        },
+        "support_ticket": {
+            "type": "email",
+            "triggers": [
+                "user_initiated"
+            ],
+            "fields": [
+                "subject",
+                "description",
+                "attachments"
+            ],
+            "priority": "medium"
+        }
+    },
+    "feedback_schema": {
+        "required": {
+            "id": {
+                "type": "string",
+                "format": "uuid"
+            },
+            "timestamp": {
+                "type": "string",
+                "format": "iso8601"
+            },
+            "channel": {
+                "type": "string",
+                "enum": [
+                    "in_app",
+                    "admin_panel",
+                    "error_prompt",
+                    "support_ticket"
+                ]
+            },
+            "user_id": {
+                "type": "string"
+            }
+        },
+        "optional": {
+            "session_id": {
+                "type": "string"
+            },
+            "page_url": {
+                "type": "string"
+            },
+            "category": {
+                "type": "string"
+            },
+            "severity": {
+                "type": "string",
+                "enum": [
+                    "low",
+                    "medium",
+                    "high",
+                    "critical"
+                ]
+            },
+            "rating": {
+                "type": "integer",
+                "min": 1,
+                "max": 5
+            },
+            "description": {
+                "type": "string",
+                "max_length": 2000
+            },
+            "screenshots": {
+                "type": "array",
+                "items": "string"
+            },
+            "device_info": {
+                "type": "object"
+            },
+            "error_context": {
+                "type": "object"
+            }
+        }
+    },
+    "categories": {
+        "bug": {
+            "label": "Bug Report",
+            "maps_to": "product_backlog",
+            "priority_boost": 1
+        },
+        "feature_request": {
+            "label": "Feature Request",
+            "maps_to": "product_backlog",
+            "priority_boost": 0
+        },
+        "usability": {
+            "label": "Usability Issue",
+            "maps_to": "ux_backlog",
+            "priority_boost": 0.5
+        },
+        "performance": {
+            "label": "Performance Issue",
+            "maps_to": "engineering_backlog",
+            "priority_boost": 1
+        },
+        "question": {
+            "label": "Question",
+            "maps_to": "documentation",
+            "priority_boost": 0
+        }
+    },
+    "normalization_rules": {
+        "deduplication": {
+            "enabled": true,
+            "similarity_threshold": 0.8,
+            "window_days": 7,
+            "action": "merge_and_increment_count"
+        },
+        "auto_categorization": {
+            "enabled": true,
+            "method": "keyword_matching",
+            "fallback": "manual_triage"
+        },
+        "priority_calculation": {
+            "factors": [
+                {
+                    "name": "severity",
+                    "weight": 0.3
+                },
+                {
+                    "name": "frequency",
+                    "weight": 0.25
+                },
+                {
+                    "name": "user_tier",
+                    "weight": 0.15
+                },
+                {
+                    "name": "category_boost",
+                    "weight": 0.15
+                },
+                {
+                    "name": "recency",
+                    "weight": 0.15
+                }
+            ]
+        },
+        "sensitive_data_removal": {
+            "enabled": true,
+            "patterns": [
+                "email",
+                "phone",
+                "address",
+                "card_number"
+            ]
+        }
+    },
+    "backlog_conversion": {
+        "fields_mapping": {
+            "title": "Generated from description (first 100 chars)",
+            "description": "Original feedback + context",
+            "source": "feedback",
+            "priority": "Calculated priority",
+            "category": "Mapped category",
+            "reporter": "User ID (anonymized if needed)"
+        },
+        "auto_create": {
+            "enabled": false,
+            "threshold_count": 3,
+            "requires_approval": true
+        }
+    }
+}

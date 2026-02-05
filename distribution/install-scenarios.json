@@ -1,0 +1,198 @@
+{
+    "version": "1.0.0",
+    "created": "2026-02-05T10:30:00Z",
+    "description": "Installation test scenarios for dry-run validation",
+    "test_objective": "Verify that a third party can install and configure the platform without assistance",
+    "scenarios": [
+        {
+            "id": "INSTALL_001",
+            "name": "Clean Environment Fresh Install",
+            "description": "Install on a clean machine with no prior configuration",
+            "preconditions": [
+                "Fresh VM or container",
+                "Node.js 20.x installed",
+                "No prior 3D Commerce installation",
+                "Network access to npm and Firebase"
+            ],
+            "steps": [
+                "1. Clone repository",
+                "2. Copy .env.example to .env.development",
+                "3. Fill in required Firebase credentials",
+                "4. Run ./distribution/scripts/install.sh development",
+                "5. Verify health endpoint responds"
+            ],
+            "expected_result": "Installation completes without errors, health check passes",
+            "success_criteria": {
+                "exit_code": 0,
+                "health_check": "200 OK",
+                "no_manual_intervention": true
+            },
+            "estimated_time_minutes": 15
+        },
+        {
+            "id": "INSTALL_002",
+            "name": "Missing Required Config",
+            "description": "Attempt install without required environment variables",
+            "preconditions": [
+                "Node.js installed",
+                "No .env file present"
+            ],
+            "steps": [
+                "1. Clone repository",
+                "2. Remove .env file if present",
+                "3. Run ./distribution/scripts/install.sh"
+            ],
+            "expected_result": "Installation fails with clear error message",
+            "success_criteria": {
+                "exit_code": "non-zero",
+                "error_message_clear": true,
+                "error_actionable": true,
+                "no_silent_failure": true
+            }
+        },
+        {
+            "id": "INSTALL_003",
+            "name": "Missing Optional Config",
+            "description": "Install with optional variables missing",
+            "preconditions": [
+                "Required variables set",
+                "Optional variables not set (SENTRY_DSN, ANALYTICS_ID)"
+            ],
+            "steps": [
+                "1. Create .env with only required variables",
+                "2. Run install script",
+                "3. Verify warnings logged",
+                "4. Verify system functional"
+            ],
+            "expected_result": "Installation succeeds with warnings about missing optional config",
+            "success_criteria": {
+                "exit_code": 0,
+                "warnings_logged": true,
+                "system_functional": true
+            }
+        },
+        {
+            "id": "INSTALL_004",
+            "name": "Invalid Config Values",
+            "description": "Install with invalid configuration values",
+            "preconditions": [
+                "Invalid FIREBASE_PROJECT_ID format",
+                "Invalid RUN_MODE value"
+            ],
+            "steps": [
+                "1. Set FIREBASE_PROJECT_ID to 'invalid value with spaces'",
+                "2. Set RUN_MODE to 'unknown'",
+                "3. Run install script"
+            ],
+            "expected_result": "Validation fails with specific error messages",
+            "success_criteria": {
+                "exit_code": "non-zero",
+                "specific_variable_named": true,
+                "valid_values_suggested": true
+            }
+        },
+        {
+            "id": "INSTALL_005",
+            "name": "Docker Local Deployment",
+            "description": "Deploy using Docker Compose",
+            "preconditions": [
+                "Docker and Docker Compose installed",
+                ".env.local file configured"
+            ],
+            "steps": [
+                "1. cd distribution",
+                "2. docker-compose up -d",
+                "3. Wait for health checks",
+                "4. curl http://localhost:8080/api/health"
+            ],
+            "expected_result": "All containers healthy, API responding",
+            "success_criteria": {
+                "all_containers_healthy": true,
+                "api_responding": true,
+                "frontend_accessible": true
+            },
+            "estimated_time_minutes": 10
+        },
+        {
+            "id": "UPGRADE_001",
+            "name": "Minor Version Upgrade",
+            "description": "Upgrade from X.Y.0 to X.Y.1",
+            "preconditions": [
+                "Version 1.0.0 installed and running",
+                "Version 1.0.1 available"
+            ],
+            "steps": [
+                "1. Run ./distribution/scripts/upgrade.sh 1.0.0 1.0.1",
+                "2. Verify backup created",
+                "3. Verify migration ran",
+                "4. Verify new version running"
+            ],
+            "expected_result": "Upgrade completes, data preserved",
+            "success_criteria": {
+                "backup_created": true,
+                "data_preserved": true,
+                "new_version_running": true
+            }
+        },
+        {
+            "id": "ROLLBACK_001",
+            "name": "Rollback After Failed Upgrade",
+            "description": "Restore previous version after upgrade failure",
+            "preconditions": [
+                "Previous backup exists",
+                "Current state is broken"
+            ],
+            "steps": [
+                "1. Run ./distribution/scripts/rollback.sh",
+                "2. Verify previous version restored",
+                "3. Verify system functional"
+            ],
+            "expected_result": "System restored to previous working state",
+            "success_criteria": {
+                "previous_version_running": true,
+                "data_preserved": true,
+                "system_functional": true
+            }
+        },
+        {
+            "id": "SECURITY_001",
+            "name": "No Secrets in Artifacts",
+            "description": "Verify no secrets embedded in build artifacts",
+            "preconditions": [
+                "Build completed"
+            ],
+            "steps": [
+                "1. Scan built artifacts for secret patterns",
+                "2. Check Docker image layers",
+                "3. Verify .env files excluded from git"
+            ],
+            "expected_result": "No secrets found in any artifacts",
+            "success_criteria": {
+                "no_secrets_in_code": true,
+                "no_secrets_in_images": true,
+                "env_files_gitignored": true
+            }
+        }
+    ],
+    "test_schedule": {
+        "on_release": [
+            "INSTALL_001",
+            "INSTALL_002",
+            "INSTALL_005",
+            "SECURITY_001"
+        ],
+        "weekly": [
+            "UPGRADE_001",
+            "ROLLBACK_001"
+        ],
+        "on_demand": [
+            "INSTALL_003",
+            "INSTALL_004"
+        ]
+    },
+    "automation": {
+        "framework": "bash_scripts",
+        "ci_integration": true,
+        "report_format": "json"
+    }
+}

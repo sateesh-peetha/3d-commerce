@@ -1,0 +1,163 @@
+{
+    "version": "1.0.0",
+    "created": "2026-02-05T11:00:00Z",
+    "description": "Signal collection definitions for user behavior analysis",
+    "user_journey_signals": {
+        "onboarding": {
+            "signals": [
+                {
+                    "name": "registration_started",
+                    "event": "auth.registration.started",
+                    "indicates": "User intent to join"
+                },
+                {
+                    "name": "registration_completed",
+                    "event": "auth.registration.completed",
+                    "indicates": "Successful account creation"
+                },
+                {
+                    "name": "first_product_view",
+                    "event": "product.viewed",
+                    "filter": "is_first_view = true",
+                    "indicates": "User engagement"
+                }
+            ],
+            "funnel_conversion_target": 0.7
+        },
+        "purchase": {
+            "signals": [
+                {
+                    "name": "add_to_cart",
+                    "event": "cart.item_added",
+                    "indicates": "Purchase intent"
+                },
+                {
+                    "name": "checkout_started",
+                    "event": "checkout.started",
+                    "indicates": "Commitment to purchase"
+                },
+                {
+                    "name": "payment_submitted",
+                    "event": "payment.submitted",
+                    "indicates": "Payment attempt"
+                },
+                {
+                    "name": "order_completed",
+                    "event": "order.completed",
+                    "indicates": "Successful transaction"
+                }
+            ],
+            "funnel_conversion_target": 0.5
+        }
+    },
+    "drop_off_tracking": {
+        "enabled": true,
+        "significant_threshold_percentage": 20,
+        "pages_tracked": [
+            "product_listing",
+            "product_detail",
+            "cart",
+            "checkout_shipping",
+            "checkout_payment",
+            "order_confirmation"
+        ],
+        "alert_on_drop_off_increase": true
+    },
+    "failure_signals": {
+        "upload_failures": {
+            "event": "upload.failed",
+            "categorize_by": [
+                "file_type",
+                "file_size",
+                "error_code"
+            ],
+            "alert_threshold_per_hour": 10
+        },
+        "checkout_failures": {
+            "event": "checkout.failed",
+            "categorize_by": [
+                "payment_method",
+                "error_code",
+                "cart_value"
+            ],
+            "alert_threshold_per_hour": 5
+        },
+        "auth_failures": {
+            "event": "auth.failed",
+            "categorize_by": [
+                "method",
+                "error_code"
+            ],
+            "alert_threshold_per_hour": 20
+        }
+    },
+    "admin_friction_signals": {
+        "long_task_completion": {
+            "threshold_seconds": 60,
+            "tasks": [
+                "product_creation",
+                "order_processing",
+                "bulk_operations"
+            ]
+        },
+        "repeated_actions": {
+            "threshold_repeats": 3,
+            "window_seconds": 60,
+            "indicates": "UI confusion or errors"
+        }
+    },
+    "plugin_signals": {
+        "plugin_errors": {
+            "event": "plugin.error",
+            "categorize_by": [
+                "plugin_id",
+                "error_type"
+            ],
+            "alert_threshold_per_hour": 5
+        },
+        "plugin_resource_usage": {
+            "track": [
+                "cpu_time",
+                "memory",
+                "api_calls"
+            ],
+            "alert_on_threshold_exceed": true
+        }
+    },
+    "ai_usage_signals": {
+        "suggestion_generated": {
+            "event": "ai.suggestion.generated",
+            "track": [
+                "type",
+                "cost",
+                "latency"
+            ]
+        },
+        "suggestion_applied": {
+            "event": "ai.suggestion.applied",
+            "indicates": "AI value delivered"
+        },
+        "suggestion_rejected": {
+            "event": "ai.suggestion.rejected",
+            "indicates": "AI quality signal"
+        },
+        "acceptance_rate_target": 0.5
+    },
+    "aggregation": {
+        "real_time": [
+            "error_rate",
+            "latency",
+            "throughput"
+        ],
+        "hourly": [
+            "funnel_metrics",
+            "drop_offs",
+            "ai_usage"
+        ],
+        "daily": [
+            "user_segments",
+            "retention",
+            "revenue"
+        ]
+    }
+}

@@ -1,0 +1,168 @@
+{
+    "version": "1.0.0",
+    "created": "2026-02-05T10:30:00Z",
+    "description": "License model and entitlement configuration for 3D Commerce",
+    "license_type": {
+        "primary": "proprietary",
+        "model": "subscription",
+        "alternatives_available": [
+            "open_source_core",
+            "enterprise"
+        ]
+    },
+    "core_license": {
+        "name": "3D Commerce Core",
+        "type": "MIT",
+        "file": "LICENSE",
+        "includes": [
+            "Frontend application",
+            "Backend API",
+            "Basic commerce features",
+            "Standard UI components"
+        ],
+        "excludes": [
+            "Enterprise plugins",
+            "Premium support",
+            "SLA guarantees"
+        ]
+    },
+    "commercial_license": {
+        "name": "3D Commerce Professional",
+        "type": "commercial",
+        "tiers": [
+            {
+                "name": "Starter",
+                "price": "Free",
+                "limits": {
+                    "products": 100,
+                    "storage_gb": 5,
+                    "orders_per_month": 100,
+                    "team_members": 1,
+                    "ai_calls_per_day": 50
+                },
+                "features": [
+                    "Core commerce",
+                    "Basic analytics",
+                    "Community support"
+                ]
+            },
+            {
+                "name": "Professional",
+                "price": "$99/month",
+                "limits": {
+                    "products": 10000,
+                    "storage_gb": 100,
+                    "orders_per_month": 10000,
+                    "team_members": 10,
+                    "ai_calls_per_day": 500
+                },
+                "features": [
+                    "All Starter features",
+                    "Advanced analytics",
+                    "Email support",
+                    "Custom domain",
+                    "Priority bug fixes"
+                ]
+            },
+            {
+                "name": "Enterprise",
+                "price": "Custom",
+                "limits": {
+                    "products": "Unlimited",
+                    "storage_gb": "Unlimited",
+                    "orders_per_month": "Unlimited",
+                    "team_members": "Unlimited",
+                    "ai_calls_per_day": "Custom"
+                },
+                "features": [
+                    "All Professional features",
+                    "Dedicated support",
+                    "SLA guarantees",
+                    "Custom integrations",
+                    "On-premise option",
+                    "Audit logs",
+                    "SSO/SAML"
+                ]
+            }
+        ]
+    },
+    "feature_gating": {
+        "method": "license_key_validation",
+        "enforcement": "server_side",
+        "graceful_degradation": true,
+        "features": {
+            "ai_layout": {
+                "free": true,
+                "daily_limit": "tier_based"
+            },
+            "plugins": {
+                "free": true,
+                "marketplace": "starter_plus"
+            },
+            "advanced_analytics": {
+                "free": false,
+                "tier": "professional"
+            },
+            "sso_saml": {
+                "free": false,
+                "tier": "enterprise"
+            },
+            "audit_logs": {
+                "free": false,
+                "tier": "enterprise"
+            },
+            "custom_domain": {
+                "free": false,
+                "tier": "professional"
+            }
+        }
+    },
+    "plugin_licensing": {
+        "core_plugins": {
+            "license": "included",
+            "examples": [
+                "Basic shipping",
+                "Standard export"
+            ]
+        },
+        "marketplace_plugins": {
+            "license": "per_plugin",
+            "models": [
+                "free",
+                "one_time",
+                "subscription"
+            ],
+            "revenue_share": "70/30 developer/platform"
+        },
+        "enterprise_plugins": {
+            "license": "enterprise_tier",
+            "examples": [
+                "ERP integration",
+                "Custom workflows"
+            ]
+        }
+    },
+    "license_verification": {
+        "method": "api_key_validation",
+        "frequency": "on_startup_and_daily",
+        "offline_grace_period_days": 7,
+        "tamper_detection": true
+    },
+    "terms": {
+        "terms_of_service": "/legal/terms",
+        "privacy_policy": "/legal/privacy",
+        "acceptable_use": "/legal/aup",
+        "data_processing_agreement": "/legal/dpa"
+    },
+    "compliance": {
+        "gdpr": {
+            "dpa_available": true,
+            "data_export": true,
+            "data_deletion": true
+        },
+        "export_control": {
+            "itar": "not_applicable",
+            "ear": "not_applicable"
+        }
+    }
+}

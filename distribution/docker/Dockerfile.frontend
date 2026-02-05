@@ -1,0 +1,56 @@
+# 3D Commerce Frontend Container
+# Optimized for production with nginx serving static assets
+
+# Build stage
+FROM node:20-alpine AS builder
+
+WORKDIR /app
+
+# Install dependencies first for better caching
+COPY package*.json ./
+RUN npm ci --only=production=false
+
+# Copy source and build
+COPY . .
+RUN npm run build
+
+# Production stage
+FROM nginx:1.25-alpine
+
+# Security: Create non-root user
+RUN addgroup -g 1001 -S appgroup && \
+    adduser -u 1001 -S appuser -G appgroup
+
+# Copy nginx configuration
+COPY distribution/docker/nginx.conf /etc/nginx/nginx.conf
+COPY distribution/docker/default.conf /etc/nginx/conf.d/default.conf
+
+# Copy built assets from builder
+COPY --from=builder /app/dist /usr/share/nginx/html
+
+# Security: Set proper permissions
+RUN chown -R appuser:appgroup /usr/share/nginx/html && \
+    chown -R appuser:appgroup /var/cache/nginx && \
+    chown -R appuser:appgroup /var/log/nginx && \
+    chown -R appuser:appgroup /etc/nginx/conf.d && \
+    touch /var/run/nginx.pid && \
+    chown -R appuser:appgroup /var/run/nginx.pid
+
+# Switch to non-root user
+USER appuser
+
+# Expose port
+EXPOSE 8080
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD wget --no-verbose --tries=1 --spider http://localhost:8080/health || exit 1
+
+# Labels
+LABEL org.opencontainers.image.title="3D Commerce Frontend" \
+      org.opencontainers.image.description="Web frontend for 3D Commerce platform" \
+      org.opencontainers.image.version="1.0.0" \
+      org.opencontainers.image.vendor="3D Commerce"
+
+# Start nginx
+CMD ["nginx", "-g", "daemon off;"]

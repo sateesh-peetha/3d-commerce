@@ -1,0 +1,179 @@
+{
+    "version": "1.0.0",
+    "created": "2026-02-05T11:00:00Z",
+    "description": "Release strategy and audience configuration for 3D Commerce",
+    "current_mode": "private_beta",
+    "release_modes": {
+        "internal": {
+            "order": 1,
+            "description": "Internal testing with development team",
+            "audience": [
+                "developers",
+                "qa_team"
+            ],
+            "max_users": 10,
+            "duration": "1 week minimum",
+            "success_criteria": {
+                "all_golden_flows_pass": true,
+                "error_rate_below": 1.0,
+                "load_time_under_ms": 3000,
+                "zero_security_issues": true
+            },
+            "exit_gates": [
+                "All Phase 1-10 tags present",
+                "Zero critical bugs",
+                "All core flows validated"
+            ]
+        },
+        "private_beta": {
+            "order": 2,
+            "description": "Invite-only beta with trusted external users",
+            "audience": [
+                "internal",
+                "trusted_testers",
+                "design_partners"
+            ],
+            "max_users": 100,
+            "duration": "2-4 weeks",
+            "success_criteria": {
+                "user_activation_rate": 0.7,
+                "checkout_completion_rate": 0.6,
+                "nps_score_above": 30,
+                "error_rate_below": 0.5,
+                "support_tickets_per_user_below": 0.5
+            },
+            "exit_gates": [
+                "Passed internal stage",
+                "No P1 bugs open",
+                "Feedback system active",
+                "Monitoring in place"
+            ],
+            "feedback_priority": "high"
+        },
+        "public_ga": {
+            "order": 3,
+            "description": "General availability - open to all",
+            "audience": [
+                "everyone"
+            ],
+            "max_users": null,
+            "duration": "ongoing",
+            "success_criteria": {
+                "uptime_percentage": 99.9,
+                "user_activation_rate": 0.6,
+                "checkout_completion_rate": 0.5,
+                "monthly_revenue_growth": 0.1,
+                "churn_rate_below": 0.05
+            },
+            "exit_gates": [
+                "Passed private beta",
+                "All beta feedback addressed",
+                "Scaling verified",
+                "Support ready"
+            ]
+        }
+    },
+    "scope_freeze": {
+        "frozen_at": "2026-02-05T11:00:00Z",
+        "frozen_features": [
+            "Product catalog",
+            "Shopping cart",
+            "Checkout flow",
+            "User authentication",
+            "Admin dashboard",
+            "AI layout suggestions",
+            "Plugin system"
+        ],
+        "excluded_from_freeze": [
+            "Bug fixes",
+            "Security patches",
+            "Performance optimizations",
+            "Documentation updates"
+        ],
+        "change_control": {
+            "new_features_allowed": false,
+            "exceptions_require": [
+                "Engineering Lead approval",
+                "Risk assessment"
+            ]
+        }
+    },
+    "success_metrics_by_stage": {
+        "internal": {
+            "technical": {
+                "test_pass_rate": {
+                    "target": 1.0,
+                    "unit": "percentage"
+                },
+                "error_rate": {
+                    "target": 0.01,
+                    "unit": "percentage"
+                },
+                "response_time_p95": {
+                    "target": 500,
+                    "unit": "ms"
+                }
+            }
+        },
+        "private_beta": {
+            "user_experience": {
+                "activation_rate": {
+                    "target": 0.7,
+                    "unit": "percentage",
+                    "definition": "Complete first purchase flow"
+                },
+                "time_to_value": {
+                    "target": 300,
+                    "unit": "seconds",
+                    "definition": "Time to first product view"
+                },
+                "task_success_rate": {
+                    "target": 0.85,
+                    "unit": "percentage"
+                }
+            },
+            "business": {
+                "nps": {
+                    "target": 30,
+                    "unit": "score"
+                },
+                "csat": {
+                    "target": 4.0,
+                    "unit": "score_out_of_5"
+                }
+            }
+        },
+        "public_ga": {
+            "reliability": {
+                "uptime": {
+                    "target": 0.999,
+                    "unit": "percentage"
+                },
+                "mttr": {
+                    "target": 60,
+                    "unit": "minutes"
+                }
+            },
+            "growth": {
+                "wau_growth": {
+                    "target": 0.1,
+                    "unit": "week_over_week"
+                },
+                "conversion_rate": {
+                    "target": 0.02,
+                    "unit": "percentage"
+                }
+            }
+        }
+    },
+    "rollback_strategy": {
+        "trigger_conditions": [
+            "Error rate exceeds 5%",
+            "P95 latency exceeds 2000ms",
+            "Security incident detected",
+            "Critical data integrity issue"
+        ],
+        "rollback_time_target_minutes": 15,
+        "communication_required": true
+    }
+}

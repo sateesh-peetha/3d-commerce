@@ -1,0 +1,143 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "version": "1.0.0",
+    "tag": "doc-freeze/v1",
+    "created": "2026-02-05T10:41:00Z",
+    "description": "Documentation freeze manifest - locks scope of what must be documented",
+    "purpose": "Prevent structural changes during Phase 10 documentation",
+    "documentation_scope": {
+        "architecture": {
+            "frozen": true,
+            "includes": [
+                "System topology",
+                "Component boundaries",
+                "Data flow patterns",
+                "Technology decisions"
+            ],
+            "source_artifacts": [
+                "distribution/deployment-topology.json",
+                "contracts/*.schema.json"
+            ]
+        },
+        "agents": {
+            "frozen": true,
+            "includes": [
+                "Agent roles and mandates",
+                "Input/output contracts",
+                "Execution order and gates",
+                "Invariant enforcement"
+            ],
+            "source_artifacts": [
+                "agents/*.json"
+            ],
+            "agent_count": 12
+        },
+        "api_contracts": {
+            "frozen": true,
+            "includes": [
+                "All public endpoints",
+                "Authentication flows",
+                "Request/response schemas",
+                "Error codes"
+            ],
+            "source_artifacts": [
+                "contracts/api-catalog.json",
+                "contracts/auth-contract.json"
+            ],
+            "endpoint_count": 65
+        },
+        "ui_block_system": {
+            "frozen": true,
+            "includes": [
+                "Block types and responsibilities",
+                "Props and rendering rules",
+                "Theme token system",
+                "Device-specific behavior"
+            ],
+            "source_artifacts": [
+                "contracts/ui-block-catalog.json",
+                "design-system/**/*.css"
+            ],
+            "block_count": 25
+        },
+        "plugin_sdk": {
+            "frozen": true,
+            "includes": [
+                "Plugin lifecycle",
+                "Permission model",
+                "UI injection points",
+                "Backend hooks"
+            ],
+            "source_artifacts": [
+                "contracts/plugin-contract.json",
+                "contracts/plugin-entitlements.json"
+            ]
+        },
+        "ai_governance": {
+            "frozen": true,
+            "includes": [
+                "AI capability matrix",
+                "Allowed/blocked actions",
+                "Approval workflows",
+                "Cost controls"
+            ],
+            "source_artifacts": [
+                "ai/ai-governance.json",
+                "agents/ai-layout-agent.json"
+            ]
+        },
+        "operations": {
+            "frozen": true,
+            "includes": [
+                "Run modes",
+                "Observability hooks",
+                "Health checks",
+                "Backup/recovery"
+            ],
+            "source_artifacts": [
+                "ops/*.json",
+                "distribution/*.json"
+            ]
+        },
+        "security": {
+            "frozen": true,
+            "includes": [
+                "Authentication model",
+                "Authorization rules",
+                "Data isolation",
+                "Compliance alignment"
+            ],
+            "source_artifacts": [
+                "security/*.json",
+                "contracts/security*.json"
+            ]
+        }
+    },
+    "structural_change_policy": {
+        "during_phase_10": "DISALLOWED",
+        "exceptions": [
+            "Critical security fixes",
+            "Documentation-discovered bugs"
+        ],
+        "approval_required": "Engineering Lead"
+    },
+    "documentation_requirements": {
+        "format": "Markdown with code examples",
+        "diagrams": "Mermaid or ASCII for portability",
+        "cross_references": "Required between related docs",
+        "versioning": "Match software version",
+        "audience_tags": [
+            "developer",
+            "operator",
+            "plugin-author",
+            "admin"
+        ]
+    },
+    "validation_criteria": {
+        "new_contributor_test": "Can install and understand system",
+        "operator_test": "Can handle simulated incident",
+        "plugin_author_test": "Can create simple plugin",
+        "no_tribal_knowledge": "All assumptions documented"
+    },
+    "exit_tag": "docs-approved/v1"
+}

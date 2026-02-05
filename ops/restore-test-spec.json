@@ -1,0 +1,229 @@
+{
+    "version": "1.0.0",
+    "created": "2026-02-05T10:05:00Z",
+    "description": "Restore test specifications and drill procedures",
+    "restore_types": {
+        "partial_restore": {
+            "description": "Restore specific collection or subset of data",
+            "use_cases": [
+                "Accidental deletion of records",
+                "Data corruption in single collection",
+                "User requests data recovery"
+            ],
+            "procedure": [
+                "Identify affected collection and time range",
+                "Locate appropriate backup version",
+                "Create test environment for validation",
+                "Restore data to test environment",
+                "Verify data integrity",
+                "Merge restored data with production (if applicable)"
+            ],
+            "estimated_duration_minutes": 30,
+            "rto_target_minutes": 60
+        },
+        "full_restore": {
+            "description": "Complete system restore from backup",
+            "use_cases": [
+                "Catastrophic data loss",
+                "Ransomware recovery",
+                "Primary region failure"
+            ],
+            "procedure": [
+                "Declare disaster and assemble response team",
+                "Identify target backup version",
+                "Provision new infrastructure if needed",
+                "Restore Firestore collections in priority order",
+                "Restore storage buckets in priority order",
+                "Restore configuration",
+                "Validate all health checks pass",
+                "Verify sample data integrity",
+                "Switch traffic to restored system"
+            ],
+            "estimated_duration_hours": 4,
+            "rto_target_hours": 4
+        },
+        "point_in_time_restore": {
+            "description": "Restore to specific point in time",
+            "use_cases": [
+                "Rollback after bad deployment",
+                "Recovery from logical errors"
+            ],
+            "procedure": [
+                "Identify target timestamp",
+                "Locate closest backup before timestamp",
+                "Apply transaction logs if available",
+                "Verify data state matches expectations"
+            ],
+            "estimated_duration_minutes": 60,
+            "note": "Requires transaction logging enabled"
+        }
+    },
+    "drill_schedule": {
+        "partial_restore_drill": {
+            "frequency": "monthly",
+            "scope": "Single collection restore to test environment",
+            "success_criteria": [
+                "Backup located within 5 minutes",
+                "Restore completes within 30 minutes",
+                "100% of sample records match original"
+            ]
+        },
+        "full_restore_drill": {
+            "frequency": "quarterly",
+            "scope": "Complete system restore to staging environment",
+            "success_criteria": [
+                "All collections restored",
+                "All storage buckets restored",
+                "Health checks pass",
+                "Sample transactions succeed",
+                "Restore completes within RTO (4 hours)"
+            ]
+        }
+    },
+    "data_integrity_verification": {
+        "checks": [
+            {
+                "name": "record_count",
+                "description": "Compare record counts before and after restore",
+                "tolerance_percentage": 0.1
+            },
+            {
+                "name": "checksum_sample",
+                "description": "Verify checksums of random sample records",
+                "sample_size": 100
+            },
+            {
+                "name": "referential_integrity",
+                "description": "Verify foreign key relationships are intact",
+                "collections": [
+                    "orders->users",
+                    "files->users"
+                ]
+            },
+            {
+                "name": "timestamp_sanity",
+                "description": "Verify no timestamps are in the future",
+                "fields": [
+                    "createdAt",
+                    "updatedAt"
+                ]
+            }
+        ]
+    },
+    "restore_priority_order": {
+        "collections": [
+            {
+                "priority": 1,
+                "name": "users",
+                "reason": "Required for authentication"
+            },
+            {
+                "priority": 2,
+                "name": "auditLogs",
+                "reason": "Compliance requirement"
+            },
+            {
+                "priority": 3,
+                "name": "orders",
+                "reason": "Financial data"
+            },
+            {
+                "priority": 4,
+                "name": "products",
+                "reason": "Core business data"
+            },
+            {
+                "priority": 5,
+                "name": "files",
+                "reason": "User uploads"
+            },
+            {
+                "priority": 6,
+                "name": "carts",
+                "reason": "Transient but useful"
+            },
+            {
+                "priority": 7,
+                "name": "plugins",
+                "reason": "Extensions"
+            },
+            {
+                "priority": 8,
+                "name": "themes",
+                "reason": "Customizations"
+            },
+            {
+                "priority": 9,
+                "name": "aiChanges",
+                "reason": "AI history"
+            }
+        ],
+        "buckets": [
+            {
+                "priority": 1,
+                "name": "3d-models",
+                "reason": "User data"
+            },
+            {
+                "priority": 2,
+                "name": "thumbnails",
+                "reason": "Can regenerate but slow"
+            },
+            {
+                "priority": 3,
+                "name": "exports",
+                "reason": "Can regenerate"
+            }
+        ]
+    },
+    "drill_report_template": {
+        "fields": [
+            "drill_date",
+            "drill_type",
+            "backup_version_used",
+            "participants",
+            "start_time",
+            "end_time",
+            "duration_minutes",
+            "target_rto_minutes",
+            "rto_met",
+            "collections_restored",
+            "integrity_checks_passed",
+            "issues_encountered",
+            "lessons_learned",
+            "action_items"
+        ]
+    },
+    "automation_scripts": {
+        "partial_restore": {
+            "script": "scripts/restore-collection.sh",
+            "parameters": [
+                "collection_name",
+                "backup_timestamp",
+                "target_project"
+            ]
+        },
+        "full_restore": {
+            "script": "scripts/full-restore.sh",
+            "parameters": [
+                "backup_timestamp",
+                "target_project",
+                "dry_run"
+            ]
+        },
+        "verify_integrity": {
+            "script": "scripts/verify-restore.sh",
+            "parameters": [
+                "source_project",
+                "target_project"
+            ]
+        }
+    },
+    "hard_rules": [
+        "Restore must be tested - not assumed to work",
+        "Drill results must be documented",
+        "Failed drills must trigger remediation",
+        "RTO must be measured against target",
+        "Integrity verification is mandatory"
+    ]
+}

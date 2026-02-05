@@ -1,0 +1,264 @@
+{
+    "version": "1.0.0",
+    "created": "2026-02-05T10:05:00Z",
+    "description": "Structured logging configuration for JSON-formatted, correlated logs",
+    "format": {
+        "type": "json",
+        "encoding": "utf-8",
+        "newline": true,
+        "pretty_print": false
+    },
+    "required_fields": {
+        "timestamp": {
+            "type": "string",
+            "format": "ISO8601",
+            "example": "2026-02-05T10:05:00.123Z"
+        },
+        "level": {
+            "type": "string",
+            "enum": [
+                "debug",
+                "info",
+                "warn",
+                "error",
+                "fatal"
+            ]
+        },
+        "message": {
+            "type": "string",
+            "max_length": 1000
+        },
+        "service": {
+            "type": "string",
+            "description": "Service name emitting the log"
+        },
+        "environment": {
+            "type": "string",
+            "enum": [
+                "development",
+                "staging",
+                "production"
+            ]
+        }
+    },
+    "correlation_fields": {
+        "request_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Unique ID for request tracing across services",
+            "required": true
+        },
+        "session_id": {
+            "type": "string",
+            "description": "User session identifier",
+            "required": false
+        },
+        "trace_id": {
+            "type": "string",
+            "description": "Distributed tracing ID",
+            "required": false
+        },
+        "span_id": {
+            "type": "string",
+            "description": "Span ID for distributed tracing",
+            "required": false
+        }
+    },
+    "context_fields": {
+        "user_role": {
+            "type": "string",
+            "enum": [
+                "guest",
+                "user",
+                "admin",
+                "super_admin",
+                "system"
+            ],
+            "description": "Role of the actor (not user identity)"
+        },
+        "action": {
+            "type": "string",
+            "description": "Action being performed"
+        },
+        "resource": {
+            "type": "string",
+            "description": "Resource being accessed"
+        },
+        "duration_ms": {
+            "type": "number",
+            "description": "Operation duration in milliseconds"
+        },
+        "status": {
+            "type": "string",
+            "enum": [
+                "success",
+                "failure",
+                "partial"
+            ]
+        }
+    },
+    "mandatory_categories": {
+        "auth": {
+            "description": "Authentication events",
+            "events": [
+                "login",
+                "logout",
+                "token_refresh",
+                "mfa_challenge",
+                "password_reset"
+            ],
+            "min_level": "info"
+        },
+        "api": {
+            "description": "API access logs",
+            "events": [
+                "request_start",
+                "request_complete",
+                "request_error"
+            ],
+            "min_level": "info"
+        },
+        "admin": {
+            "description": "Administrative actions",
+            "events": [
+                "user_modify",
+                "role_change",
+                "config_update",
+                "secret_access"
+            ],
+            "min_level": "info"
+        },
+        "plugin": {
+            "description": "Plugin lifecycle events",
+            "events": [
+                "install",
+                "enable",
+                "disable",
+                "execute",
+                "error"
+            ],
+            "min_level": "info"
+        },
+        "ai": {
+            "description": "AI execution events",
+            "events": [
+                "call_start",
+                "call_complete",
+                "call_error",
+                "cost_update"
+            ],
+            "min_level": "info"
+        },
+        "error": {
+            "description": "Errors and exceptions",
+            "events": [
+                "unhandled_exception",
+                "validation_error",
+                "external_error"
+            ],
+            "min_level": "error"
+        },
+        "security": {
+            "description": "Security-relevant events",
+            "events": [
+                "access_denied",
+                "rate_limited",
+                "suspicious_activity"
+            ],
+            "min_level": "warn"
+        }
+    },
+    "pii_masking": {
+        "enabled": true,
+        "patterns": [
+            {
+                "name": "email",
+                "pattern": "[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}",
+                "replacement": "[EMAIL_REDACTED]"
+            },
+            {
+                "name": "phone",
+                "pattern": "\\+?[1-9]\\d{1,14}",
+                "replacement": "[PHONE_REDACTED]"
+            },
+            {
+                "name": "ip_address",
+                "pattern": "\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}",
+                "replacement": "[IP_REDACTED]"
+            },
+            {
+                "name": "credit_card",
+                "pattern": "\\d{4}[- ]?\\d{4}[- ]?\\d{4}[- ]?\\d{4}",
+                "replacement": "[CARD_REDACTED]"
+            },
+            {
+                "name": "ssn",
+                "pattern": "\\d{3}-\\d{2}-\\d{4}",
+                "replacement": "[SSN_REDACTED]"
+            },
+            {
+                "name": "bearer_token",
+                "pattern": "Bearer [A-Za-z0-9-_]+\\.[A-Za-z0-9-_]+\\.[A-Za-z0-9-_]+",
+                "replacement": "[TOKEN_REDACTED]"
+            },
+            {
+                "name": "api_key",
+                "pattern": "(?i)(api[_-]?key|apikey)[\"']?\\s*[:=]\\s*[\"']?[A-Za-z0-9-_]{20,}",
+                "replacement": "[API_KEY_REDACTED]"
+            }
+        ],
+        "fields_to_never_log": [
+            "password",
+            "secret",
+            "token",
+            "api_key",
+            "private_key",
+            "credit_card",
+            "ssn",
+            "authorization"
+        ]
+    },
+    "output_destinations": {
+        "development": {
+            "console": true,
+            "file": true,
+            "file_path": "./logs/dev.log"
+        },
+        "staging": {
+            "console": false,
+            "file": true,
+            "file_path": "/var/log/3dcommerce/staging.log",
+            "cloud_logging": true
+        },
+        "production": {
+            "console": false,
+            "file": false,
+            "cloud_logging": true,
+            "cloud_provider": "gcp_cloud_logging"
+        }
+    },
+    "rejection_criteria": [
+        "Log without request_id (except startup logs)",
+        "Log containing unmasked PII",
+        "Console.log in production code",
+        "Error logged without stack trace context",
+        "Log without proper level assignment"
+    ],
+    "example_log": {
+        "timestamp": "2026-02-05T10:05:00.123Z",
+        "level": "info",
+        "message": "User completed checkout",
+        "service": "checkout-service",
+        "environment": "production",
+        "request_id": "550e8400-e29b-41d4-a716-446655440000",
+        "user_role": "user",
+        "action": "checkout_complete",
+        "resource": "orders",
+        "duration_ms": 1234,
+        "status": "success",
+        "metadata": {
+            "order_id": "ord_123",
+            "items_count": 3
+        }
+    }
+}

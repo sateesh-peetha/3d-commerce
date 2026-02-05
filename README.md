@@ -46,25 +46,25 @@ The platform follows a **10-Layer Audited Architecture** designed for zero-drift
 
 ```mermaid
 graph TD
-    User[User/Browser] -->|HTTPS| CDN[CDN/Edge]
-    CDN -->|Static Assets| S3[Storage Bucket]
-    CDN -->|API Req| LB[Load Balancer]
-    LB -->|Traffic| API[API Gateway / Backend]
+    User["User/Browser"] -->|HTTPS| CDN["CDN/Edge"]
+    CDN -->|Static Assets| S3["Storage Bucket"]
+    CDN -->|API Req| LB["Load Balancer"]
+    LB -->|Traffic| API["API Gateway / Backend"]
     
     subgraph "Core System (Trusted)"
-        API -->|Read/Write| DB[(Primary DB)]
-        API -->|Pricing Logic| PE[Pricing Engine (Deterministic)]
+        API -->|Read/Write| DB[("Primary DB")]
+        API -->|Pricing Logic| PE["Pricing Engine (Deterministic)"]
     end
     
     subgraph "AI Layer (Governed)"
-        API -->|Request| AG[AI Governance Proxy]
-        AG -->|Sanitized Prompt| LLM[LLM Service]
+        API -->|Request| AG["AI Governance Proxy"]
+        AG -->|Sanitized Prompt| LLM["LLM Service"]
         LLM -->|Suggestion| AG
     end
     
     subgraph "Extensions (Sandboxed)"
-        API -->|Hook| PM[Plugin Manager]
-        PM -->|Limited Context| PL[Plugins]
+        API -->|Hook| PM["Plugin Manager"]
+        PM -->|Limited Context| PL["Plugins"]
     end
 ```
 

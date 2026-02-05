@@ -1,0 +1,139 @@
+{
+    "version": "1.0.0",
+    "tag": "ai-capability-freeze/v1",
+    "frozen_date": "2026-02-05T09:41:00Z",
+    "status": "FROZEN",
+    "description": "Explicit AI capability matrix - AI is incapable by design of acting outside this matrix",
+    "allowed": [
+        {
+            "id": "AI-ALLOW-001",
+            "capability": "reorder_ui_blocks",
+            "description": "Reorder existing UI blocks within a screen",
+            "scope": "UI composition only",
+            "risk_level": "LOW"
+        },
+        {
+            "id": "AI-ALLOW-002",
+            "capability": "suggest_theme_tokens",
+            "description": "Suggest design token values for themes",
+            "scope": "Design tokens only",
+            "risk_level": "LOW"
+        },
+        {
+            "id": "AI-ALLOW-003",
+            "capability": "generate_plugin_scaffold",
+            "description": "Generate boilerplate code for new plugins",
+            "scope": "Plugin scaffolding only",
+            "risk_level": "MEDIUM"
+        },
+        {
+            "id": "AI-ALLOW-004",
+            "capability": "generate_content_draft",
+            "description": "Generate text content drafts",
+            "scope": "Text content only",
+            "risk_level": "LOW"
+        },
+        {
+            "id": "AI-ALLOW-005",
+            "capability": "explain_configuration",
+            "description": "Explain system configuration to admins",
+            "scope": "Read-only explanation",
+            "risk_level": "LOW"
+        },
+        {
+            "id": "AI-ALLOW-006",
+            "capability": "toggle_block_visibility",
+            "description": "Show/hide existing UI blocks",
+            "scope": "Visibility only",
+            "risk_level": "LOW"
+        },
+        {
+            "id": "AI-ALLOW-007",
+            "capability": "change_block_zone",
+            "description": "Move blocks between zones on same screen",
+            "scope": "Zone assignment only",
+            "risk_level": "LOW"
+        },
+        {
+            "id": "AI-ALLOW-008",
+            "capability": "modify_spacing",
+            "description": "Adjust spacing using design tokens",
+            "scope": "Layout spacing only",
+            "risk_level": "LOW"
+        }
+    ],
+    "forbidden": [
+        {
+            "id": "AI-FORBID-001",
+            "capability": "modify_security_rules",
+            "reason": "Security rules are human-controlled only",
+            "violation_action": "HARD_BLOCK"
+        },
+        {
+            "id": "AI-FORBID-002",
+            "capability": "modify_auth_logic",
+            "reason": "Authentication is a critical security surface",
+            "violation_action": "HARD_BLOCK"
+        },
+        {
+            "id": "AI-FORBID-003",
+            "capability": "access_secrets",
+            "reason": "Secrets must never be exposed to AI",
+            "violation_action": "HARD_BLOCK"
+        },
+        {
+            "id": "AI-FORBID-004",
+            "capability": "change_pricing_logic",
+            "reason": "Pricing is business-critical and human-controlled",
+            "violation_action": "HARD_BLOCK"
+        },
+        {
+            "id": "AI-FORBID-005",
+            "capability": "write_to_production_db",
+            "reason": "Direct database writes bypass all safeguards",
+            "violation_action": "HARD_BLOCK"
+        },
+        {
+            "id": "AI-FORBID-006",
+            "capability": "create_new_ui_blocks",
+            "reason": "Only predefined blocks are allowed",
+            "violation_action": "HARD_BLOCK"
+        },
+        {
+            "id": "AI-FORBID-007",
+            "capability": "modify_permissions",
+            "reason": "Permission changes are admin-only",
+            "violation_action": "HARD_BLOCK"
+        },
+        {
+            "id": "AI-FORBID-008",
+            "capability": "alter_schema",
+            "reason": "Schema changes require migration process",
+            "violation_action": "HARD_BLOCK"
+        },
+        {
+            "id": "AI-FORBID-009",
+            "capability": "execute_arbitrary_code",
+            "reason": "Code execution must be sandboxed",
+            "violation_action": "HARD_BLOCK"
+        },
+        {
+            "id": "AI-FORBID-010",
+            "capability": "access_other_users_data",
+            "reason": "Data isolation is inviolable",
+            "violation_action": "HARD_BLOCK"
+        }
+    ],
+    "enforcement": {
+        "pre_execution_check": true,
+        "post_execution_validation": true,
+        "violation_logging": true,
+        "automatic_rollback_on_violation": true
+    },
+    "referenced_by": [
+        "ai-governance-agent",
+        "ai-orchestration-agent",
+        "regression-guardian-agent",
+        "security-auditor-agent"
+    ]
+}

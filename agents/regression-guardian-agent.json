@@ -1,46 +1,115 @@
 {
     "agent_id": "regression-guardian-agent",
-    "version": "1.0.0",
-    "spec_hash": "GOLDEN-2026-02-04-gp001",
-    "objective": "Ensure new bundles do not break existing functionality",
+    "version": "2.0.0",
+    "spec_hash": "PHASE5-2026-02-05-hardening",
+    "mode": "always_on",
+    "objective": "Gatekeeper agent that prevents any regression from entering the codebase",
+    "mandate": {
+        "detect_regressions_across": [
+            "Golden Path",
+            "All accepted bundles",
+            "System invariants",
+            "AI-generated outputs",
+            "Cost thresholds"
+        ],
+        "enforcement_level": "ABSOLUTE",
+        "human_override_allowed": false
+    },
     "input_sources": [
         "/tests/**/*",
         "/outputs/golden/**/*",
-        "/specs/system-invariants.json"
+        "/specs/system-invariants.json",
+        "/baseline/v1-stable.json",
+        "/contracts/cost-regression-rules.json"
     ],
     "checks": [
         {
             "id": "golden-path-tests",
             "description": "All Golden Path tests must pass",
             "command": "npm run test:e2e -- --grep 'Golden Path'",
-            "pass_condition": "exit_code == 0"
+            "pass_condition": "exit_code == 0",
+            "severity": "BLOCKING"
+        },
+        {
+            "id": "unit-tests",
+            "description": "All unit tests must pass",
+            "command": "npm run test",
+            "pass_condition": "exit_code == 0",
+            "severity": "BLOCKING"
+        },
+        {
+            "id": "integration-tests",
+            "description": "All integration tests must pass",
+            "command": "npm run test:integration",
+            "pass_condition": "exit_code == 0",
+            "severity": "BLOCKING"
         },
         {
             "id": "security-tests",
             "description": "All security tests must pass",
             "command": "npm run test:security",
-            "pass_condition": "exit_code == 0"
+            "pass_condition": "exit_code == 0",
+            "severity": "BLOCKING"
         },
         {
             "id": "invariant-check",
             "description": "No invariant violations in new code",
-            "script": "/scripts/check-invariants.ts",
-            "pass_condition": "violations == 0"
+            "command": "npm run check:invariants",
+            "pass_condition": "exit_code == 0",
+            "severity": "BLOCKING"
         },
         {
             "id": "bundle-tests",
             "description": "All previously completed bundle tests pass",
-            "command": "npm run test -- --grep 'Bundle:'",
-            "pass_condition": "exit_code == 0"
+            "command": "npm run test:e2e -- --grep 'Bundle:'",
+            "pass_condition": "exit_code == 0",
+            "severity": "BLOCKING"
+        },
+        {
+            "id": "ai-regression-tests",
+            "description": "All AI output regression tests pass",
+            "command": "npm run test:ai-regression",
+            "pass_condition": "exit_code == 0",
+            "severity": "BLOCKING"
+        },
+        {
+            "id": "cost-regression-check",
+            "description": "No cost regression patterns detected",
+            "command": "npm run check:cost-regression",
+            "pass_condition": "exit_code == 0",
+            "severity": "BLOCKING"
+        },
+        {
+            "id": "coverage-check",
+            "description": "Test coverage meets minimum threshold",
+            "command": "npm run check:coverage",
+            "pass_condition": "coverage >= 80",
+            "severity": "BLOCKING"
+        },
+        {
+            "id": "chaos-tests",
+            "description": "System handles failure scenarios gracefully",
+            "command": "npm run test:chaos",
+            "pass_condition": "exit_code == 0",
+            "severity": "WARNING"
         }
     ],
     "outputs": {
         "report": "/outputs/regression-report.json",
-        "blocking_issues": "array of failed checks"
+        "blocking_issues": "array of failed checks",
+        "warnings": "array of non-blocking issues",
+        "confidence_score": "0-100 stability metric"
     },
     "enforcement": {
         "on_failure": "BLOCK_BUILD",
         "retry_allowed": false,
-        "manual_override": "super_admin only"
-    }
+        "manual_override": "PROHIBITED",
+        "escalation": "Notify all stakeholders on failure"
+    },
+    "hard_rules": [
+        "Any regression = automatic build failure",
+        "No human override allowed",
+        "All checks must pass before merge",
+        "AI changes treated same as human changes"
+    ]
 }

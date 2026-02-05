@@ -1,0 +1,57 @@
+{
+    "version": "1.0.0",
+    "tag": "ai-governed/v1",
+    "governance_date": "2026-02-05T09:41:00Z",
+    "status": "PENDING_VERIFICATION",
+    "description": "AI Governance sign-off package for Phase 7 completion",
+    "governance_summary": {
+        "capability_surface_frozen": true,
+        "governance_agent_active": true,
+        "prompt_pipeline_configured": true,
+        "output_validation_configured": true,
+        "human_approval_enforced": true,
+        "rollback_capability_enabled": true,
+        "cost_controls_active": true,
+        "observability_configured": true,
+        "version_governance_active": true
+    },
+    "test_results": {
+        "governance_tests": {
+            "total": 0,
+            "passed": 0,
+            "failed": 0,
+            "status": "PENDING"
+        },
+        "adversarial_tests": {
+            "total": 0,
+            "passed": 0,
+            "failed": 0,
+            "status": "PENDING"
+        }
+    },
+    "artifacts": {
+        "capability_matrix": "/ai/ai_capabilities.json",
+        "governance_agent": "/agents/ai-governance-agent.json",
+        "prompt_rules": "/contracts/prompt-validation-rules.json",
+        "output_validation": "/contracts/ai-output-validation.json",
+        "approval_workflow": "/contracts/ai-approval-workflow.json",
+        "rollback_schema": "/contracts/ai-rollback-schema.json",
+        "cost_controls": "/contracts/ai-cost-controls.json",
+        "observability": "/contracts/ai-observability.json",
+        "version_governance": "/contracts/ai-version-governance.json"
+    },
+    "exit_criteria": {
+        "capability_surface_frozen": "VERIFIED",
+        "all_ai_actions_validated": "PENDING",
+        "all_ai_outputs_reversible": "PENDING",
+        "ai_changes_tested": "PENDING",
+        "ai_costs_bounded": "VERIFIED",
+        "no_adversarial_prompt_succeeds": "PENDING"
+    },
+    "sign_off_requirements": {
+        "governance_tests_pass": true,
+        "adversarial_tests_pass": true,
+        "no_bypass_detected": true,
+        "cost_controls_verified": true
+    }
+}

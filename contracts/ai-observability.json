@@ -1,0 +1,136 @@
+{
+    "version": "1.0.0",
+    "created": "2026-02-05T09:41:00Z",
+    "description": "AI observability and auditability requirements",
+    "core_principle": "AI must be observable and auditable - metadata only, no sensitive content",
+    "logging_requirements": {
+        "required_events": [
+            {
+                "event": "ai_request_initiated",
+                "fields": [
+                    "user_id",
+                    "session_id",
+                    "capability_requested",
+                    "timestamp",
+                    "request_hash"
+                ]
+            },
+            {
+                "event": "ai_prompt_validated",
+                "fields": [
+                    "user_id",
+                    "validation_result",
+                    "failed_checks",
+                    "timestamp"
+                ]
+            },
+            {
+                "event": "ai_output_generated",
+                "fields": [
+                    "user_id",
+                    "capability_used",
+                    "output_hash",
+                    "risk_score",
+                    "timestamp"
+                ]
+            },
+            {
+                "event": "ai_output_validated",
+                "fields": [
+                    "user_id",
+                    "validation_result",
+                    "failed_checks",
+                    "timestamp"
+                ]
+            },
+            {
+                "event": "ai_change_approved",
+                "fields": [
+                    "user_id",
+                    "approver_id",
+                    "change_id",
+                    "timestamp"
+                ]
+            },
+            {
+                "event": "ai_change_rejected",
+                "fields": [
+                    "user_id",
+                    "approver_id",
+                    "change_id",
+                    "rejection_reason",
+                    "timestamp"
+                ]
+            },
+            {
+                "event": "ai_change_applied",
+                "fields": [
+                    "user_id",
+                    "change_id",
+                    "rollback_id",
+                    "timestamp"
+                ]
+            },
+            {
+                "event": "ai_rollback_executed",
+                "fields": [
+                    "user_id",
+                    "rollback_id",
+                    "change_id",
+                    "reason",
+                    "timestamp"
+                ]
+            }
+        ],
+        "forbidden_in_logs": [
+            "prompt_content",
+            "output_content",
+            "user_data",
+            "secrets",
+            "tokens"
+        ]
+    },
+    "storage": {
+        "immutable": true,
+        "encrypted": true,
+        "retention_days": 365,
+        "backup_enabled": true
+    },
+    "queryability": {
+        "by_user_id": true,
+        "by_capability": true,
+        "by_date_range": true,
+        "by_outcome": true,
+        "by_risk_score": true,
+        "export_format": [
+            "JSON",
+            "CSV"
+        ]
+    },
+    "alerting": {
+        "high_rejection_rate": {
+            "threshold_percent": 50,
+            "window_minutes": 60,
+            "action": "ALERT_ADMIN"
+        },
+        "high_rollback_rate": {
+            "threshold_percent": 30,
+            "window_minutes": 60,
+            "action": "ALERT_ADMIN"
+        },
+        "cost_spike": {
+            "threshold_factor": 3,
+            "compared_to": "daily_average",
+            "action": "ALERT_ADMIN"
+        }
+    },
+    "dashboard_metrics": [
+        "requests_per_hour",
+        "approval_rate",
+        "rejection_rate",
+        "rollback_rate",
+        "average_risk_score",
+        "cost_per_day",
+        "tokens_consumed"
+    ]
+}

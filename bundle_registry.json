@@ -1,0 +1,461 @@
+{
+    "version": "1.0.0",
+    "created": "2026-02-05T09:08:00Z",
+    "locked": true,
+    "description": "Master bundle registry. READ-ONLY for agents. Any modification requires manual approval.",
+    "bundles": [
+        {
+            "id": "commerce",
+            "name": "Commerce Bundle",
+            "priority": 1,
+            "scope": {
+                "includes": [
+                    "Store page with product listing",
+                    "Product detail page",
+                    "Cart management (add, remove, update)",
+                    "Cart persistence across sessions",
+                    "Coupon system with validation",
+                    "Tax logic integration",
+                    "Payment abstraction (no card storage)",
+                    "Checkout flow refinement",
+                    "Payment method selection (mock)",
+                    "Order history"
+                ],
+                "excludes": [
+                    "Real payment gateway integration",
+                    "Card storage or PCI compliance",
+                    "Subscription/recurring billing",
+                    "Multi-currency",
+                    "Real-time tax calculation engine"
+                ]
+            },
+            "ui_blocks": [
+                "product-card",
+                "product-grid",
+                "filter-panel",
+                "cart-summary",
+                "pricing-box"
+            ],
+            "apis_required": [
+                "GET /api/products",
+                "GET /api/products/:id",
+                "POST /api/cart",
+                "PUT /api/cart/:id",
+                "DELETE /api/cart/:id",
+                "POST /api/cart/coupon",
+                "POST /api/checkout",
+                "GET /api/orders"
+            ],
+            "data_collections": [
+                "products",
+                "carts",
+                "orders",
+                "coupons"
+            ],
+            "tests_required": [
+                "unit:cart-operations",
+                "unit:coupon-validation",
+                "unit:tax-calculation",
+                "integration:checkout-flow",
+                "e2e:purchase-journey",
+                "security:cart-isolation"
+            ],
+            "ai_usage": false,
+            "depends_on": [
+                "golden-path"
+            ]
+        },
+        {
+            "id": "3d-printing-ops",
+            "name": "3D Printing Operations Bundle",
+            "priority": 2,
+            "scope": {
+                "includes": [
+                    "Multi-file order support",
+                    "File management (history, favorites)",
+                    "Configuration variants (presets)",
+                    "Reprint handling",
+                    "Advanced pricing rules extension",
+                    "Order workflow states",
+                    "Print job tracking",
+                    "Delivery options"
+                ],
+                "excludes": [
+                    "Direct printer control",
+                    "CAD editing",
+                    "Slice preview",
+                    "Real-time printer monitoring"
+                ]
+            },
+            "ui_blocks": [
+                "file-upload",
+                "model-viewer",
+                "config-panel",
+                "material-selector",
+                "pricing-box",
+                "order-card"
+            ],
+            "apis_required": [
+                "POST /api/files",
+                "GET /api/files",
+                "GET /api/files/:id",
+                "POST /api/files/:id/favorite",
+                "POST /api/presets",
+                "GET /api/presets",
+                "PUT /api/orders/:id/state",
+                "POST /api/orders/:id/reprint"
+            ],
+            "data_collections": [
+                "files",
+                "presets",
+                "orders",
+                "printJobs"
+            ],
+            "tests_required": [
+                "unit:file-validation",
+                "unit:pricing-rules",
+                "unit:preset-management",
+                "integration:reprint-flow",
+                "e2e:multi-file-order",
+                "security:file-access"
+            ],
+            "ai_usage": false,
+            "depends_on": [
+                "golden-path",
+                "commerce"
+            ]
+        },
+        {
+            "id": "admin-platform",
+            "name": "Admin & Platform Bundle",
+            "priority": 3,
+            "scope": {
+                "includes": [
+                    "User management (list, search, roles)",
+                    "API key manager (multiple providers)",
+                    "Secrets rotation UI",
+                    "Audit logs viewer",
+                    "Role management",
+                    "System settings panel",
+                    "Email templates"
+                ],
+                "excludes": [
+                    "Multi-tenant architecture",
+                    "White-label customization",
+                    "Billing/invoicing"
+                ]
+            },
+            "ui_blocks": [
+                "kpi-grid",
+                "order-queue",
+                "printer-status",
+                "profile-card"
+            ],
+            "apis_required": [
+                "GET /api/admin/users",
+                "PUT /api/admin/users/:id/role",
+                "GET /api/admin/api-keys",
+                "POST /api/admin/api-keys",
+                "DELETE /api/admin/api-keys/:id",
+                "POST /api/admin/api-keys/:id/rotate",
+                "GET /api/admin/audit-logs",
+                "GET /api/admin/settings",
+                "PUT /api/admin/settings"
+            ],
+            "data_collections": [
+                "users",
+                "apiKeys",
+                "auditLogs",
+                "settings"
+            ],
+            "tests_required": [
+                "unit:role-validation",
+                "unit:api-key-rotation",
+                "integration:audit-logging",
+                "e2e:admin-user-management",
+                "security:admin-access-control",
+                "security:role-escalation"
+            ],
+            "ai_usage": false,
+            "depends_on": [
+                "golden-path"
+            ]
+        },
+        {
+            "id": "cms-blog",
+            "name": "CMS & Blog Bundle",
+            "priority": 4,
+            "scope": {
+                "includes": [
+                    "Static pages (About, FAQ, Terms)",
+                    "Blog post creation/editing",
+                    "Content CRUD operations",
+                    "SEO metadata management",
+                    "Draft/publish flow",
+                    "Media library",
+                    "Media access control",
+                    "Content scheduling"
+                ],
+                "excludes": [
+                    "Full WYSIWYG editor",
+                    "Multi-language",
+                    "Comments system",
+                    "Social sharing"
+                ]
+            },
+            "ui_blocks": [
+                "card",
+                "input",
+                "btn"
+            ],
+            "apis_required": [
+                "GET /api/pages",
+                "POST /api/pages",
+                "PUT /api/pages/:id",
+                "DELETE /api/pages/:id",
+                "GET /api/blog",
+                "POST /api/blog",
+                "PUT /api/blog/:id",
+                "PUT /api/blog/:id/publish",
+                "GET /api/media",
+                "POST /api/media"
+            ],
+            "data_collections": [
+                "pages",
+                "blogPosts",
+                "media"
+            ],
+            "tests_required": [
+                "unit:seo-validation",
+                "unit:content-sanitization",
+                "integration:publish-flow",
+                "e2e:blog-creation",
+                "security:media-access"
+            ],
+            "ai_usage": false,
+            "depends_on": [
+                "admin-platform"
+            ]
+        },
+        {
+            "id": "theme-ui",
+            "name": "Theme & UI Customization Bundle",
+            "priority": 5,
+            "scope": {
+                "includes": [
+                    "Theme switching (light/dark)",
+                    "Custom theme creation (admin)",
+                    "Device-specific rendering adjustments",
+                    "Device overrides",
+                    "Layout variants per screen",
+                    "Token customization",
+                    "Accessibility settings",
+                    "AI layout suggestions"
+                ],
+                "excludes": [
+                    "Full customer-facing theme builder",
+                    "CSS export",
+                    "Mobile app theming"
+                ]
+            },
+            "ui_blocks": [
+                "all-navigation-blocks",
+                "all-shared-blocks"
+            ],
+            "apis_required": [
+                "GET /api/themes",
+                "POST /api/themes",
+                "PUT /api/themes/:id",
+                "GET /api/themes/active",
+                "PUT /api/themes/active",
+                "GET /api/layout-variants",
+                "PUT /api/user/preferences"
+            ],
+            "data_collections": [
+                "themes",
+                "layoutVariants",
+                "userPreferences"
+            ],
+            "tests_required": [
+                "unit:theme-validation",
+                "unit:token-override",
+                "integration:theme-switching",
+                "e2e:theme-persistence",
+                "e2e:accessibility-settings"
+            ],
+            "ai_usage": true,
+            "depends_on": [
+                "golden-path"
+            ]
+        },
+        {
+            "id": "plugin-extension",
+            "name": "Plugin & Extension Bundle",
+            "priority": 6,
+            "scope": {
+                "includes": [
+                    "Plugin SDK definition",
+                    "Plugin lifecycle (install, enable, disable)",
+                    "Permission system",
+                    "Permission boundaries",
+                    "UI injection",
+                    "Versioning",
+                    "Marketplace scaffold (list, install)",
+                    "Plugin configuration UI"
+                ],
+                "excludes": [
+                    "External plugin submission",
+                    "Payment for plugins",
+                    "Plugin versioning/updates"
+                ]
+            },
+            "ui_blocks": [
+                "All blocks with plugin slots"
+            ],
+            "apis_required": [
+                "GET /api/plugins",
+                "POST /api/plugins/install",
+                "PUT /api/plugins/:id/enable",
+                "PUT /api/plugins/:id/disable",
+                "DELETE /api/plugins/:id",
+                "GET /api/plugins/:id/config",
+                "PUT /api/plugins/:id/config"
+            ],
+            "data_collections": [
+                "plugins",
+                "pluginConfigs",
+                "pluginPermissions"
+            ],
+            "tests_required": [
+                "unit:plugin-validation",
+                "unit:permission-check",
+                "integration:plugin-lifecycle",
+                "e2e:plugin-install-flow",
+                "security:plugin-sandbox",
+                "security:permission-boundary"
+            ],
+            "ai_usage": false,
+            "depends_on": [
+                "admin-platform"
+            ]
+        },
+        {
+            "id": "ai-enablement",
+            "name": "AI Enablement Bundle",
+            "priority": 7,
+            "scope": {
+                "includes": [
+                    "Prompt-driven UI adjustments",
+                    "Prompt templates",
+                    "AI-generated layout suggestions",
+                    "Guardrails",
+                    "Validation & guardrails UI",
+                    "Change history & rollback",
+                    "Rollback mechanism",
+                    "AI usage analytics (admin)"
+                ],
+                "excludes": [
+                    "AI content generation",
+                    "AI product descriptions",
+                    "Autonomous AI actions"
+                ]
+            },
+            "ui_blocks": [
+                "prompt-box",
+                "generated-preview"
+            ],
+            "apis_required": [
+                "POST /api/ai/generate-layout",
+                "POST /api/ai/preview",
+                "POST /api/ai/apply",
+                "POST /api/ai/rollback",
+                "GET /api/ai/history",
+                "GET /api/ai/templates",
+                "GET /api/admin/ai-analytics"
+            ],
+            "data_collections": [
+                "aiChanges",
+                "aiTemplates",
+                "aiAnalytics"
+            ],
+            "tests_required": [
+                "unit:prompt-validation",
+                "unit:guardrail-check",
+                "integration:ai-preview-apply",
+                "e2e:ai-layout-change",
+                "e2e:ai-rollback",
+                "security:ai-output-validation"
+            ],
+            "ai_usage": true,
+            "depends_on": [
+                "golden-path",
+                "plugin-extension"
+            ]
+        },
+        {
+            "id": "mobile-apps",
+            "name": "Mobile Apps Bundle",
+            "priority": 8,
+            "scope": {
+                "includes": [
+                    "iOS app parity with web",
+                    "Android app parity with web",
+                    "Offline safety measures",
+                    "Secure local storage",
+                    "Push notifications"
+                ],
+                "excludes": [
+                    "AR features",
+                    "Native 3D model editing",
+                    "Background printing",
+                    "Widgets"
+                ]
+            },
+            "ui_blocks": [
+                "header-mobile-nav",
+                "nav-bottom-tabs",
+                "all-mobile-compatible-blocks"
+            ],
+            "apis_required": [
+                "POST /api/push/register",
+                "DELETE /api/push/unregister",
+                "GET /api/sync/status",
+                "POST /api/sync/pull",
+                "POST /api/sync/push"
+            ],
+            "data_collections": [
+                "pushTokens",
+                "syncState"
+            ],
+            "tests_required": [
+                "unit:offline-queue",
+                "unit:secure-storage",
+                "integration:push-notification",
+                "integration:sync-flow",
+                "e2e:mobile-parity",
+                "security:local-storage"
+            ],
+            "ai_usage": false,
+            "depends_on": [
+                "golden-path",
+                "commerce",
+                "3d-printing-ops"
+            ]
+        }
+    ],
+    "execution_order": [
+        "commerce",
+        "3d-printing-ops",
+        "admin-platform",
+        "cms-blog",
+        "theme-ui",
+        "plugin-extension",
+        "ai-enablement",
+        "mobile-apps"
+    ],
+    "rules": {
+        "read_only": true,
+        "no_parallel_execution": true,
+        "agent_modification_prohibited": true
+    }
+}

@@ -1,0 +1,116 @@
+{
+    "version": "1.0.0",
+    "created": "2026-02-05T09:31:00Z",
+    "description": "Data protection and compliance rules for GDPR/CCPA alignment",
+    "data_minimization": {
+        "principle": "Collect only what is necessary",
+        "rules": [
+            "No unnecessary PII collection",
+            "No tracking beyond product functionality",
+            "No third-party data sharing without consent"
+        ]
+    },
+    "purpose_limitation": {
+        "principle": "Use data only for stated purposes",
+        "allowed_purposes": [
+            "Order fulfillment",
+            "Account management",
+            "Customer support",
+            "Security monitoring",
+            "Legal compliance"
+        ],
+        "forbidden_purposes": [
+            "Selling user data",
+            "Profiling without consent",
+            "Third-party marketing"
+        ]
+    },
+    "data_retention": {
+        "active_accounts": {
+            "personal_data": "Account lifetime",
+            "order_history": "7 years (legal requirement)",
+            "payment_records": "7 years (legal requirement)",
+            "upload_files": "90 days after order completion",
+            "session_logs": "30 days"
+        },
+        "deleted_accounts": {
+            "grace_period_days": 30,
+            "retained_for_legal": [
+                "order_history",
+                "payment_records"
+            ],
+            "deleted_immediately": [
+                "personal_preferences",
+                "cart_data",
+                "session_data"
+            ]
+        }
+    },
+    "user_rights": {
+        "right_to_access": {
+            "description": "User can request copy of their data",
+            "endpoint": "POST /api/user/data-export",
+            "response_time_days": 30,
+            "format": "JSON"
+        },
+        "right_to_deletion": {
+            "description": "User can request data deletion",
+            "endpoint": "DELETE /api/user/account",
+            "verification_required": true,
+            "exceptions": [
+                "legal_holds",
+                "pending_orders"
+            ]
+        },
+        "right_to_portability": {
+            "description": "User can export data in machine-readable format",
+            "endpoint": "POST /api/user/data-export?portable=true",
+            "format": "JSON"
+        },
+        "right_to_rectification": {
+            "description": "User can correct their data",
+            "endpoint": "PUT /api/user/profile"
+        }
+    },
+    "deletion_verification": {
+        "complete_deletion_items": [
+            "User profile",
+            "User preferences",
+            "Cart contents",
+            "Saved addresses",
+            "Session tokens",
+            "Uploaded files (after retention)"
+        ],
+        "retained_items": [
+            "Order records (anonymized)",
+            "Payment records (anonymized)",
+            "Audit logs (anonymized)"
+        ],
+        "verification_tests": [
+            "Search for userId returns empty",
+            "No PII in retained records",
+            "Files physically deleted from storage"
+        ]
+    },
+    "breach_response": {
+        "detection": {
+            "monitoring": true,
+            "alerting": true,
+            "log_analysis": true
+        },
+        "response_timeline": {
+            "internal_notification_hours": 24,
+            "regulatory_notification_hours": 72,
+            "user_notification_hours": 72
+        },
+        "response_steps": [
+            "1. Contain and assess breach",
+            "2. Notify security team",
+            "3. Document incident",
+            "4. Notify regulatory authorities (if required)",
+            "5. Notify affected users",
+            "6. Remediate vulnerability",
+            "7. Post-incident review"
+        ]
+    }
+}

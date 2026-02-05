@@ -1,0 +1,91 @@
+{
+    "version": "1.0.0",
+    "created": "2026-02-05T09:41:00Z",
+    "description": "Prompt validation rules for AI prompt firewall",
+    "validation_rules": {
+        "length_limits": {
+            "max_prompt_characters": 10000,
+            "max_prompt_tokens": 2048,
+            "min_prompt_characters": 10
+        },
+        "format_rules": {
+            "must_be_utf8": true,
+            "no_binary_content": true,
+            "no_base64_encoded_data": true
+        },
+        "content_rules": {
+            "blocked_patterns": [
+                {
+                    "id": "PROMPT-BLOCK-001",
+                    "pattern": "ignore (previous |all |your )?instructions",
+                    "reason": "Instruction override attempt"
+                },
+                {
+                    "id": "PROMPT-BLOCK-002",
+                    "pattern": "forget (everything|what you were told)",
+                    "reason": "Memory wipe attempt"
+                },
+                {
+                    "id": "PROMPT-BLOCK-003",
+                    "pattern": "you are now (a |an )?",
+                    "reason": "Role override attempt"
+                },
+                {
+                    "id": "PROMPT-BLOCK-004",
+                    "pattern": "(system|assistant) prompt",
+                    "reason": "System prompt extraction attempt"
+                },
+                {
+                    "id": "PROMPT-BLOCK-005",
+                    "pattern": "(api[_-]?key|secret|password|token|credential)",
+                    "reason": "Secret extraction attempt"
+                },
+                {
+                    "id": "PROMPT-BLOCK-006",
+                    "pattern": "(delete|drop|truncate) (all |the )?(users?|data|database|table)",
+                    "reason": "Destructive action attempt"
+                },
+                {
+                    "id": "PROMPT-BLOCK-007",
+                    "pattern": "(grant|give|escalate).*(admin|permission|role|access)",
+                    "reason": "Privilege escalation attempt"
+                },
+                {
+                    "id": "PROMPT-BLOCK-008",
+                    "pattern": "(modify|change|update).*(security|auth|firestore).*(rules?)",
+                    "reason": "Security modification attempt"
+                }
+            ],
+            "required_context": [
+                "user_id",
+                "session_id",
+                "capability_requested"
+            ]
+        }
+    },
+    "intent_classification": {
+        "required": true,
+        "allowed_intents": [
+            "layout_modification",
+            "theme_suggestion",
+            "content_generation",
+            "configuration_explanation",
+            "plugin_scaffolding"
+        ],
+        "ambiguous_handling": "REJECT_WITH_CLARIFICATION_REQUEST",
+        "multi_intent_handling": "REJECT_COMPLEX_PROMPTS"
+    },
+    "logging": {
+        "log_metadata": true,
+        "log_content": false,
+        "log_hash": true,
+        "log_classification": true,
+        "log_rejection_reason": true
+    },
+    "rate_limiting": {
+        "per_user_per_minute": 10,
+        "per_user_per_hour": 100,
+        "per_admin_per_minute": 30,
+        "global_per_minute": 500
+    }
+}

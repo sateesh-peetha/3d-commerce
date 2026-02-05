@@ -1,0 +1,94 @@
+{
+    "version": "1.0.0",
+    "created": "2026-02-05T09:41:00Z",
+    "description": "Human-in-the-loop approval workflow for AI changes",
+    "core_principle": "All AI-generated changes must be explicitly approved by authorized admin",
+    "enforcement": {
+        "no_auto_apply": true,
+        "no_background_mutations": true,
+        "no_silent_changes": true,
+        "explicit_approval_required": true
+    },
+    "approval_workflow": {
+        "steps": [
+            {
+                "step": 1,
+                "name": "View Diff",
+                "description": "Admin must view the complete diff of proposed changes",
+                "required": true,
+                "timeout_minutes": null
+            },
+            {
+                "step": 2,
+                "name": "View AI Explanation",
+                "description": "Admin must read AI's explanation of what it changed and why",
+                "required": true,
+                "timeout_minutes": null
+            },
+            {
+                "step": 3,
+                "name": "View Risk Score",
+                "description": "Admin must acknowledge the risk score and impact assessment",
+                "required": true,
+                "timeout_minutes": null
+            },
+            {
+                "step": 4,
+                "name": "Approve or Reject",
+                "description": "Admin explicitly approves or rejects the change",
+                "required": true,
+                "options": [
+                    "APPROVE",
+                    "REJECT",
+                    "REQUEST_MODIFICATION"
+                ]
+            }
+        ]
+    },
+    "approval_requirements": {
+        "standard_changes": {
+            "risk_score_threshold": 0.5,
+            "approver_role": [
+                "admin",
+                "super_admin"
+            ],
+            "approvers_required": 1
+        },
+        "high_risk_changes": {
+            "risk_score_threshold": 0.7,
+            "approver_role": [
+                "super_admin"
+            ],
+            "approvers_required": 1,
+            "additional_review": "security_team"
+        },
+        "critical_changes": {
+            "risk_score_threshold": 0.9,
+            "approver_role": [
+                "super_admin"
+            ],
+            "approvers_required": 2,
+            "additional_review": "security_team",
+            "cooldown_hours": 24
+        }
+    },
+    "approval_record": {
+        "stored_fields": [
+            "change_id",
+            "approver_user_id",
+            "approval_timestamp",
+            "risk_score_acknowledged",
+            "diff_viewed_timestamp",
+            "explanation_viewed_timestamp",
+            "decision",
+            "rejection_reason"
+        ],
+        "immutable": true,
+        "retention_period": "1 year"
+    },
+    "pending_changes": {
+        "max_pending_per_user": 5,
+        "expiry_hours": 24,
+        "expired_action": "AUTO_REJECT"
+    }
+}

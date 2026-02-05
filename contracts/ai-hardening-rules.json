@@ -1,0 +1,129 @@
+{
+    "version": "1.0.0",
+    "created": "2026-02-05T09:21:00Z",
+    "description": "AI output hardening rules - ensures AI changes are safe, validated, and reversible",
+    "core_principle": "AI output is never applied directly",
+    "mandatory_steps": [
+        {
+            "step": 1,
+            "name": "Diff Generation",
+            "description": "AI output must be diffed against current state",
+            "output": "Unified diff showing exact changes",
+            "required": true
+        },
+        {
+            "step": 2,
+            "name": "Explanation",
+            "description": "AI must explain what changes it made and why",
+            "output": "Human-readable explanation",
+            "required": true
+        },
+        {
+            "step": 3,
+            "name": "Validation",
+            "description": "AI output must pass all validation rules",
+            "output": "Validation report with pass/fail per rule",
+            "required": true
+        },
+        {
+            "step": 4,
+            "name": "Preview",
+            "description": "User must preview changes before apply",
+            "output": "Visual preview of affected screens",
+            "required": true
+        },
+        {
+            "step": 5,
+            "name": "Approval",
+            "description": "Explicit user approval required",
+            "output": "Approval timestamp and user ID",
+            "required": true
+        },
+        {
+            "step": 6,
+            "name": "Rollback Metadata",
+            "description": "Store rollback data before apply",
+            "output": "Rollback ID and restoration instructions",
+            "required": true
+        }
+    ],
+    "validation_rules": [
+        {
+            "id": "AI-VAL-001",
+            "rule": "No new UI blocks",
+            "check": "AI cannot create blocks not in ui-blocks.json",
+            "severity": "BLOCKING"
+        },
+        {
+            "id": "AI-VAL-002",
+            "rule": "Device rules respected",
+            "check": "Layout changes must follow device-rules.css",
+            "severity": "BLOCKING"
+        },
+        {
+            "id": "AI-VAL-003",
+            "rule": "Token usage only",
+            "check": "No hardcoded values, only design tokens",
+            "severity": "BLOCKING"
+        },
+        {
+            "id": "AI-VAL-004",
+            "rule": "No business logic",
+            "check": "AI cannot modify pricing, auth, or workflow logic",
+            "severity": "BLOCKING"
+        },
+        {
+            "id": "AI-VAL-005",
+            "rule": "No security modifications",
+            "check": "AI cannot modify Firestore rules or permissions",
+            "severity": "BLOCKING"
+        },
+        {
+            "id": "AI-VAL-006",
+            "rule": "Accessibility compliance",
+            "check": "Changes must pass a11y validation",
+            "severity": "WARNING"
+        }
+    ],
+    "rollback_requirements": {
+        "rollback_window": "30 days",
+        "metadata_stored": [
+            "original_state",
+            "change_diff",
+            "user_who_approved",
+            "timestamp",
+            "ai_explanation"
+        ],
+        "instant_rollback": true,
+        "no_data_loss_guarantee": true
+    },
+    "regression_treatment": {
+        "rule": "AI changes must pass the same regression suite as human code",
+        "test_suite": "Full regression suite",
+        "exceptions": "NONE"
+    },
+    "guardrails": {
+        "max_changes_per_request": 10,
+        "allowed_transformation_types": [
+            "reorder_block",
+            "toggle_visibility",
+            "change_zone",
+            "modify_spacing",
+            "adjust_layout"
+        ],
+        "blocked_transformation_types": [
+            "create_block",
+            "delete_block",
+            "modify_logic",
+            "change_api",
+            "alter_security"
+        ]
+    },
+    "audit_requirements": {
+        "log_all_ai_requests": true,
+        "log_all_ai_outputs": true,
+        "log_all_applications": true,
+        "log_all_rollbacks": true,
+        "retention_period": "1 year"
+    }
+}

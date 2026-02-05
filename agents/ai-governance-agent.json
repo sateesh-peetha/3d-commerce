@@ -1,0 +1,103 @@
+{
+    "agent_id": "ai-governance-agent",
+    "version": "1.0.0",
+    "spec_hash": "PHASE7-2026-02-05-governance",
+    "type": "governance",
+    "objective": "Enforce AI capability limits, validate every AI input and output, block unsafe actions",
+    "mandate": {
+        "enforce_capability_limits": true,
+        "validate_all_inputs": true,
+        "validate_all_outputs": true,
+        "block_unsafe_actions": true,
+        "block_ambiguous_actions": true,
+        "no_bypass_allowed": true
+    },
+    "inputs": [
+        "/ai/ai_capabilities.json",
+        "/specs/system-invariants.json",
+        "/contracts/ai-hardening-rules.json",
+        "AI prompts",
+        "Proposed AI outputs"
+    ],
+    "validation_stages": {
+        "input_validation": {
+            "order": 1,
+            "checks": [
+                "prompt_length_within_limits",
+                "prompt_token_count_within_limits",
+                "no_bypass_instructions",
+                "no_secret_references",
+                "no_privilege_escalation_attempts",
+                "intent_is_clear"
+            ],
+            "on_failure": "REJECT_WITH_REASON"
+        },
+        "capability_validation": {
+            "order": 2,
+            "checks": [
+                "requested_action_in_allowed_list",
+                "requested_action_not_in_forbidden_list",
+                "scope_within_bounds"
+            ],
+            "on_failure": "REJECT_WITH_REASON"
+        },
+        "output_validation": {
+            "order": 3,
+            "checks": [
+                "output_matches_schema",
+                "output_within_capability_bounds",
+                "output_passes_invariant_check",
+                "output_can_be_diffed",
+                "output_can_be_rolled_back"
+            ],
+            "on_failure": "REJECT_WITH_REASON"
+        },
+        "risk_assessment": {
+            "order": 4,
+            "checks": [
+                "calculate_impact_scope",
+                "calculate_regression_risk",
+                "calculate_security_risk"
+            ],
+            "output": "risk_score"
+        }
+    },
+    "outputs": {
+        "approved_action": {
+            "includes": [
+                "action_id",
+                "capability_used",
+                "validated_output",
+                "risk_score"
+            ]
+        },
+        "rejected_action": {
+            "includes": [
+                "action_id",
+                "rejection_reason",
+                "failed_checks",
+                "remediation_hint"
+            ]
+        },
+        "risk_classification": {
+            "levels": [
+                "LOW",
+                "MEDIUM",
+                "HIGH",
+                "CRITICAL"
+            ],
+            "high_requires_extra_approval": true
+        }
+    },
+    "hard_rules": [
+        "No AI output reaches the system without passing this agent",
+        "Forbidden capabilities cannot be overridden by any prompt",
+        "All rejections are logged with full context",
+        "Risk score > 0.7 requires senior admin approval"
+    ],
+    "integration": {
+        "called_before": "ai_output_application",
+        "called_after": "ai_prompt_ingestion",
+        "blocks_pipeline_on_failure": true
+    }
+}

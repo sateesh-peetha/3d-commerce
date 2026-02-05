@@ -1,0 +1,118 @@
+{
+    "version": "1.0.0",
+    "tag": "security-freeze/v1",
+    "frozen_date": "2026-02-05T09:31:00Z",
+    "status": "FROZEN",
+    "description": "Security surface freeze for Phase 6 audit. No security-relevant changes allowed until Phase 6 completes.",
+    "frozen_surfaces": {
+        "authentication_flows": {
+            "oauth_providers": [
+                "google",
+                "apple"
+            ],
+            "otp_enabled": true,
+            "mfa_required_for": [
+                "admin",
+                "super_admin"
+            ],
+            "token_expiry_minutes": 60,
+            "refresh_token_days": 30,
+            "changes_allowed": false
+        },
+        "authorization_model": {
+            "roles": [
+                "user",
+                "admin",
+                "super_admin"
+            ],
+            "permissions": {
+                "user": [
+                    "read_own",
+                    "write_own",
+                    "upload_files",
+                    "create_orders"
+                ],
+                "admin": [
+                    "read_all",
+                    "manage_orders",
+                    "manage_printers",
+                    "view_analytics"
+                ],
+                "super_admin": [
+                    "all_admin",
+                    "manage_users",
+                    "manage_roles",
+                    "system_config"
+                ]
+            },
+            "changes_allowed": false
+        },
+        "api_surface": {
+            "total_endpoints": 65,
+            "public_endpoints": 2,
+            "authenticated_endpoints": 63,
+            "admin_endpoints": 15,
+            "new_endpoints_allowed": false
+        },
+        "firestore_schema": {
+            "collections": [
+                "users",
+                "products",
+                "carts",
+                "orders",
+                "files",
+                "plugins",
+                "themes",
+                "aiChanges",
+                "auditLogs"
+            ],
+            "changes_allowed": false
+        },
+        "storage_patterns": {
+            "buckets": [
+                "3d-models",
+                "thumbnails",
+                "exports"
+            ],
+            "access_pattern": "signed_urls_only",
+            "url_expiry_minutes": 15,
+            "changes_allowed": false
+        },
+        "plugin_permissions": {
+            "allowed": [
+                "read_user",
+                "write_cart",
+                "modify_ui",
+                "api_access"
+            ],
+            "forbidden": [
+                "read_secrets",
+                "write_auth",
+                "modify_security",
+                "direct_db_access"
+            ],
+            "changes_allowed": false
+        },
+        "ai_boundaries": {
+            "allowed_operations": [
+                "reorder_block",
+                "toggle_visibility",
+                "change_zone"
+            ],
+            "forbidden_operations": [
+                "create_block",
+                "modify_security",
+                "change_schema",
+                "alter_permissions"
+            ],
+            "supervision_required": true,
+            "changes_allowed": false
+        }
+    },
+    "enforcement": {
+        "pre_commit_hook": true,
+        "ci_blocking": true,
+        "manual_override": "PROHIBITED"
+    },
+    "release_condition": "Phase 6 complete with security-approved/v1 tag"
+}

@@ -1,0 +1,129 @@
+{
+    "agent_id": "change-impact-analyzer",
+    "version": "1.0.0",
+    "spec_hash": "PHASE5-2026-02-05-hardening",
+    "type": "sub_agent",
+    "parent_agent": "regression-guardian-agent",
+    "objective": "Predict what could break before tests run to enable targeted testing and risk assessment",
+    "inputs": {
+        "code_diff": {
+            "description": "Git diff of changed files",
+            "format": "unified diff"
+        },
+        "schema_diff": {
+            "description": "Changes to Firestore schemas",
+            "format": "JSON diff"
+        },
+        "ui_block_diff": {
+            "description": "Changes to UI block contracts",
+            "format": "JSON diff"
+        },
+        "api_diff": {
+            "description": "Changes to API contracts",
+            "format": "OpenAPI diff"
+        }
+    },
+    "outputs": {
+        "impacted_areas": {
+            "description": "List of areas affected by the change",
+            "format": [
+                "bundle_id",
+                "component",
+                "api",
+                "test_file"
+            ]
+        },
+        "tests_to_run": {
+            "description": "Subset of tests that must be re-run",
+            "format": [
+                "test_file_path"
+            ]
+        },
+        "risk_score": {
+            "description": "0-100 score indicating regression risk",
+            "thresholds": {
+                "low": "0-30",
+                "medium": "31-60",
+                "high": "61-80",
+                "critical": "81-100"
+            }
+        },
+        "risk_factors": {
+            "description": "Specific factors contributing to risk",
+            "format": [
+                "factor_name",
+                "severity",
+                "description"
+            ]
+        }
+    },
+    "analysis_rules": [
+        {
+            "id": "api-change",
+            "trigger": "Any file in /api/ or /contracts/api-*.json modified",
+            "impact": "All integration and e2e tests for affected endpoints",
+            "risk_weight": 30
+        },
+        {
+            "id": "security-change",
+            "trigger": "Any file matching *security*, *auth*, *rules* modified",
+            "impact": "All security tests + affected bundle tests",
+            "risk_weight": 50
+        },
+        {
+            "id": "pricing-change",
+            "trigger": "Any file matching *pricing*, *cart*, *checkout* modified",
+            "impact": "Pricing unit tests + checkout e2e tests",
+            "risk_weight": 40
+        },
+        {
+            "id": "ui-block-change",
+            "trigger": "Any file in /design-system/blocks/ modified",
+            "impact": "Visual regression tests + bundle composition tests",
+            "risk_weight": 20
+        },
+        {
+            "id": "schema-change",
+            "trigger": "Any Firestore schema or rules modified",
+            "impact": "All integration tests + security tests",
+            "risk_weight": 60
+        },
+        {
+            "id": "ai-change",
+            "trigger": "Any file in /ai/ or matching *ai-orchestration* modified",
+            "impact": "AI regression tests + validation tests",
+            "risk_weight": 45
+        },
+        {
+            "id": "plugin-change",
+            "trigger": "Any file in /plugins/ or plugin SDK modified",
+            "impact": "Plugin lifecycle tests + permission tests",
+            "risk_weight": 35
+        },
+        {
+            "id": "invariant-change",
+            "trigger": "system-invariants.json or check-invariants.ts modified",
+            "impact": "Full regression suite required",
+            "risk_weight": 70
+        }
+    ],
+    "risk_calculation": {
+        "formula": "sum(triggered_rule_weights) + file_count_factor + cross_bundle_factor",
+        "file_count_factor": {
+            "1-5_files": 0,
+            "6-15_files": 10,
+            "16-30_files": 25,
+            "30+_files": 50
+        },
+        "cross_bundle_factor": {
+            "single_bundle": 0,
+            "2_bundles": 15,
+            "3+_bundles": 30
+        }
+    },
+    "outputs_to": "regression-guardian-agent",
+    "execution": {
+        "when": "Before full test suite runs",
+        "purpose": "Prevent blind full test runs, enable targeted testing"
+    }
+}

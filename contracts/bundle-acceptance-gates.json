@@ -1,0 +1,72 @@
+{
+    "version": "1.0.0",
+    "created": "2026-02-05T09:08:00Z",
+    "description": "Hard stop acceptance gates for bundle approval. ALL conditions must be TRUE for acceptance.",
+    "acceptance_gates": {
+        "gate_1_screens": {
+            "name": "All Screens Render",
+            "check": "All bundle screens render without errors",
+            "validation": "Visual regression test passes",
+            "severity": "BLOCKING",
+            "command": "npm run test:e2e -- --grep 'renders correctly'"
+        },
+        "gate_2_apis": {
+            "name": "All APIs Authenticated",
+            "check": "Every /api/* endpoint requires authentication",
+            "validation": "Security test for unauthenticated access fails as expected",
+            "severity": "BLOCKING",
+            "command": "npm run test:security -- --grep 'authentication'"
+        },
+        "gate_3_tests_old": {
+            "name": "Existing Tests Pass",
+            "check": "All previously passing tests still pass",
+            "validation": "Full test suite exit code is 0",
+            "severity": "BLOCKING",
+            "command": "npm run test:all"
+        },
+        "gate_4_tests_new": {
+            "name": "New Tests Pass",
+            "check": "All new bundle-specific tests pass",
+            "validation": "Bundle test suite exit code is 0",
+            "severity": "BLOCKING",
+            "command": "npm run test:e2e -- --grep 'Bundle:'"
+        },
+        "gate_5_invariants": {
+            "name": "No Invariant Violations",
+            "check": "All system invariants remain enforced",
+            "validation": "Invariant check script reports 0 violations",
+            "severity": "BLOCKING",
+            "script": "scripts/check-invariants.ts"
+        },
+        "gate_6_security": {
+            "name": "No High/Critical Security Issues",
+            "check": "Security scan finds no HIGH or CRITICAL issues",
+            "validation": "Security policy agent report is clean",
+            "severity": "BLOCKING",
+            "command": "npm run test:security"
+        },
+        "gate_7_regression": {
+            "name": "Regression Suite Clean",
+            "check": "Golden path and all previous bundles work",
+            "validation": "Regression guardian agent reports no blockers",
+            "severity": "BLOCKING",
+            "command": "npm run test:e2e -- --grep 'Golden Path'"
+        }
+    },
+    "failure_handling": {
+        "on_any_gate_failure": {
+            "action": "REJECT_BUNDLE",
+            "next_step": "Fix architecture and re-run entire agent pipeline",
+            "manual_patch_allowed": false
+        },
+        "retry_policy": {
+            "max_retries": 3,
+            "cooldown_between_retries": "review_required"
+        }
+    },
+    "approval_requirements": {
+        "all_gates_must_pass": true,
+        "partial_approval_allowed": false,
+        "override_authority": "super_admin only"
+    }
+}

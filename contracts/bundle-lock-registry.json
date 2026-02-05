@@ -1,0 +1,79 @@
+{
+    "version": "1.0.0",
+    "created": "2026-02-05T09:08:00Z",
+    "description": "Post-acceptance lock registry. Tracks frozen contracts per bundle to prevent moving ground bugs.",
+    "frozen_bundles": [],
+    "lock_schema": {
+        "bundle_id": "string",
+        "accepted_at": "ISO8601 timestamp",
+        "frozen_apis": {
+            "description": "List of API endpoints that cannot be modified",
+            "format": [
+                "METHOD /path"
+            ]
+        },
+        "frozen_ui_blocks": {
+            "description": "List of UI block IDs with locked contracts",
+            "format": [
+                "block-id"
+            ]
+        },
+        "frozen_data_schemas": {
+            "description": "Firestore collection schemas with version",
+            "format": {
+                "collection": "schema_version"
+            }
+        },
+        "regression_baseline": {
+            "description": "Test counts at time of acceptance",
+            "format": {
+                "unit_tests": "number",
+                "integration_tests": "number",
+                "e2e_tests": "number",
+                "security_tests": "number"
+            }
+        }
+    },
+    "lock_rules": {
+        "api_modification": {
+            "breaking_changes": "PROHIBITED",
+            "additive_changes": "ALLOWED with new version",
+            "deprecation": "ALLOWED with 2 version grace period"
+        },
+        "ui_block_modification": {
+            "slot_removal": "PROHIBITED",
+            "slot_addition": "ALLOWED",
+            "prop_type_changes": "PROHIBITED"
+        },
+        "schema_modification": {
+            "field_removal": "PROHIBITED",
+            "field_addition": "ALLOWED with migration",
+            "type_changes": "PROHIBITED without migration plan"
+        }
+    },
+    "unlock_process": {
+        "authority": "super_admin",
+        "requirements": [
+            "Written justification",
+            "Impact analysis",
+            "Migration plan",
+            "Rollback plan"
+        ]
+    },
+    "template_lock_entry": {
+        "bundle_id": "",
+        "accepted_at": "",
+        "accepted_by": "",
+        "frozen_apis": [],
+        "frozen_ui_blocks": [],
+        "frozen_data_schemas": {},
+        "regression_baseline": {
+            "unit_tests": 0,
+            "integration_tests": 0,
+            "e2e_tests": 0,
+            "security_tests": 0
+        },
+        "commit_hash": "",
+        "notes": ""
+    }
+}

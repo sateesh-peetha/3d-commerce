@@ -1,0 +1,98 @@
+{
+    "version": "1.0.0",
+    "created": "2026-02-05T09:21:00Z",
+    "description": "Coverage enforcement policy - no untested paths allowed",
+    "policy": {
+        "name": "No Untested Path",
+        "enforcement_level": "HARD_STOP",
+        "applies_to": "All code changes"
+    },
+    "rules": [
+        {
+            "id": "COV-001",
+            "rule": "New API endpoint requires tests",
+            "trigger": "Any new endpoint in /api/",
+            "required_tests": [
+                "unit",
+                "integration"
+            ],
+            "on_violation": "BLOCK_MERGE"
+        },
+        {
+            "id": "COV-002",
+            "rule": "New UI block requires tests",
+            "trigger": "Any new block in /design-system/blocks/",
+            "required_tests": [
+                "visual",
+                "composition"
+            ],
+            "on_violation": "BLOCK_MERGE"
+        },
+        {
+            "id": "COV-003",
+            "rule": "Pricing logic change requires tests",
+            "trigger": "Any modification to pricing, cart, or checkout logic",
+            "required_tests": [
+                "unit",
+                "e2e"
+            ],
+            "on_violation": "BLOCK_MERGE"
+        },
+        {
+            "id": "COV-004",
+            "rule": "Security logic change requires tests",
+            "trigger": "Any modification to auth, rules, or permissions",
+            "required_tests": [
+                "security",
+                "integration"
+            ],
+            "on_violation": "BLOCK_MERGE"
+        },
+        {
+            "id": "COV-005",
+            "rule": "Workflow logic change requires tests",
+            "trigger": "Any modification to order states or job tracking",
+            "required_tests": [
+                "unit",
+                "e2e"
+            ],
+            "on_violation": "BLOCK_MERGE"
+        },
+        {
+            "id": "COV-006",
+            "rule": "Plugin change requires tests",
+            "trigger": "Any modification to plugin SDK or lifecycle",
+            "required_tests": [
+                "unit",
+                "security"
+            ],
+            "on_violation": "BLOCK_MERGE"
+        },
+        {
+            "id": "COV-007",
+            "rule": "AI logic change requires tests",
+            "trigger": "Any modification to AI orchestration or output handling",
+            "required_tests": [
+                "ai-regression",
+                "validation"
+            ],
+            "on_violation": "BLOCK_MERGE"
+        }
+    ],
+    "minimum_thresholds": {
+        "overall_coverage": 80,
+        "critical_path_coverage": 100,
+        "security_coverage": 100,
+        "pricing_coverage": 100
+    },
+    "enforcement_mechanism": {
+        "pre_commit_hook": false,
+        "ci_pipeline": true,
+        "test_generation_auto_run": true,
+        "regression_guardian_verification": true
+    },
+    "exemptions": {
+        "allowed": false,
+        "override_authority": "NONE"
+    }
+}

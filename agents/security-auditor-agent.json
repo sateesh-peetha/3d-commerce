@@ -1,0 +1,150 @@
+{
+    "agent_id": "security-auditor-agent",
+    "version": "1.0.0",
+    "spec_hash": "PHASE6-2026-02-05-security",
+    "type": "auditor",
+    "objective": "Perform hostile security audit assuming attackers and developer mistakes exist",
+    "mandate": {
+        "assume_hostile_attackers": true,
+        "assume_developer_mistakes": true,
+        "trust_nothing_without_proof": true,
+        "enforcement_over_convenience": true
+    },
+    "inputs": [
+        "/src/**/*",
+        "/contracts/**/*",
+        "/specs/**/*",
+        "/outputs/golden/firestore.rules",
+        "/agents/**/*",
+        "/design-system/**/*"
+    ],
+    "audit_areas": [
+        {
+            "id": "AUTH",
+            "name": "Authentication & Session",
+            "checks": [
+                "no_password_storage",
+                "no_token_reuse",
+                "logout_revokes_access",
+                "admin_requires_mfa",
+                "token_expiry_enforced"
+            ]
+        },
+        {
+            "id": "AUTHZ",
+            "name": "Authorization & Data Isolation",
+            "checks": [
+                "no_idor_vulnerabilities",
+                "no_cross_user_access",
+                "no_role_escalation",
+                "admin_apis_protected"
+            ]
+        },
+        {
+            "id": "STORAGE",
+            "name": "File & Object Storage",
+            "checks": [
+                "no_public_buckets",
+                "no_long_lived_urls",
+                "file_type_validation",
+                "file_size_limits"
+            ]
+        },
+        {
+            "id": "PAYMENT",
+            "name": "Payment & Financial",
+            "checks": [
+                "webhook_signature_verified",
+                "idempotency_enforced",
+                "no_order_without_payment"
+            ]
+        },
+        {
+            "id": "AI",
+            "name": "AI & Prompt Security",
+            "checks": [
+                "prompt_injection_resistant",
+                "ai_cannot_create_permissions",
+                "ai_cannot_bypass_rules",
+                "ai_output_validated"
+            ]
+        },
+        {
+            "id": "PLUGIN",
+            "name": "Plugin & Extension",
+            "checks": [
+                "plugin_sandboxed",
+                "no_secret_access",
+                "no_cross_plugin_access",
+                "ui_injection_scoped"
+            ]
+        },
+        {
+            "id": "AUDIT",
+            "name": "Logging & Forensics",
+            "checks": [
+                "admin_actions_logged",
+                "security_events_logged",
+                "no_pii_in_logs",
+                "tamper_resistant_logs"
+            ]
+        }
+    ],
+    "outputs": {
+        "findings_report": "/outputs/security/audit-findings.json",
+        "severity_summary": "/outputs/security/severity-summary.json",
+        "remediation_plan": "/outputs/security/remediation-plan.json"
+    },
+    "severity_classification": {
+        "CRITICAL": {
+            "description": "Immediate data breach or privilege escalation risk",
+            "examples": [
+                "cross_user_data_access",
+                "admin_api_exposed",
+                "secret_leaked"
+            ],
+            "action": "BLOCK_PHASE_6"
+        },
+        "HIGH": {
+            "description": "Significant security weakness exploitable with moderate effort",
+            "examples": [
+                "weak_token_validation",
+                "missing_rate_limit",
+                "idor_possible"
+            ],
+            "action": "BLOCK_PHASE_6"
+        },
+        "MEDIUM": {
+            "description": "Security concern requiring attention before production",
+            "examples": [
+                "verbose_errors",
+                "missing_headers",
+                "weak_password_policy"
+            ],
+            "action": "MUST_FIX"
+        },
+        "LOW": {
+            "description": "Minor security improvement opportunity",
+            "examples": [
+                "outdated_dependency",
+                "missing_csp_header"
+            ],
+            "action": "SHOULD_FIX"
+        }
+    },
+    "hard_rules": [
+        "Any HIGH or CRITICAL finding blocks Phase 6 completion",
+        "No exceptions or waivers for security issues",
+        "All findings must be documented with proof",
+        "Remediation must be verified by re-audit"
+    ],
+    "attack_simulations": [
+        "token_replay",
+        "session_fixation",
+        "idor_exploitation",
+        "privilege_escalation",
+        "prompt_injection",
+        "webhook_forgery",
+        "storage_access_bypass"
+    ]
+}

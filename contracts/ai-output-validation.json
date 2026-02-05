@@ -1,0 +1,95 @@
+{
+    "version": "1.0.0",
+    "created": "2026-02-05T09:41:00Z",
+    "description": "AI output validation and diffing requirements",
+    "core_principle": "If output cannot be diffed, it cannot be applied",
+    "validation_stages": {
+        "schema_validation": {
+            "order": 1,
+            "description": "Validate output against expected schema",
+            "schemas": {
+                "layout_change": "/contracts/layout-change.schema.json",
+                "theme_suggestion": "/contracts/theme-suggestion.schema.json",
+                "plugin_scaffold": "/contracts/plugin-scaffold.schema.json",
+                "content_draft": "/contracts/content-draft.schema.json"
+            },
+            "on_failure": "REJECT"
+        },
+        "capability_validation": {
+            "order": 2,
+            "description": "Verify output is within allowed capabilities",
+            "reference": "/ai/ai_capabilities.json",
+            "on_failure": "REJECT"
+        },
+        "invariant_validation": {
+            "order": 3,
+            "description": "Verify output does not violate system invariants",
+            "reference": "/specs/system-invariants.json",
+            "on_failure": "REJECT"
+        },
+        "regression_risk": {
+            "order": 4,
+            "description": "Estimate regression risk of output",
+            "factors": [
+                "number_of_changes",
+                "scope_of_impact",
+                "affected_screens",
+                "affected_users"
+            ],
+            "output": "risk_score (0.0 - 1.0)"
+        }
+    },
+    "diff_requirements": {
+        "mandatory": true,
+        "formats": {
+            "layout_change": {
+                "show": [
+                    "block_id",
+                    "old_position",
+                    "new_position",
+                    "old_visibility",
+                    "new_visibility"
+                ],
+                "format": "unified_diff"
+            },
+            "theme_suggestion": {
+                "show": [
+                    "token_name",
+                    "old_value",
+                    "new_value",
+                    "preview_color"
+                ],
+                "format": "side_by_side"
+            },
+            "plugin_scaffold": {
+                "show": [
+                    "file_path",
+                    "content_preview",
+                    "permissions_required"
+                ],
+                "format": "file_tree"
+            }
+        },
+        "must_be_human_readable": true,
+        "must_show_impact_scope": true
+    },
+    "validation_output": {
+        "success": {
+            "includes": [
+                "validated_output",
+                "diff",
+                "impact_summary",
+                "risk_score",
+                "rollback_id"
+            ]
+        },
+        "failure": {
+            "includes": [
+                "failed_stage",
+                "failed_checks",
+                "rejection_reason",
+                "remediation_guidance"
+            ]
+        }
+    }
+}

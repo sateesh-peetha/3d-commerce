@@ -1,0 +1,79 @@
+{
+    "version": "1.0.0",
+    "created": "2026-02-05T09:41:00Z",
+    "description": "Prompt and model version governance - model change = code change",
+    "core_principle": "Model changes are treated like code changes",
+    "prompt_versioning": {
+        "required": true,
+        "format": "v{major}.{minor}.{patch}",
+        "storage": "/ai/prompts/versions/",
+        "changelog_required": true,
+        "version_on_change": {
+            "major": "Capability scope change",
+            "minor": "Behavior modification",
+            "patch": "Wording refinement"
+        }
+    },
+    "model_configuration": {
+        "locked_per_environment": true,
+        "environments": {
+            "development": {
+                "model": "gemini-1.5-flash",
+                "temperature": 0.7,
+                "max_tokens": 4096
+            },
+            "staging": {
+                "model": "gemini-1.5-pro",
+                "temperature": 0.3,
+                "max_tokens": 4096
+            },
+            "production": {
+                "model": "gemini-1.5-pro",
+                "temperature": 0.1,
+                "max_tokens": 4096,
+                "locked": true
+            }
+        },
+        "silent_upgrade_prevention": true
+    },
+    "change_process": {
+        "prompt_change": {
+            "requires": [
+                "code_review",
+                "test_pass",
+                "approval"
+            ],
+            "tested_with": [
+                "regression_tests",
+                "adversarial_tests"
+            ],
+            "deployed_via": "standard_deployment_pipeline"
+        },
+        "model_change": {
+            "requires": [
+                "security_review",
+                "regression_tests",
+                "load_tests",
+                "approval"
+            ],
+            "cooldown_days": 7,
+            "rollback_plan_required": true
+        }
+    },
+    "version_registry": {
+        "current_prompt_versions": {
+            "layout_generation": "v1.0.0",
+            "theme_suggestion": "v1.0.0",
+            "plugin_scaffolding": "v1.0.0",
+            "content_generation": "v1.0.0",
+            "configuration_explanation": "v1.0.0"
+        },
+        "current_model": "gemini-1.5-pro",
+        "last_updated": "2026-02-05T09:41:00Z"
+    },
+    "compatibility_checks": {
+        "prompt_model_compatibility": true,
+        "schema_compatibility": true,
+        "capability_compatibility": true
+    }
+}

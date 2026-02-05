@@ -1,0 +1,90 @@
+{
+    "version": "1.0.0",
+    "created": "2026-02-05T09:41:00Z",
+    "description": "AI change rollback schema and versioning requirements",
+    "core_principle": "Every AI-applied change must be reversible",
+    "rollback_metadata": {
+        "required_fields": [
+            {
+                "field": "rollback_id",
+                "type": "uuid",
+                "description": "Unique identifier for rollback operation"
+            },
+            {
+                "field": "change_id",
+                "type": "uuid",
+                "description": "Reference to the AI change"
+            },
+            {
+                "field": "version_before",
+                "type": "integer",
+                "description": "State version before change"
+            },
+            {
+                "field": "version_after",
+                "type": "integer",
+                "description": "State version after change"
+            },
+            {
+                "field": "snapshot_data",
+                "type": "object",
+                "description": "Complete snapshot of pre-change state"
+            },
+            {
+                "field": "rollback_instructions",
+                "type": "object",
+                "description": "Step-by-step rollback procedure"
+            },
+            {
+                "field": "created_at",
+                "type": "timestamp",
+                "description": "When rollback metadata was created"
+            },
+            {
+                "field": "expires_at",
+                "type": "timestamp",
+                "description": "When rollback capability expires"
+            }
+        ]
+    },
+    "version_assignment": {
+        "auto_increment": true,
+        "format": "v{major}.{minor}.{patch}",
+        "ai_changes_increment": "patch",
+        "max_versions_retained": 100
+    },
+    "rollback_capabilities": {
+        "one_click_rollback": true,
+        "partial_rollback": false,
+        "rollback_chain": true,
+        "rollback_window_days": 30
+    },
+    "rollback_validation": {
+        "required_checks": [
+            {
+                "check": "snapshot_integrity",
+                "description": "Verify snapshot data is complete and valid"
+            },
+            {
+                "check": "no_conflicts",
+                "description": "Verify no conflicting changes since snapshot"
+            },
+            {
+                "check": "schema_compatible",
+                "description": "Verify snapshot is compatible with current schema"
+            }
+        ],
+        "on_validation_failure": "BLOCK_ROLLBACK_REQUIRE_MANUAL"
+    },
+    "rejection_rules": {
+        "cannot_rollback": "REJECT_CHANGE",
+        "description": "If a change cannot be rolled back cleanly, it cannot be applied"
+    },
+    "audit_trail": {
+        "log_rollback_creation": true,
+        "log_rollback_execution": true,
+        "log_rollback_failure": true,
+        "include_user_id": true,
+        "include_reason": true
+    }
+}

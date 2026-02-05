@@ -1,0 +1,299 @@
+{
+    "version": "1.0.0",
+    "tag": "baseline/v1-stable",
+    "frozen_date": "2026-02-05T09:21:00Z",
+    "status": "IMMUTABLE",
+    "description": "Baseline snapshot for Phase 5 hardening. All future changes are compared against this baseline.",
+    "api_contracts": {
+        "version": "1.0.0",
+        "total_endpoints": 65,
+        "endpoints": [
+            {
+                "path": "/api/products",
+                "methods": [
+                    "GET"
+                ]
+            },
+            {
+                "path": "/api/products/:id",
+                "methods": [
+                    "GET"
+                ]
+            },
+            {
+                "path": "/api/cart",
+                "methods": [
+                    "GET",
+                    "POST"
+                ]
+            },
+            {
+                "path": "/api/cart/:id",
+                "methods": [
+                    "PUT",
+                    "DELETE"
+                ]
+            },
+            {
+                "path": "/api/cart/coupon",
+                "methods": [
+                    "POST"
+                ]
+            },
+            {
+                "path": "/api/checkout",
+                "methods": [
+                    "POST"
+                ]
+            },
+            {
+                "path": "/api/orders",
+                "methods": [
+                    "GET"
+                ]
+            },
+            {
+                "path": "/api/orders/:id",
+                "methods": [
+                    "GET"
+                ]
+            },
+            {
+                "path": "/api/files",
+                "methods": [
+                    "GET",
+                    "POST"
+                ]
+            },
+            {
+                "path": "/api/files/:id",
+                "methods": [
+                    "GET",
+                    "DELETE"
+                ]
+            },
+            {
+                "path": "/api/presets",
+                "methods": [
+                    "GET",
+                    "POST"
+                ]
+            },
+            {
+                "path": "/api/admin/users",
+                "methods": [
+                    "GET"
+                ]
+            },
+            {
+                "path": "/api/admin/users/:id/role",
+                "methods": [
+                    "PUT"
+                ]
+            },
+            {
+                "path": "/api/admin/api-keys",
+                "methods": [
+                    "GET",
+                    "POST"
+                ]
+            },
+            {
+                "path": "/api/admin/audit-logs",
+                "methods": [
+                    "GET"
+                ]
+            },
+            {
+                "path": "/api/admin/settings",
+                "methods": [
+                    "GET",
+                    "PUT"
+                ]
+            },
+            {
+                "path": "/api/pages",
+                "methods": [
+                    "GET",
+                    "POST"
+                ]
+            },
+            {
+                "path": "/api/blog",
+                "methods": [
+                    "GET",
+                    "POST"
+                ]
+            },
+            {
+                "path": "/api/media",
+                "methods": [
+                    "GET",
+                    "POST"
+                ]
+            },
+            {
+                "path": "/api/themes",
+                "methods": [
+                    "GET",
+                    "POST"
+                ]
+            },
+            {
+                "path": "/api/plugins",
+                "methods": [
+                    "GET"
+                ]
+            },
+            {
+                "path": "/api/ai/generate-layout",
+                "methods": [
+                    "POST"
+                ]
+            },
+            {
+                "path": "/api/ai/preview",
+                "methods": [
+                    "POST"
+                ]
+            },
+            {
+                "path": "/api/ai/apply",
+                "methods": [
+                    "POST"
+                ]
+            },
+            {
+                "path": "/api/ai/rollback",
+                "methods": [
+                    "POST"
+                ]
+            }
+        ]
+    },
+    "ui_block_contracts": {
+        "version": "1.0.0",
+        "total_blocks": 28,
+        "blocks": {
+            "navigation": [
+                "header-main-nav",
+                "header-mobile-nav",
+                "nav-bottom-tabs",
+                "footer-main"
+            ],
+            "commerce": [
+                "product-card",
+                "product-grid",
+                "filter-panel",
+                "cart-summary"
+            ],
+            "3d_printing": [
+                "file-upload",
+                "model-viewer",
+                "config-panel",
+                "material-selector",
+                "pricing-box"
+            ],
+            "user": [
+                "profile-card",
+                "order-card"
+            ],
+            "admin": [
+                "kpi-grid",
+                "order-queue",
+                "printer-status"
+            ],
+            "ai": [
+                "prompt-box",
+                "generated-preview"
+            ],
+            "shared": [
+                "btn",
+                "input",
+                "badge",
+                "card",
+                "avatar",
+                "skeleton"
+            ]
+        }
+    },
+    "plugin_sdk": {
+        "version": "1.0.0",
+        "lifecycle_methods": [
+            "onInstall",
+            "onEnable",
+            "onDisable",
+            "onUninstall"
+        ],
+        "permissions": [
+            "read_user",
+            "write_cart",
+            "modify_ui",
+            "api_access"
+        ]
+    },
+    "schema_versions": {
+        "users": "1.0.0",
+        "products": "1.0.0",
+        "carts": "1.0.0",
+        "orders": "1.0.0",
+        "files": "1.0.0",
+        "plugins": "1.0.0",
+        "themes": "1.0.0",
+        "aiChanges": "1.0.0"
+    },
+    "invariants": {
+        "ref": "/specs/system-invariants.json",
+        "count": 10,
+        "enforcement": "ACTIVE"
+    },
+    "test_baseline": {
+        "unit_tests": {
+            "total": 2,
+            "passing": 2,
+            "files": [
+                "pricing.test.ts",
+                "coupon.test.ts"
+            ]
+        },
+        "integration_tests": {
+            "total": 0,
+            "passing": 0,
+            "files": []
+        },
+        "e2e_tests": {
+            "total": 5,
+            "passing": 5,
+            "files": [
+                "golden-path.spec.ts",
+                "commerce-bundle.spec.ts",
+                "3d-printing-ops-bundle.spec.ts",
+                "admin-platform-bundle.spec.ts",
+                "checkout.test.json"
+            ]
+        },
+        "security_tests": {
+            "total": 2,
+            "passing": 2,
+            "files": [
+                "cross-user-access.test.json",
+                "golden-path-security.spec.ts"
+            ]
+        }
+    },
+    "bundles_completed": [
+        "golden-path",
+        "commerce",
+        "3d-printing-ops",
+        "admin-platform",
+        "cms-blog",
+        "theme-ui",
+        "plugin-extension",
+        "ai-enablement"
+    ],
+    "modification_rules": {
+        "this_file_is": "READ_ONLY",
+        "breaking_changes_require": "NEW_BASELINE_VERSION",
+        "additive_changes_require": "BASELINE_EXTENSION"
+    }
+}

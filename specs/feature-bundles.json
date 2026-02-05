@@ -213,6 +213,38 @@
                 "golden-path",
                 "plugin-extension"
             ]
+        },
+        {
+            "id": "mobile-apps",
+            "name": "Mobile Apps Bundle",
+            "priority": 8,
+            "scope": {
+                "includes": [
+                    "iOS app parity with web",
+                    "Android app parity with web",
+                    "Offline safety measures",
+                    "Secure local storage",
+                    "Push notifications"
+                ],
+                "excludes": [
+                    "AR features",
+                    "Native 3D model editing",
+                    "Background printing",
+                    "Widgets"
+                ]
+            },
+            "success_tests": [
+                "Mobile renders same screens as web",
+                "Offline queue works correctly",
+                "Push notifications received",
+                "Secure storage encrypted",
+                "Sync recovers gracefully"
+            ],
+            "depends_on": [
+                "golden-path",
+                "commerce",
+                "3d-printing-ops"
+            ]
         }
     ],
     "execution_order": [
@@ -222,6 +254,7 @@
         "cms-blog",
         "theme-ui",
         "plugin-extension",
-        "ai-enablement"
+        "ai-enablement",
+        "mobile-apps"
     ]
 }

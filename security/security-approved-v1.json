@@ -1,0 +1,69 @@
+{
+    "version": "1.0.0",
+    "tag": "security-approved/v1",
+    "approval_date": "2026-02-05T09:31:00Z",
+    "status": "PENDING_APPROVAL",
+    "description": "Security sign-off package for Phase 6 completion",
+    "audit_summary": {
+        "total_checks": 150,
+        "passed": 0,
+        "failed": 0,
+        "pending": 150,
+        "status": "AUDIT_PENDING"
+    },
+    "findings_summary": {
+        "critical": 0,
+        "high": 0,
+        "medium": 0,
+        "low": 0,
+        "status": "PENDING_AUDIT"
+    },
+    "compliance_checklist": {
+        "authentication": {
+            "no_password_storage": "PENDING",
+            "token_expiry_enforced": "PENDING",
+            "admin_mfa_required": "PENDING",
+            "logout_revokes_access": "PENDING"
+        },
+        "authorization": {
+            "no_idor_vulnerabilities": "PENDING",
+            "no_cross_user_access": "PENDING",
+            "admin_apis_protected": "PENDING",
+            "no_privilege_escalation": "PENDING"
+        },
+        "data_protection": {
+            "data_encrypted_at_rest": "PENDING",
+            "data_encrypted_in_transit": "PENDING",
+            "no_pii_in_logs": "PENDING",
+            "deletion_verified": "PENDING"
+        },
+        "ai_security": {
+            "prompt_injection_resistant": "PENDING",
+            "output_validated": "PENDING",
+            "guardrails_enforced": "PENDING",
+            "rollback_available": "PENDING"
+        },
+        "plugin_security": {
+            "sandbox_isolation": "PENDING",
+            "permission_boundaries": "PENDING",
+            "ui_injection_scoped": "PENDING"
+        }
+    },
+    "evidence_archive": {
+        "security_freeze_manifest": "/security/freeze-v1.json",
+        "audit_findings": "/outputs/security/audit-findings.json",
+        "test_results": "/outputs/security/test-results.json",
+        "compliance_report": "/outputs/security/compliance-report.json",
+        "penetration_report": "/outputs/security/pentest-report.json"
+    },
+    "sign_off_requirements": {
+        "no_high_critical_findings": true,
+        "all_security_tests_pass": true,
+        "ai_fully_constrained": true,
+        "data_access_provably_isolated": true,
+        "compliance_obligations_met": true,
+        "evidence_archived": true
+    },
+    "approvers": [],
+    "approval_notes": "Pending Phase 6 audit completion"
+}

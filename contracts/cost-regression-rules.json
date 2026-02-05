@@ -1,0 +1,173 @@
+{
+    "version": "1.0.0",
+    "created": "2026-02-05T09:21:00Z",
+    "description": "Cost and abuse regression detection rules",
+    "objective": "Detect expensive patterns and potential abuse vectors before they reach production",
+    "checks": [
+        {
+            "id": "COST-001",
+            "name": "Unbounded Loops",
+            "description": "Detect loops without termination conditions",
+            "patterns": [
+                "while(true)",
+                "for(;;)",
+                "recursive calls without base case"
+            ],
+            "severity": "BLOCKING",
+            "threshold": 0
+        },
+        {
+            "id": "COST-002",
+            "name": "Uncached Queries",
+            "description": "Detect repeated Firestore queries without caching",
+            "patterns": [
+                "query inside loop",
+                "same query called multiple times",
+                "missing cache check before query"
+            ],
+            "severity": "WARNING",
+            "threshold": 3
+        },
+        {
+            "id": "COST-003",
+            "name": "Excessive AI Calls",
+            "description": "Detect unbounded or excessive AI API calls",
+            "patterns": [
+                "AI call in loop",
+                "multiple AI calls per request",
+                "missing rate limiting"
+            ],
+            "severity": "BLOCKING",
+            "limits": {
+                "max_ai_calls_per_request": 3,
+                "max_ai_calls_per_minute": 10,
+                "max_ai_calls_per_user_per_hour": 50
+            }
+        },
+        {
+            "id": "COST-004",
+            "name": "Large File Abuse",
+            "description": "Detect missing file size validation",
+            "patterns": [
+                "file upload without size check",
+                "file processing without limits",
+                "buffer allocation without bounds"
+            ],
+            "severity": "BLOCKING",
+            "limits": {
+                "max_file_size_mb": 100,
+                "max_files_per_upload": 10,
+                "max_total_upload_mb": 500
+            }
+        },
+        {
+            "id": "COST-005",
+            "name": "Unrestricted Polling",
+            "description": "Detect aggressive polling without backoff",
+            "patterns": [
+                "setInterval without cleanup",
+                "polling without exponential backoff",
+                "real-time listeners without limits"
+            ],
+            "severity": "WARNING",
+            "limits": {
+                "min_poll_interval_ms": 5000,
+                "max_concurrent_listeners": 10
+            }
+        },
+        {
+            "id": "COST-006",
+            "name": "N+1 Query Pattern",
+            "description": "Detect N+1 query anti-pattern",
+            "patterns": [
+                "query for each item in collection",
+                "nested getDoc calls",
+                "sequential queries that could be batched"
+            ],
+            "severity": "WARNING",
+            "threshold": 5
+        },
+        {
+            "id": "COST-007",
+            "name": "Missing Pagination",
+            "description": "Detect unbounded list queries",
+            "patterns": [
+                "collection query without limit",
+                "getDocs without pagination",
+                "list API without page size"
+            ],
+            "severity": "BLOCKING",
+            "limits": {
+                "max_page_size": 100,
+                "default_page_size": 20
+            }
+        },
+        {
+            "id": "COST-008",
+            "name": "Memory Leak Patterns",
+            "description": "Detect potential memory leaks",
+            "patterns": [
+                "event listener without cleanup",
+                "subscription without unsubscribe",
+                "growing array without bounds"
+            ],
+            "severity": "WARNING",
+            "threshold": 2
+        }
+    ],
+    "abuse_vectors": [
+        {
+            "id": "ABUSE-001",
+            "name": "Cart Manipulation",
+            "description": "Prevent cart abuse patterns",
+            "checks": [
+                "max_items_per_cart",
+                "max_quantity_per_item",
+                "rate_limit_cart_updates"
+            ],
+            "limits": {
+                "max_items": 50,
+                "max_quantity": 100,
+                "updates_per_minute": 30
+            }
+        },
+        {
+            "id": "ABUSE-002",
+            "name": "File Upload Abuse",
+            "description": "Prevent storage abuse",
+            "checks": [
+                "file_type_validation",
+                "storage_quota_per_user",
+                "upload_rate_limiting"
+            ],
+            "limits": {
+                "quota_mb": 1000,
+                "uploads_per_hour": 20
+            }
+        },
+        {
+            "id": "ABUSE-003",
+            "name": "API Rate Abuse",
+            "description": "Prevent API hammering",
+            "checks": [
+                "requests_per_minute",
+                "requests_per_hour",
+                "concurrent_requests"
+            ],
+            "limits": {
+                "per_minute": 60,
+                "per_hour": 1000,
+                "concurrent": 5
+            }
+        }
+    ],
+    "enforcement": {
+        "pre_commit": false,
+        "ci_pipeline": true,
+        "runtime_monitoring": true,
+        "on_violation": {
+            "BLOCKING": "FAIL_BUILD",
+            "WARNING": "LOG_AND_NOTIFY"
+        }
+    }
+}

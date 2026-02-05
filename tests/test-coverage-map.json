@@ -1,0 +1,147 @@
+{
+    "version": "1.0.0",
+    "created": "2026-02-05T09:21:00Z",
+    "description": "Maps every functional objective to its test coverage",
+    "coverage_requirement": "Every functional objective must map to ≥1 test",
+    "objectives": {
+        "core": [
+            {
+                "objective": "3D model upload and preview",
+                "tests": [
+                    "tests/e2e/golden-path.spec.ts:upload",
+                    "tests/unit/file-validation.test.ts"
+                ],
+                "coverage": "COMPLETE"
+            },
+            {
+                "objective": "Material and configuration selection",
+                "tests": [
+                    "tests/e2e/golden-path.spec.ts:configure",
+                    "tests/e2e/3d-printing-ops-bundle.spec.ts:presets"
+                ],
+                "coverage": "COMPLETE"
+            },
+            {
+                "objective": "Real-time pricing calculation",
+                "tests": [
+                    "tests/unit/pricing.test.ts",
+                    "tests/e2e/golden-path.spec.ts:pricing"
+                ],
+                "coverage": "COMPLETE"
+            },
+            {
+                "objective": "Order management and tracking",
+                "tests": [
+                    "tests/e2e/golden-path.spec.ts:checkout",
+                    "tests/e2e/admin-platform-bundle.spec.ts:orders"
+                ],
+                "coverage": "COMPLETE"
+            },
+            {
+                "objective": "Admin dashboard for fleet management",
+                "tests": [
+                    "tests/e2e/admin-platform-bundle.spec.ts",
+                    "tests/security/golden-path-security.spec.ts:admin"
+                ],
+                "coverage": "COMPLETE"
+            },
+            {
+                "objective": "Plugin-based extensibility",
+                "tests": [
+                    "tests/e2e/plugin-bundle.spec.ts"
+                ],
+                "coverage": "PARTIAL",
+                "missing": [
+                    "plugin lifecycle tests",
+                    "permission boundary tests"
+                ]
+            },
+            {
+                "objective": "AI-assisted layout generation",
+                "tests": [
+                    "tests/e2e/golden-path.spec.ts:ai-layout"
+                ],
+                "coverage": "PARTIAL",
+                "missing": [
+                    "rollback tests",
+                    "validation tests"
+                ]
+            }
+        ],
+        "commerce": [
+            {
+                "objective": "Cart management",
+                "tests": [
+                    "tests/e2e/commerce-bundle.spec.ts:cart"
+                ],
+                "coverage": "COMPLETE"
+            },
+            {
+                "objective": "Coupon system",
+                "tests": [
+                    "tests/unit/coupon.test.ts",
+                    "tests/e2e/commerce-bundle.spec.ts:coupon"
+                ],
+                "coverage": "COMPLETE"
+            },
+            {
+                "objective": "Checkout flow",
+                "tests": [
+                    "tests/e2e/commerce-bundle.spec.ts:checkout",
+                    "tests/e2e/checkout.test.json"
+                ],
+                "coverage": "COMPLETE"
+            }
+        ],
+        "security": [
+            {
+                "objective": "No cross-user data access",
+                "tests": [
+                    "tests/security/cross-user-access.test.json",
+                    "tests/security/golden-path-security.spec.ts:isolation"
+                ],
+                "coverage": "COMPLETE"
+            },
+            {
+                "objective": "Admin-only actions protected",
+                "tests": [
+                    "tests/security/golden-path-security.spec.ts:admin"
+                ],
+                "coverage": "COMPLETE"
+            },
+            {
+                "objective": "No secrets exposed",
+                "tests": [
+                    "scripts/check-invariants.ts:INV-009"
+                ],
+                "coverage": "COMPLETE"
+            }
+        ]
+    },
+    "summary": {
+        "total_objectives": 13,
+        "fully_covered": 11,
+        "partially_covered": 2,
+        "uncovered": 0,
+        "coverage_percentage": 84.6
+    },
+    "gaps": [
+        {
+            "objective": "Plugin-based extensibility",
+            "missing_tests": [
+                "plugin lifecycle",
+                "permission boundaries"
+            ],
+            "priority": "HIGH"
+        },
+        {
+            "objective": "AI-assisted layout generation",
+            "missing_tests": [
+                "rollback",
+                "validation",
+                "guardrails"
+            ],
+            "priority": "HIGH"
+        }
+    ]
+}

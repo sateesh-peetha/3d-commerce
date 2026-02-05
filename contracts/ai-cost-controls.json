@@ -1,0 +1,81 @@
+{
+    "version": "1.0.0",
+    "created": "2026-02-05T09:41:00Z",
+    "description": "AI cost, rate, and abuse controls",
+    "core_principle": "AI usage must be bounded and cannot grow unbounded",
+    "usage_limits": {
+        "per_user": {
+            "requests_per_minute": 5,
+            "requests_per_hour": 50,
+            "requests_per_day": 200,
+            "tokens_per_day": 50000
+        },
+        "per_admin": {
+            "requests_per_minute": 15,
+            "requests_per_hour": 150,
+            "requests_per_day": 500,
+            "tokens_per_day": 200000
+        },
+        "global": {
+            "requests_per_minute": 100,
+            "requests_per_hour": 2000,
+            "tokens_per_hour": 1000000
+        }
+    },
+    "spend_caps": {
+        "daily_cap_usd": 50,
+        "weekly_cap_usd": 250,
+        "monthly_cap_usd": 500,
+        "hard_stop_on_cap": true,
+        "alert_threshold_percent": 80
+    },
+    "rate_limiting": {
+        "algorithm": "sliding_window",
+        "window_seconds": 60,
+        "burst_allowed": 3,
+        "on_limit_exceeded": "REJECT_WITH_RETRY_AFTER"
+    },
+    "abuse_detection": {
+        "patterns": [
+            {
+                "id": "ABUSE-001",
+                "pattern": "rapid_fire_requests",
+                "description": "More than 10 requests in 10 seconds",
+                "action": "TEMPORARY_BLOCK",
+                "block_duration_minutes": 15
+            },
+            {
+                "id": "ABUSE-002",
+                "pattern": "cost_amplifying_loop",
+                "description": "Same prompt submitted repeatedly",
+                "action": "BLOCK_DUPLICATE",
+                "block_duration_minutes": 5
+            },
+            {
+                "id": "ABUSE-003",
+                "pattern": "token_stuffing",
+                "description": "Prompts near max token limit repeatedly",
+                "action": "WARN_AND_LIMIT",
+                "reduced_limit_factor": 0.5
+            },
+            {
+                "id": "ABUSE-004",
+                "pattern": "off_hours_bulk",
+                "description": "Unusual volume during off-hours",
+                "action": "FLAG_FOR_REVIEW"
+            }
+        ]
+    },
+    "cost_tracking": {
+        "track_per_request": true,
+        "track_per_user": true,
+        "track_per_capability": true,
+        "expose_to_admin_dashboard": true,
+        "alert_on_anomaly": true
+    },
+    "enforcement": {
+        "hard_enforcement": true,
+        "no_override_without_super_admin": true,
+        "grace_period_requests": 0
+    }
+}

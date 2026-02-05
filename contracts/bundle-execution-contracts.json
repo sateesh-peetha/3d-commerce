@@ -1,0 +1,549 @@
+{
+    "version": "1.0.0",
+    "created": "2026-02-05T09:08:00Z",
+    "description": "Bundle execution contracts defining required agents and enforcement rules",
+    "contracts": {
+        "commerce": {
+            "bundle": "Commerce",
+            "agents_required": [
+                "ux-composer-agent",
+                "frontend-scaffold-agent",
+                "backend-contract-agent",
+                "security-policy-agent",
+                "test-generation-agent",
+                "regression-guardian-agent"
+            ],
+            "invariants_enforced": true,
+            "regression_blocking": true,
+            "pipeline_order": [
+                {
+                    "step": 1,
+                    "agent": "ux-composer-agent",
+                    "objective": "Generate screen compositions for commerce pages",
+                    "reject_if": [
+                        "new_block_invented",
+                        "device_rule_violation"
+                    ]
+                },
+                {
+                    "step": 2,
+                    "agent": "frontend-scaffold-agent",
+                    "objective": "Create React component stubs",
+                    "reject_if": [
+                        "inline_styles",
+                        "direct_api_calls",
+                        "business_logic"
+                    ]
+                },
+                {
+                    "step": 3,
+                    "agent": "backend-contract-agent",
+                    "objective": "Define commerce APIs and data models",
+                    "reject_if": [
+                        "endpoint_without_auth",
+                        "overfetching",
+                        "cross_bundle_coupling"
+                    ]
+                },
+                {
+                    "step": 4,
+                    "agent": "security-policy-agent",
+                    "objective": "Validate access control and data isolation",
+                    "reject_if": [
+                        "cross_user_access",
+                        "admin_privilege_leakage"
+                    ]
+                },
+                {
+                    "step": 5,
+                    "agent": "test-generation-agent",
+                    "objective": "Create unit, integration, e2e, and security tests",
+                    "reject_if": [
+                        "missing_test_coverage"
+                    ]
+                },
+                {
+                    "step": 6,
+                    "agent": "regression-guardian-agent",
+                    "objective": "Validate no regressions in golden path or invariants",
+                    "reject_if": [
+                        "any_regression"
+                    ]
+                }
+            ]
+        },
+        "3d-printing-ops": {
+            "bundle": "3D Printing Operations",
+            "agents_required": [
+                "ux-composer-agent",
+                "frontend-scaffold-agent",
+                "backend-contract-agent",
+                "security-policy-agent",
+                "test-generation-agent",
+                "regression-guardian-agent"
+            ],
+            "invariants_enforced": true,
+            "regression_blocking": true,
+            "pipeline_order": [
+                {
+                    "step": 1,
+                    "agent": "ux-composer-agent",
+                    "objective": "Extend 3D printing screens with new features",
+                    "reject_if": [
+                        "new_block_invented",
+                        "device_rule_violation"
+                    ]
+                },
+                {
+                    "step": 2,
+                    "agent": "frontend-scaffold-agent",
+                    "objective": "Create component stubs for file management and presets",
+                    "reject_if": [
+                        "inline_styles",
+                        "direct_api_calls",
+                        "business_logic"
+                    ]
+                },
+                {
+                    "step": 3,
+                    "agent": "backend-contract-agent",
+                    "objective": "Define file, preset, and reprint APIs",
+                    "reject_if": [
+                        "endpoint_without_auth",
+                        "overfetching"
+                    ]
+                },
+                {
+                    "step": 4,
+                    "agent": "security-policy-agent",
+                    "objective": "Validate file access isolation",
+                    "reject_if": [
+                        "cross_user_file_access"
+                    ]
+                },
+                {
+                    "step": 5,
+                    "agent": "test-generation-agent",
+                    "objective": "Create tests for pricing rules and reprint flows",
+                    "reject_if": [
+                        "missing_test_coverage"
+                    ]
+                },
+                {
+                    "step": 6,
+                    "agent": "regression-guardian-agent",
+                    "objective": "Validate commerce bundle remains intact",
+                    "reject_if": [
+                        "any_regression"
+                    ]
+                }
+            ]
+        },
+        "admin-platform": {
+            "bundle": "Admin & Platform",
+            "agents_required": [
+                "ux-composer-agent",
+                "frontend-scaffold-agent",
+                "backend-contract-agent",
+                "security-policy-agent",
+                "test-generation-agent",
+                "regression-guardian-agent"
+            ],
+            "invariants_enforced": true,
+            "regression_blocking": true,
+            "pipeline_order": [
+                {
+                    "step": 1,
+                    "agent": "ux-composer-agent",
+                    "objective": "Create admin dashboard and management screens",
+                    "reject_if": [
+                        "new_block_invented",
+                        "device_rule_violation"
+                    ]
+                },
+                {
+                    "step": 2,
+                    "agent": "frontend-scaffold-agent",
+                    "objective": "Create admin component stubs",
+                    "reject_if": [
+                        "inline_styles",
+                        "direct_api_calls"
+                    ]
+                },
+                {
+                    "step": 3,
+                    "agent": "backend-contract-agent",
+                    "objective": "Define admin APIs with strict role requirements",
+                    "reject_if": [
+                        "endpoint_without_auth",
+                        "missing_admin_check"
+                    ]
+                },
+                {
+                    "step": 4,
+                    "agent": "security-policy-agent",
+                    "objective": "Validate admin-only access and audit logging",
+                    "reject_if": [
+                        "admin_privilege_leakage",
+                        "missing_audit_log"
+                    ]
+                },
+                {
+                    "step": 5,
+                    "agent": "test-generation-agent",
+                    "objective": "Create admin security and role escalation tests",
+                    "reject_if": [
+                        "missing_test_coverage"
+                    ]
+                },
+                {
+                    "step": 6,
+                    "agent": "regression-guardian-agent",
+                    "objective": "Validate all previous bundles",
+                    "reject_if": [
+                        "any_regression"
+                    ]
+                }
+            ]
+        },
+        "cms-blog": {
+            "bundle": "CMS & Blog",
+            "agents_required": [
+                "ux-composer-agent",
+                "frontend-scaffold-agent",
+                "backend-contract-agent",
+                "security-policy-agent",
+                "test-generation-agent",
+                "regression-guardian-agent"
+            ],
+            "invariants_enforced": true,
+            "regression_blocking": true,
+            "pipeline_order": [
+                {
+                    "step": 1,
+                    "agent": "ux-composer-agent",
+                    "objective": "Create CMS and blog management screens",
+                    "reject_if": [
+                        "new_block_invented"
+                    ]
+                },
+                {
+                    "step": 2,
+                    "agent": "frontend-scaffold-agent",
+                    "objective": "Create content editor stubs",
+                    "reject_if": [
+                        "inline_styles"
+                    ]
+                },
+                {
+                    "step": 3,
+                    "agent": "backend-contract-agent",
+                    "objective": "Define content and media APIs",
+                    "reject_if": [
+                        "endpoint_without_auth"
+                    ]
+                },
+                {
+                    "step": 4,
+                    "agent": "security-policy-agent",
+                    "objective": "Validate media access control",
+                    "reject_if": [
+                        "public_media_without_check"
+                    ]
+                },
+                {
+                    "step": 5,
+                    "agent": "test-generation-agent",
+                    "objective": "Create content and SEO tests",
+                    "reject_if": [
+                        "missing_test_coverage"
+                    ]
+                },
+                {
+                    "step": 6,
+                    "agent": "regression-guardian-agent",
+                    "objective": "Validate admin-platform remains intact",
+                    "reject_if": [
+                        "any_regression"
+                    ]
+                }
+            ]
+        },
+        "theme-ui": {
+            "bundle": "Theme & UI Customization",
+            "agents_required": [
+                "ux-composer-agent",
+                "frontend-scaffold-agent",
+                "backend-contract-agent",
+                "security-policy-agent",
+                "test-generation-agent",
+                "regression-guardian-agent"
+            ],
+            "invariants_enforced": true,
+            "regression_blocking": true,
+            "pipeline_order": [
+                {
+                    "step": 1,
+                    "agent": "ux-composer-agent",
+                    "objective": "Create theme management screens",
+                    "reject_if": [
+                        "new_block_invented"
+                    ]
+                },
+                {
+                    "step": 2,
+                    "agent": "frontend-scaffold-agent",
+                    "objective": "Create theme switcher and settings stubs",
+                    "reject_if": [
+                        "hardcoded_colors",
+                        "inline_styles"
+                    ]
+                },
+                {
+                    "step": 3,
+                    "agent": "backend-contract-agent",
+                    "objective": "Define theme and preference APIs",
+                    "reject_if": [
+                        "endpoint_without_auth"
+                    ]
+                },
+                {
+                    "step": 4,
+                    "agent": "security-policy-agent",
+                    "objective": "Validate theme isolation per user",
+                    "reject_if": [
+                        "cross_user_theme_access"
+                    ]
+                },
+                {
+                    "step": 5,
+                    "agent": "test-generation-agent",
+                    "objective": "Create theme switching and persistence tests",
+                    "reject_if": [
+                        "missing_test_coverage"
+                    ]
+                },
+                {
+                    "step": 6,
+                    "agent": "regression-guardian-agent",
+                    "objective": "Validate design tokens consistency",
+                    "reject_if": [
+                        "any_regression",
+                        "token_violation"
+                    ]
+                }
+            ]
+        },
+        "plugin-extension": {
+            "bundle": "Plugin & Extension",
+            "agents_required": [
+                "ux-composer-agent",
+                "frontend-scaffold-agent",
+                "backend-contract-agent",
+                "security-policy-agent",
+                "test-generation-agent",
+                "regression-guardian-agent"
+            ],
+            "invariants_enforced": true,
+            "regression_blocking": true,
+            "pipeline_order": [
+                {
+                    "step": 1,
+                    "agent": "ux-composer-agent",
+                    "objective": "Create plugin management screens",
+                    "reject_if": [
+                        "new_block_invented"
+                    ]
+                },
+                {
+                    "step": 2,
+                    "agent": "frontend-scaffold-agent",
+                    "objective": "Create plugin slot renderers",
+                    "reject_if": [
+                        "inline_styles",
+                        "unsandboxed_execution"
+                    ]
+                },
+                {
+                    "step": 3,
+                    "agent": "backend-contract-agent",
+                    "objective": "Define plugin lifecycle APIs",
+                    "reject_if": [
+                        "endpoint_without_auth"
+                    ]
+                },
+                {
+                    "step": 4,
+                    "agent": "security-policy-agent",
+                    "objective": "Validate plugin sandboxing and permissions",
+                    "reject_if": [
+                        "plugin_without_sandbox",
+                        "permission_bypass"
+                    ]
+                },
+                {
+                    "step": 5,
+                    "agent": "test-generation-agent",
+                    "objective": "Create plugin lifecycle and permission tests",
+                    "reject_if": [
+                        "missing_test_coverage"
+                    ]
+                },
+                {
+                    "step": 6,
+                    "agent": "regression-guardian-agent",
+                    "objective": "Validate INV-006 plugin sandboxing",
+                    "reject_if": [
+                        "any_regression",
+                        "invariant_violation"
+                    ]
+                }
+            ]
+        },
+        "ai-enablement": {
+            "bundle": "AI Enablement",
+            "agents_required": [
+                "ux-composer-agent",
+                "frontend-scaffold-agent",
+                "backend-contract-agent",
+                "security-policy-agent",
+                "test-generation-agent",
+                "regression-guardian-agent",
+                "ai-orchestration-agent"
+            ],
+            "invariants_enforced": true,
+            "regression_blocking": true,
+            "pipeline_order": [
+                {
+                    "step": 1,
+                    "agent": "ux-composer-agent",
+                    "objective": "Create AI prompt and preview screens",
+                    "reject_if": [
+                        "new_block_invented"
+                    ]
+                },
+                {
+                    "step": 2,
+                    "agent": "frontend-scaffold-agent",
+                    "objective": "Create AI interaction component stubs",
+                    "reject_if": [
+                        "inline_styles"
+                    ]
+                },
+                {
+                    "step": 3,
+                    "agent": "backend-contract-agent",
+                    "objective": "Define AI generation and rollback APIs",
+                    "reject_if": [
+                        "endpoint_without_auth",
+                        "missing_rollback"
+                    ]
+                },
+                {
+                    "step": 4,
+                    "agent": "ai-orchestration-agent",
+                    "objective": "Configure prompts, guardrails, and validation",
+                    "reject_if": [
+                        "unguarded_prompt",
+                        "missing_validation"
+                    ]
+                },
+                {
+                    "step": 5,
+                    "agent": "security-policy-agent",
+                    "objective": "Validate AI output constraints",
+                    "reject_if": [
+                        "ai_output_without_validation"
+                    ]
+                },
+                {
+                    "step": 6,
+                    "agent": "test-generation-agent",
+                    "objective": "Create AI guardrail and rollback tests",
+                    "reject_if": [
+                        "missing_test_coverage"
+                    ]
+                },
+                {
+                    "step": 7,
+                    "agent": "regression-guardian-agent",
+                    "objective": "Validate INV-007 AI validation + rollback",
+                    "reject_if": [
+                        "any_regression"
+                    ]
+                }
+            ]
+        },
+        "mobile-apps": {
+            "bundle": "Mobile Apps",
+            "agents_required": [
+                "ux-composer-agent",
+                "frontend-scaffold-agent",
+                "backend-contract-agent",
+                "security-policy-agent",
+                "test-generation-agent",
+                "regression-guardian-agent"
+            ],
+            "invariants_enforced": true,
+            "regression_blocking": true,
+            "pipeline_order": [
+                {
+                    "step": 1,
+                    "agent": "ux-composer-agent",
+                    "objective": "Verify mobile screen parity with web",
+                    "reject_if": [
+                        "new_block_invented",
+                        "mobile_rule_violation"
+                    ]
+                },
+                {
+                    "step": 2,
+                    "agent": "frontend-scaffold-agent",
+                    "objective": "Create React Native component stubs",
+                    "reject_if": [
+                        "inline_styles",
+                        "platform_specific_logic"
+                    ]
+                },
+                {
+                    "step": 3,
+                    "agent": "backend-contract-agent",
+                    "objective": "Define sync and push notification APIs",
+                    "reject_if": [
+                        "endpoint_without_auth"
+                    ]
+                },
+                {
+                    "step": 4,
+                    "agent": "security-policy-agent",
+                    "objective": "Validate secure local storage and offline safety",
+                    "reject_if": [
+                        "insecure_storage",
+                        "missing_encryption"
+                    ]
+                },
+                {
+                    "step": 5,
+                    "agent": "test-generation-agent",
+                    "objective": "Create mobile parity and offline tests",
+                    "reject_if": [
+                        "missing_test_coverage"
+                    ]
+                },
+                {
+                    "step": 6,
+                    "agent": "regression-guardian-agent",
+                    "objective": "Validate all web features remain intact",
+                    "reject_if": [
+                        "any_regression"
+                    ]
+                }
+            ]
+        }
+    },
+    "global_rules": {
+        "no_agent_skip": "No bundle can skip an agent in the pipeline",
+        "no_invariant_skip": "No agent can skip invariant enforcement",
+        "sequential_only": "Bundles execute one at a time, never in parallel"
+    }
+}

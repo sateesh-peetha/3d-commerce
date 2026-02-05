@@ -1,0 +1,126 @@
+{
+    "version": "1.0.0",
+    "created": "2026-02-05T09:31:00Z",
+    "description": "Audit logging requirements for Phase 6 security compliance",
+    "mandatory_logging": {
+        "admin_actions": {
+            "required": true,
+            "events": [
+                "user_role_change",
+                "user_suspension",
+                "api_key_creation",
+                "api_key_revocation",
+                "settings_modification",
+                "plugin_install",
+                "plugin_uninstall",
+                "theme_change"
+            ],
+            "fields": [
+                "actor_id",
+                "action_type",
+                "target_id",
+                "timestamp",
+                "ip_address",
+                "user_agent"
+            ]
+        },
+        "security_events": {
+            "required": true,
+            "events": [
+                "login_success",
+                "login_failure",
+                "logout",
+                "mfa_challenge",
+                "mfa_success",
+                "mfa_failure",
+                "password_change",
+                "permission_denied",
+                "rate_limit_exceeded"
+            ],
+            "fields": [
+                "user_id",
+                "event_type",
+                "timestamp",
+                "ip_address",
+                "success",
+                "failure_reason"
+            ]
+        },
+        "data_access": {
+            "required": true,
+            "events": [
+                "bulk_data_export",
+                "user_data_deletion",
+                "cross_user_access_attempt"
+            ],
+            "fields": [
+                "actor_id",
+                "data_type",
+                "record_count",
+                "timestamp"
+            ]
+        },
+        "ai_operations": {
+            "required": true,
+            "events": [
+                "ai_request",
+                "ai_output",
+                "ai_apply",
+                "ai_rollback",
+                "ai_validation_failure"
+            ],
+            "fields": [
+                "user_id",
+                "request_type",
+                "output_hash",
+                "validation_result",
+                "timestamp"
+            ]
+        }
+    },
+    "forbidden_in_logs": {
+        "pii": [
+            "password",
+            "password_hash",
+            "credit_card",
+            "ssn",
+            "full_address",
+            "phone_number",
+            "email_full"
+        ],
+        "secrets": [
+            "api_key",
+            "secret_key",
+            "access_token",
+            "refresh_token",
+            "webhook_secret"
+        ],
+        "sensitive_data": [
+            "payment_details",
+            "bank_account"
+        ]
+    },
+    "log_storage": {
+        "retention_days": 365,
+        "immutable": true,
+        "encrypted": true,
+        "backup_enabled": true
+    },
+    "tamper_resistance": {
+        "append_only": true,
+        "hash_chain": true,
+        "signature_verification": true
+    },
+    "access_control": {
+        "read_access": [
+            "super_admin",
+            "security_auditor"
+        ],
+        "write_access": [
+            "system_only"
+        ],
+        "delete_access": [
+            "NONE"
+        ]
+    }
+}

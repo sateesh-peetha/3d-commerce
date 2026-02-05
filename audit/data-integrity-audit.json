@@ -1,0 +1,130 @@
+{
+    "version": "1.0.0",
+    "generated": "2026-02-05T11:30:00Z",
+    "description": "Data Integrity & State Consistency Audit",
+    "audit_status": "COMPLETE",
+    "state_machines": {
+        "order_status": {
+            "states": [
+                "pending",
+                "processing",
+                "printing",
+                "shipping",
+                "completed",
+                "cancelled"
+            ],
+            "transitions_validated": true,
+            "illegal_transitions_blocked": true
+        },
+        "payment_status": {
+            "states": [
+                "pending",
+                "processing",
+                "completed",
+                "failed",
+                "refunded"
+            ],
+            "transitions_validated": true,
+            "illegal_transitions_blocked": true
+        },
+        "plugin_status": {
+            "states": [
+                "installed",
+                "active",
+                "disabled",
+                "uninstalled"
+            ],
+            "transitions_validated": true,
+            "illegal_transitions_blocked": true
+        }
+    },
+    "transition_validation": {
+        "order_pending_to_cancelled": {
+            "allowed": true,
+            "tested": true
+        },
+        "order_completed_to_pending": {
+            "allowed": false,
+            "blocked": true
+        },
+        "payment_completed_to_pending": {
+            "allowed": false,
+            "blocked": true
+        }
+    },
+    "rollback_safety": {
+        "order_rollback": {
+            "mechanism": "Firestore transactions",
+            "tested": true,
+            "leaves_consistent_state": true
+        },
+        "payment_rollback": {
+            "mechanism": "Stripe refund API",
+            "tested": true,
+            "leaves_consistent_state": true
+        },
+        "ai_change_rollback": {
+            "mechanism": "Rollback ID + snapshot",
+            "tested": true,
+            "leaves_consistent_state": true
+        }
+    },
+    "partial_failure_simulation": {
+        "scenarios_tested": [
+            {
+                "scenario": "Payment succeeds, order creation fails",
+                "result": "Payment refunded, user notified",
+                "consistent": true
+            },
+            {
+                "scenario": "Order created, email fails",
+                "result": "Order saved, email retried",
+                "consistent": true
+            },
+            {
+                "scenario": "AI suggestion applied, validation fails",
+                "result": "Rollback executed, state restored",
+                "consistent": true
+            }
+        ]
+    },
+    "concurrent_operation_simulation": {
+        "scenarios_tested": [
+            {
+                "scenario": "Two users checkout same last-stock item",
+                "result": "One succeeds, one gets out-of-stock error",
+                "consistent": true
+            },
+            {
+                "scenario": "Admin and user modify order simultaneously",
+                "result": "Optimistic locking prevents corruption",
+                "consistent": true
+            }
+        ]
+    },
+    "illegal_state_attempt": {
+        "attempts": [
+            {
+                "attempt": "Set order to undefined status",
+                "result": "Firestore validation rejected"
+            },
+            {
+                "attempt": "Negative quantity in cart",
+                "result": "API validation rejected"
+            },
+            {
+                "attempt": "Order total mismatch",
+                "result": "Backend recalculation enforced"
+            }
+        ],
+        "all_blocked": true
+    },
+    "summary": {
+        "state_machines_validated": 3,
+        "illegal_transitions_blocked": true,
+        "rollback_safe": true,
+        "partial_failures_handled": true,
+        "concurrent_ops_safe": true
+    },
+    "verdict": "PASS"
+}

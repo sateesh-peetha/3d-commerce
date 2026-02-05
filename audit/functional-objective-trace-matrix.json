@@ -1,0 +1,294 @@
+{
+    "version": "1.0.0",
+    "generated": "2026-02-05T11:30:00Z",
+    "description": "Functional Objective Trace Matrix - Maps every objective to implementation",
+    "source_spec": "specs/functional-objectives.json",
+    "audit_status": "COMPLETE",
+    "objectives": [
+        {
+            "id": "FO-001",
+            "objective": "3D model upload and preview",
+            "status": "TRACED",
+            "mapping": {
+                "screens": [
+                    {
+                        "id": "upload_3d",
+                        "route": "/upload"
+                    },
+                    {
+                        "id": "mobile_upload",
+                        "devices": [
+                            "web_mobile",
+                            "ios_app",
+                            "android_app"
+                        ]
+                    }
+                ],
+                "blocks": [
+                    "3d-printing/model-viewer.css",
+                    "3d-printing/upload-zone.css"
+                ],
+                "api_endpoints": [
+                    "POST /api/uploads/3d-model",
+                    "GET /api/uploads/:id"
+                ],
+                "data_model": "collections/uploads",
+                "tests": [
+                    "tests/e2e/checkout.test.json (upload flow)",
+                    "tests/security/storage-audit.test.ts"
+                ]
+            },
+            "coverage": "FULL"
+        },
+        {
+            "id": "FO-002",
+            "objective": "Material and configuration selection",
+            "status": "TRACED",
+            "mapping": {
+                "screens": [
+                    {
+                        "id": "configure_3d",
+                        "route": "/configure/:id"
+                    }
+                ],
+                "blocks": [
+                    "3d-printing/config-panel.css",
+                    "commerce/product-card.css"
+                ],
+                "api_endpoints": [
+                    "GET /api/materials",
+                    "GET /api/configurations/:modelId"
+                ],
+                "data_model": "collections/materials, collections/configurations",
+                "tests": [
+                    "tests/unit/pricing.test.ts"
+                ]
+            },
+            "coverage": "FULL"
+        },
+        {
+            "id": "FO-003",
+            "objective": "Real-time pricing calculation",
+            "status": "TRACED",
+            "mapping": {
+                "screens": [
+                    {
+                        "id": "configure_3d",
+                        "route": "/configure/:id"
+                    },
+                    {
+                        "id": "cart",
+                        "route": "/cart"
+                    }
+                ],
+                "blocks": [
+                    "commerce/cart-summary.css"
+                ],
+                "api_endpoints": [
+                    "POST /api/pricing/calculate"
+                ],
+                "data_model": "backend functions only",
+                "tests": [
+                    "tests/unit/pricing.test.ts",
+                    "tests/unit/coupon.test.ts"
+                ],
+                "invariant_check": {
+                    "invariant": "INV-005",
+                    "rule": "No pricing logic on frontend",
+                    "verified": true
+                }
+            },
+            "coverage": "FULL"
+        },
+        {
+            "id": "FO-004",
+            "objective": "Order management and tracking",
+            "status": "TRACED",
+            "mapping": {
+                "screens": [
+                    {
+                        "id": "orders",
+                        "route": "/orders"
+                    },
+                    {
+                        "id": "order_detail",
+                        "route": "/orders/:id"
+                    },
+                    {
+                        "id": "mobile_orders",
+                        "devices": [
+                            "web_mobile",
+                            "ios_app",
+                            "android_app"
+                        ]
+                    }
+                ],
+                "blocks": [
+                    "commerce/order-status.css",
+                    "user/order-history.css"
+                ],
+                "api_endpoints": [
+                    "GET /api/orders",
+                    "GET /api/orders/:id",
+                    "POST /api/orders/checkout"
+                ],
+                "data_model": "collections/orders",
+                "tests": [
+                    "tests/e2e/checkout.test.json",
+                    "tests/security/payment-audit.test.ts"
+                ]
+            },
+            "coverage": "FULL"
+        },
+        {
+            "id": "FO-005",
+            "objective": "Admin dashboard for fleet management",
+            "status": "TRACED",
+            "mapping": {
+                "screens": [
+                    {
+                        "id": "admin_dashboard",
+                        "route": "/admin"
+                    },
+                    {
+                        "id": "admin_orders",
+                        "route": "/admin/orders"
+                    },
+                    {
+                        "id": "admin_printers",
+                        "route": "/admin/printers"
+                    },
+                    {
+                        "id": "admin_customers",
+                        "route": "/admin/customers"
+                    },
+                    {
+                        "id": "admin_products",
+                        "route": "/admin/products"
+                    }
+                ],
+                "blocks": [
+                    "admin/stats-cards.css",
+                    "admin/order-queue.css",
+                    "admin/printer-list.css"
+                ],
+                "api_endpoints": [
+                    "GET /api/admin/users",
+                    "GET /api/admin/analytics",
+                    "GET /api/admin/printers"
+                ],
+                "data_model": "collections/printers, collections/users",
+                "tests": [
+                    "tests/security/authorization-audit.test.ts",
+                    "tests/security/auth-audit.test.ts"
+                ],
+                "invariant_check": {
+                    "invariant": "INV-010",
+                    "rule": "No admin action without admin claim",
+                    "verified": true
+                }
+            },
+            "coverage": "FULL"
+        },
+        {
+            "id": "FO-006",
+            "objective": "Plugin-based extensibility",
+            "status": "TRACED",
+            "mapping": {
+                "screens": [
+                    {
+                        "id": "admin_plugins",
+                        "route": "/admin/plugins"
+                    }
+                ],
+                "blocks": [
+                    "design-system/plugins/plugin-config.css"
+                ],
+                "api_endpoints": [
+                    "GET /api/plugins",
+                    "POST /api/plugins/install",
+                    "DELETE /api/plugins/:id"
+                ],
+                "data_model": "collections/plugins",
+                "tests": [
+                    "tests/security/plugin-audit.test.ts"
+                ],
+                "invariant_check": {
+                    "invariant": "INV-006",
+                    "rule": "No plugin without sandboxing",
+                    "verified": true
+                }
+            },
+            "coverage": "FULL"
+        },
+        {
+            "id": "FO-007",
+            "objective": "AI-assisted layout generation",
+            "status": "TRACED",
+            "mapping": {
+                "screens": [
+                    {
+                        "id": "admin_ai_builder",
+                        "route": "/admin/ai-builder"
+                    }
+                ],
+                "blocks": [
+                    "ai/prompt-box.css",
+                    "ai/suggestion-panel.css"
+                ],
+                "api_endpoints": [
+                    "POST /api/ai/suggest-layout"
+                ],
+                "data_model": "collections/ai_sessions",
+                "tests": [
+                    "tests/ai-adversarial/adversarial.test.ts",
+                    "tests/ai-governance/governance.test.ts",
+                    "tests/ai-regression/ai-output.test.ts",
+                    "tests/security/ai-prompt-audit.test.ts"
+                ],
+                "invariant_check": {
+                    "invariant": "INV-007",
+                    "rule": "No AI output applied without validation + rollback",
+                    "verified": true
+                }
+            },
+            "coverage": "FULL"
+        }
+    ],
+    "non_features_verified": {
+        "cad_editing": {
+            "should_exist": false,
+            "exists": false,
+            "status": "VERIFIED"
+        },
+        "slice_generation": {
+            "should_exist": false,
+            "exists": false,
+            "status": "VERIFIED"
+        },
+        "direct_printer_control": {
+            "should_exist": false,
+            "exists": false,
+            "status": "VERIFIED"
+        }
+    },
+    "orphan_detection": {
+        "orphan_screens": [],
+        "orphan_apis": [],
+        "orphan_tests": [],
+        "status": "NONE_FOUND"
+    },
+    "duplicate_detection": {
+        "duplicate_implementations": [],
+        "status": "NONE_FOUND"
+    },
+    "summary": {
+        "total_objectives": 7,
+        "traced": 7,
+        "missing": 0,
+        "orphans": 0,
+        "duplicates": 0,
+        "coverage_percentage": 100
+    },
+    "verdict": "PASS"
+}

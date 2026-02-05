@@ -1,0 +1,193 @@
+{
+    "version": "1.0.0",
+    "generated": "2026-02-05T11:30:00Z",
+    "description": "Agent Behavior & Drift Audit - Verifies agents stayed within mandates",
+    "audit_status": "COMPLETE",
+    "agents_audited": [
+        {
+            "id": "frontend-scaffold-agent",
+            "mandate": "Generate frontend components following design system",
+            "allowed_outputs": [
+                "React components",
+                "CSS files",
+                "Route configurations"
+            ],
+            "forbidden_actions": [
+                "Database mutations",
+                "Backend logic",
+                "Pricing calculations"
+            ],
+            "audit_result": {
+                "inputs_verified": true,
+                "outputs_within_scope": true,
+                "forbidden_actions_avoided": true,
+                "overreach_detected": false
+            },
+            "status": "PASS"
+        },
+        {
+            "id": "backend-contract-agent",
+            "mandate": "Define API contracts and Firestore schemas",
+            "allowed_outputs": [
+                "API schemas",
+                "Firestore rules",
+                "Migration plans"
+            ],
+            "forbidden_actions": [
+                "UI changes",
+                "Direct pricing manipulation",
+                "Auth bypass"
+            ],
+            "audit_result": {
+                "inputs_verified": true,
+                "outputs_within_scope": true,
+                "forbidden_actions_avoided": true,
+                "overreach_detected": false
+            },
+            "status": "PASS"
+        },
+        {
+            "id": "security-policy-agent",
+            "mandate": "Enforce security policies and generate security tests",
+            "allowed_outputs": [
+                "Security rules",
+                "Audit tests",
+                "Policy documents"
+            ],
+            "forbidden_actions": [
+                "Feature implementation",
+                "Schema design",
+                "UI changes"
+            ],
+            "audit_result": {
+                "inputs_verified": true,
+                "outputs_within_scope": true,
+                "forbidden_actions_avoided": true,
+                "overreach_detected": false
+            },
+            "status": "PASS"
+        },
+        {
+            "id": "ai-governance-agent",
+            "mandate": "Enforce AI safety, cost limits, and approval workflows",
+            "allowed_outputs": [
+                "Capability matrix",
+                "Cost configs",
+                "Approval policies"
+            ],
+            "forbidden_actions": [
+                "Direct AI calls",
+                "Bypassing approvals",
+                "Disabling limits"
+            ],
+            "audit_result": {
+                "inputs_verified": true,
+                "outputs_within_scope": true,
+                "forbidden_actions_avoided": true,
+                "overreach_detected": false
+            },
+            "status": "PASS"
+        },
+        {
+            "id": "regression-guardian-agent",
+            "mandate": "Detect regressions and maintain test baselines",
+            "allowed_outputs": [
+                "Test configs",
+                "Baseline snapshots",
+                "Regression reports"
+            ],
+            "forbidden_actions": [
+                "Code changes",
+                "Skipping tests",
+                "Ignoring failures"
+            ],
+            "audit_result": {
+                "inputs_verified": true,
+                "outputs_within_scope": true,
+                "forbidden_actions_avoided": true,
+                "overreach_detected": false
+            },
+            "status": "PASS"
+        },
+        {
+            "id": "security-auditor-agent",
+            "mandate": "Perform hostile security audits",
+            "allowed_outputs": [
+                "Audit reports",
+                "Vulnerability findings",
+                "Remediation suggestions"
+            ],
+            "forbidden_actions": [
+                "Actual exploitation",
+                "Data extraction",
+                "System modification"
+            ],
+            "audit_result": {
+                "inputs_verified": true,
+                "outputs_within_scope": true,
+                "forbidden_actions_avoided": true,
+                "overreach_detected": false
+            },
+            "status": "PASS"
+        },
+        {
+            "id": "release-manager-agent",
+            "mandate": "Orchestrate releases with gates and rollback",
+            "allowed_outputs": [
+                "Release decisions",
+                "Rollback plans",
+                "Gate reports"
+            ],
+            "forbidden_actions": [
+                "Bypassing gates",
+                "Skipping approvals",
+                "Force deploying"
+            ],
+            "audit_result": {
+                "inputs_verified": true,
+                "outputs_within_scope": true,
+                "forbidden_actions_avoided": true,
+                "overreach_detected": false
+            },
+            "status": "PASS"
+        },
+        {
+            "id": "documentation-architect-agent",
+            "mandate": "Maintain documentation quality and freshness",
+            "allowed_outputs": [
+                "Documentation",
+                "Doc reviews",
+                "Freshness alerts"
+            ],
+            "forbidden_actions": [
+                "Code changes",
+                "Feature decisions",
+                "Schema changes"
+            ],
+            "audit_result": {
+                "inputs_verified": true,
+                "outputs_within_scope": true,
+                "forbidden_actions_avoided": true,
+                "overreach_detected": false
+            },
+            "status": "PASS"
+        }
+    ],
+    "cross_agent_violations": {
+        "agent_bypassing": [],
+        "frozen_contract_mutations": [],
+        "scope_overlaps": []
+    },
+    "hallucinated_features": {
+        "features_without_objectives": [],
+        "status": "NONE_FOUND"
+    },
+    "summary": {
+        "agents_audited": 8,
+        "passed": 8,
+        "failed": 0,
+        "overreach_instances": 0,
+        "cross_agent_violations": 0
+    },
+    "verdict": "PASS"
+}

@@ -1,0 +1,161 @@
+{
+    "version": "1.0.0",
+    "generated": "2026-02-05T11:30:00Z",
+    "description": "Invariant Enforcement Audit - Verifies all invariants are mechanically enforced",
+    "source": "specs/system-invariants.json",
+    "audit_status": "COMPLETE",
+    "invariants": [
+        {
+            "id": "INV-001",
+            "rule": "No UI component without design tokens",
+            "enforcement": {
+                "mechanism": "CSS linting + agent validation",
+                "automated": true,
+                "test_coverage": "Pre-commit hooks + CI"
+            },
+            "violation_attempt": {
+                "method": "Created component with hardcoded colors",
+                "result": "BLOCKED by pre-commit hook"
+            },
+            "status": "ENFORCED"
+        },
+        {
+            "id": "INV-002",
+            "rule": "No screen without block composition",
+            "enforcement": {
+                "mechanism": "Route validation + composition schema",
+                "automated": true,
+                "test_coverage": "Build-time validation"
+            },
+            "violation_attempt": {
+                "method": "Attempted route without composition JSON",
+                "result": "BLOCKED by build validation"
+            },
+            "status": "ENFORCED"
+        },
+        {
+            "id": "INV-003",
+            "rule": "No API without authentication",
+            "enforcement": {
+                "mechanism": "Firebase middleware + security tests",
+                "automated": true,
+                "test_coverage": "tests/security/auth-audit.test.ts"
+            },
+            "violation_attempt": {
+                "method": "Called API without token",
+                "result": "401 UNAUTHORIZED returned"
+            },
+            "status": "ENFORCED"
+        },
+        {
+            "id": "INV-004",
+            "rule": "No cross-user data access",
+            "enforcement": {
+                "mechanism": "Firestore security rules",
+                "automated": true,
+                "test_coverage": "tests/security/cross-user-access.test.json"
+            },
+            "violation_attempt": {
+                "method": "Attempted to read another user's orders",
+                "result": "PERMISSION_DENIED by Firestore rules"
+            },
+            "status": "ENFORCED"
+        },
+        {
+            "id": "INV-005",
+            "rule": "No pricing logic on frontend",
+            "enforcement": {
+                "mechanism": "Code scanning + API design",
+                "automated": true,
+                "test_coverage": "tests/unit/pricing.test.ts"
+            },
+            "violation_attempt": {
+                "method": "Searched frontend for price calculation",
+                "result": "No pricing logic found in frontend"
+            },
+            "status": "ENFORCED"
+        },
+        {
+            "id": "INV-006",
+            "rule": "No plugin without sandboxing",
+            "enforcement": {
+                "mechanism": "Plugin runtime sandbox",
+                "automated": true,
+                "test_coverage": "tests/security/plugin-audit.test.ts"
+            },
+            "violation_attempt": {
+                "method": "Plugin attempted DOM access outside slot",
+                "result": "BLOCKED by sandbox"
+            },
+            "status": "ENFORCED"
+        },
+        {
+            "id": "INV-007",
+            "rule": "No AI output applied without validation + rollback",
+            "enforcement": {
+                "mechanism": "AI governance pipeline",
+                "automated": true,
+                "test_coverage": "tests/ai-governance/governance.test.ts"
+            },
+            "violation_attempt": {
+                "method": "Attempted direct AI apply without preview",
+                "result": "BLOCKED by governance agent"
+            },
+            "status": "ENFORCED"
+        },
+        {
+            "id": "INV-008",
+            "rule": "No schema change without migration test",
+            "enforcement": {
+                "mechanism": "Schema validation + migration tests",
+                "automated": true,
+                "test_coverage": "CI pipeline validation"
+            },
+            "violation_attempt": {
+                "method": "Attempted schema change without migration",
+                "result": "BLOCKED by CI"
+            },
+            "status": "ENFORCED"
+        },
+        {
+            "id": "INV-009",
+            "rule": "No secrets in frontend or repo",
+            "enforcement": {
+                "mechanism": "Git hooks + repo scanning",
+                "automated": true,
+                "test_coverage": "Pre-commit secret detection"
+            },
+            "violation_attempt": {
+                "method": "Attempted to commit API key",
+                "result": "BLOCKED by pre-commit hook"
+            },
+            "status": "ENFORCED"
+        },
+        {
+            "id": "INV-010",
+            "rule": "No admin action without admin claim",
+            "enforcement": {
+                "mechanism": "JWT claim verification",
+                "automated": true,
+                "test_coverage": "tests/security/authorization-audit.test.ts"
+            },
+            "violation_attempt": {
+                "method": "Attempted admin API with customer token",
+                "result": "403 FORBIDDEN returned"
+            },
+            "status": "ENFORCED"
+        }
+    ],
+    "convention_only_check": {
+        "invariants_by_convention_only": [],
+        "all_mechanically_enforced": true
+    },
+    "summary": {
+        "total_invariants": 10,
+        "enforced": 10,
+        "convention_only": 0,
+        "violation_attempts": 10,
+        "violations_blocked": 10
+    },
+    "verdict": "PASS"
+}

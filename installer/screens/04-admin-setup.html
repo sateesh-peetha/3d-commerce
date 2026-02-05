@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Setup - Your Admin Account</title>
+    <link rel="stylesheet" href="../components/wizard.css">
+</head>
+
+<body>
+    <div class="installer-wizard">
+        <div class="installer-card">
+            <!-- Progress -->
+            <div class="installer-progress">
+                <div class="installer-progress__dot installer-progress__dot--completed"></div>
+                <div class="installer-progress__dot installer-progress__dot--completed"></div>
+                <div class="installer-progress__dot installer-progress__dot--completed"></div>
+                <div class="installer-progress__dot installer-progress__dot--active"></div>
+                <div class="installer-progress__dot"></div>
+                <div class="installer-progress__dot"></div>
+                <div class="installer-progress__dot"></div>
+            </div>
+            <div class="installer-step-label">Step 4 of 7</div>
+
+            <!-- Content -->
+            <h1 class="installer-title">Create Your Admin Account</h1>
+            <p class="installer-subtitle">
+                This is the main account that controls everything.
+                You'll use this to manage orders, products, and settings.
+            </p>
+
+            <!-- Email Input -->
+            <div class="installer-input-group">
+                <label class="installer-input-label">Your Email Address</label>
+                <input type="email" class="installer-input" id="adminEmail" placeholder="you@example.com"
+                    autocomplete="email">
+                <div class="installer-validation" id="emailValidation"></div>
+            </div>
+
+            <!-- Login Method -->
+            <h3 style="margin-bottom: 0.75rem; margin-top: 1.5rem;">How do you want to log in?</h3>
+            <div class="installer-options" id="loginMethod">
+                <label class="installer-option installer-option--selected" data-value="google">
+                    <span class="installer-option__icon">🔵</span>
+                    <div class="installer-option__content">
+                        <div class="installer-option__title">Sign in with Google</div>
+                        <div class="installer-option__description">
+                            Easiest option — one click and you're in
+                        </div>
+                    </div>
+                </label>
+                <label class="installer-option" data-value="email">
+                    <span class="installer-option__icon">📧</span>
+                    <div class="installer-option__content">
+                        <div class="installer-option__title">Email & Password</div>
+                        <div class="installer-option__description">
+                            Classic login with your own password
+                        </div>
+                    </div>
+                </label>
+                <label class="installer-option" data-value="otp">
+                    <span class="installer-option__icon">📱</span>
+                    <div class="installer-option__content">
+                        <div class="installer-option__title">Phone Number (OTP)</div>
+                        <div class="installer-option__description">
+                            Get a code on your phone each time you log in
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <!-- Help -->
+            <div class="installer-help">
+                <div class="installer-help__content">
+                    <strong>Security tip:</strong> We recommend "Sign in with Google" —
+                    it's the most secure because Google handles the password for you.
+                    You can always add more team members later.
+                </div>
+            </div>
+
+            <!-- Buttons -->
+            <div class="installer-buttons">
+                <button class="installer-btn installer-btn--secondary" onclick="prevStep()">
+                    ← Back
+                </button>
+                <button class="installer-btn installer-btn--primary" onclick="nextStep()" id="nextBtn">
+                    Continue →
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let selectedMethod = 'google';
+        const emailInput = document.getElementById('adminEmail');
+        const validation = document.getElementById('emailValidation');
+
+        // Email validation
+        emailInput.addEventListener('input', () => {
+            const email = emailInput.value;
+            if (!email) {
+                validation.innerHTML = '';
+                emailInput.classList.remove('installer-input--success', 'installer-input--error');
+            } else if (email.includes('@') && email.includes('.')) {
+                validation.innerHTML = '<span class="installer-validation--success">✓ Looks good!</span>';
+                emailInput.classList.add('installer-input--success');
+                emailInput.classList.remove('installer-input--error');
+            } else {
+                validation.innerHTML = '<span class="installer-validation--error">Please enter a valid email</span>';
+                emailInput.classList.add('installer-input--error');
+                emailInput.classList.remove('installer-input--success');
+            }
+        });
+
+        // Login method selection
+        document.querySelectorAll('.installer-option').forEach(option => {
+            option.addEventListener('click', () => {
+                document.querySelectorAll('.installer-option').forEach(o =>
+                    o.classList.remove('installer-option--selected'));
+                option.classList.add('installer-option--selected');
+                selectedMethod = option.dataset.value;
+            });
+        });
+
+        function prevStep() {
+            window.location.href = '03-deployment-choice.html';
+        }
+
+        function nextStep() {
+            const email = emailInput.value;
+            if (email && email.includes('@')) {
+                localStorage.setItem('installer_admin_email', email);
+                localStorage.setItem('installer_login_method', selectedMethod);
+                window.location.href = '05-external-services.html';
+            } else {
+                validation.innerHTML = '<span class="installer-validation--error">Please enter your email address</span>';
+                emailInput.classList.add('installer-input--error');
+            }
+        }
+    </script>
+</body>
+
+</html>

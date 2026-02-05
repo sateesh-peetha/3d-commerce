@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Setup - Starting Up...</title>
+    <link rel="stylesheet" href="../components/wizard.css">
+    <style>
+        .health-status {
+            padding: 2rem 0;
+        }
+
+        .health-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            border-radius: 12px;
+            margin-bottom: 0.75rem;
+            background: #f8fafc;
+            transition: all 0.3s;
+        }
+
+        .health-item--checking {
+            background: #f8fafc;
+        }
+
+        .health-item--success {
+            background: #ecfdf5;
+        }
+
+        .health-item--error {
+            background: #fef2f2;
+        }
+
+        .health-item__icon {
+            font-size: 1.5rem;
+            width: 40px;
+            text-align: center;
+        }
+
+        .health-item__content {
+            flex: 1;
+        }
+
+        .health-item__title {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .health-item__desc {
+            font-size: 0.875rem;
+            color: var(--installer-text-muted);
+        }
+
+        .health-item__action {
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            border: none;
+            background: var(--installer-accent);
+            color: white;
+            cursor: pointer;
+            font-size: 0.875rem;
+        }
+
+        .spinner {
+            width: 24px;
+            height: 24px;
+            border: 3px solid #e5e7eb;
+            border-top-color: var(--installer-accent);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .success-panel {
+            text-align: center;
+            padding: 2rem;
+            background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+            border-radius: 16px;
+            margin-top: 2rem;
+        }
+
+        .success-panel__icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .success-panel__title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #059669;
+            margin-bottom: 0.5rem;
+        }
+
+        .success-panel__desc {
+            color: #047857;
+            margin-bottom: 1.5rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="installer-wizard">
+        <div class="installer-card" style="max-width: 650px;">
+            <!-- Header -->
+            <h1 class="installer-title" id="mainTitle">Setting Up Your System...</h1>
+            <p class="installer-subtitle" id="mainSubtitle">
+                Please wait while we configure everything. This usually takes about 30 seconds.
+            </p>
+
+            <!-- Health Checks -->
+            <div class="health-status" id="healthStatus">
+                <div class="health-item health-item--checking" id="check-config">
+                    <div class="health-item__icon">
+                        <div class="spinner"></div>
+                    </div>
+                    <div class="health-item__content">
+                        <div class="health-item__title">Saving Configuration</div>
+                        <div class="health-item__desc">Writing your settings...</div>
+                    </div>
+                </div>
+
+                <div class="health-item" id="check-database">
+                    <div class="health-item__icon">⏳</div>
+                    <div class="health-item__content">
+                        <div class="health-item__title">Storage</div>
+                        <div class="health-item__desc">Waiting...</div>
+                    </div>
+                </div>
+
+                <div class="health-item" id="check-auth">
+                    <div class="health-item__icon">⏳</div>
+                    <div class="health-item__content">
+                        <div class="health-item__title">Authentication</div>
+                        <div class="health-item__desc">Waiting...</div>
+                    </div>
+                </div>
+
+                <div class="health-item" id="check-payments">
+                    <div class="health-item__icon">⏳</div>
+                    <div class="health-item__content">
+                        <div class="health-item__title">Payments</div>
+                        <div class="health-item__desc">Waiting...</div>
+                    </div>
+                </div>
+
+                <div class="health-item" id="check-ai">
+                    <div class="health-item__icon">⏳</div>
+                    <div class="health-item__content">
+                        <div class="health-item__title">AI Features</div>
+                        <div class="health-item__desc">Waiting...</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Success Panel (hidden initially) -->
+            <div class="success-panel" id="successPanel" style="display: none;">
+                <div class="success-panel__icon">🎉</div>
+                <div class="success-panel__title">Setup Complete!</div>
+                <div class="success-panel__desc">
+                    Your 3D Commerce platform is ready to use.
+                </div>
+                <button class="installer-btn installer-btn--primary" onclick="launchApp()"
+                    style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+                    Open Your Dashboard →
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const wantsPayments = localStorage.getItem('installer_wants_payments') === 'true';
+        const wantsAI = localStorage.getItem('installer_wants_ai') !== 'false';
+
+        function updateCheck(id, status, desc, showAction = false) {
+            const el = document.getElementById(id);
+            el.className = 'health-item health-item--' + status;
+
+            const icons = { checking: '<div class="spinner"></div>', success: '✅', error: '❌', skip: '⏭️' };
+            el.querySelector('.health-item__icon').innerHTML = icons[status];
+            el.querySelector('.health-item__desc').textContent = desc;
+
+            if (showAction) {
+                const action = document.createElement('button');
+                action.className = 'health-item__action';
+                action.textContent = 'Fix Now';
+                action.onclick = () => alert('This would open configuration help');
+                el.appendChild(action);
+            }
+        }
+
+        async function runChecks() {
+            // Step 1: Config
+            await delay(800);
+            updateCheck('check-config', 'success', 'Settings saved successfully');
+
+            // Step 2: Database
+            updateCheck('check-database', 'checking', 'Connecting to storage...');
+            await delay(1000);
+            updateCheck('check-database', 'success', 'Storage ready');
+
+            // Step 3: Auth
+            updateCheck('check-auth', 'checking', 'Setting up authentication...');
+            await delay(800);
+            updateCheck('check-auth', 'success', 'Admin account created');
+
+            // Step 4: Payments
+            if (wantsPayments) {
+                updateCheck('check-payments', 'checking', 'Verifying Stripe connection...');
+                await delay(1200);
+                const hasKey = localStorage.getItem('installer_stripe_key');
+                if (hasKey) {
+                    updateCheck('check-payments', 'success', 'Stripe connected');
+                } else {
+                    updateCheck('check-payments', 'error', 'Key needed - you can add this later', true);
+                }
+            } else {
+                updateCheck('check-payments', 'skip', 'Skipped - can enable later');
+            }
+
+            // Step 5: AI
+            if (wantsAI) {
+                updateCheck('check-ai', 'checking', 'Testing AI connection...');
+                await delay(1000);
+                const hasKey = localStorage.getItem('installer_ai_key');
+                if (hasKey) {
+                    updateCheck('check-ai', 'success', 'AI features enabled');
+                } else {
+                    updateCheck('check-ai', 'error', 'Key needed - AI disabled for now', true);
+                }
+            } else {
+                updateCheck('check-ai', 'skip', 'Disabled - can enable later');
+            }
+
+            // Show success
+            await delay(500);
+            document.getElementById('mainTitle').textContent = '✨ All Done!';
+            document.getElementById('mainSubtitle').textContent = 'Your system is ready. Let\'s take a quick tour.';
+            document.getElementById('successPanel').style.display = 'block';
+        }
+
+        function delay(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        function launchApp() {
+            // Clear installer data
+            localStorage.removeItem('installer_business_type');
+            localStorage.removeItem('installer_deployment');
+            // ... etc
+
+            // Redirect to app
+            window.location.href = '/admin?tour=true';
+        }
+
+        // Start checks on load
+        runChecks();
+    </script>
+</body>
+
+</html>

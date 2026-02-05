@@ -1,0 +1,80 @@
+{
+    "version": "1.0.0",
+    "description": "Installer Mode - First-class system state for guided setup",
+    "mode_id": "INSTALLER_MODE",
+    "detection": {
+        "triggers": [
+            {
+                "condition": "no_valid_configuration",
+                "check": "Missing required environment variables or config files",
+                "action": "activate_installer_mode"
+            },
+            {
+                "condition": "explicit_request",
+                "check": "User navigates to /setup or clicks 'Run Setup'",
+                "action": "activate_installer_mode"
+            },
+            {
+                "condition": "first_boot",
+                "check": "No admin account exists in database",
+                "action": "activate_installer_mode"
+            }
+        ],
+        "required_configs": [
+            "FIREBASE_PROJECT_ID",
+            "FIREBASE_API_KEY",
+            "ADMIN_EMAIL"
+        ]
+    },
+    "behavior": {
+        "when_active": {
+            "redirect_all_traffic_to": "/setup",
+            "locked_routes": [
+                "/*"
+            ],
+            "allowed_routes": [
+                "/setup",
+                "/setup/*",
+                "/api/installer/*",
+                "/assets/*"
+            ],
+            "show_ui": "installer_wizard"
+        },
+        "exit_conditions": [
+            "All required configs valid",
+            "Admin account created",
+            "Health checks pass"
+        ]
+    },
+    "ui": {
+        "entry_point": "/setup",
+        "components": [
+            "installer/screens/01-welcome.html",
+            "installer/screens/02-business-context.html",
+            "installer/screens/03-deployment-choice.html",
+            "installer/screens/04-admin-setup.html",
+            "installer/screens/05-external-services.html",
+            "installer/screens/06-ai-integrations.html",
+            "installer/screens/07-review-confirm.html"
+        ],
+        "post_install": "installer/screens/health-check.html"
+    },
+    "api_endpoints": {
+        "check_status": "GET /api/installer/status",
+        "save_step": "POST /api/installer/step/:id",
+        "validate": "POST /api/installer/validate",
+        "complete": "POST /api/installer/complete",
+        "reset": "POST /api/installer/reset"
+    },
+    "persistence": {
+        "in_progress_state": "installer_state.json",
+        "completed_config": ".env.local",
+        "secrets_vault": "secrets/"
+    },
+    "recovery": {
+        "re_runnable": true,
+        "safe_to_update": true,
+        "repair_mode": true,
+        "access_via": "/setup?mode=repair"
+    }
+}

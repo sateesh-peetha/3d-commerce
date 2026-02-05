@@ -1,0 +1,339 @@
+/* Installer Wizard Design System */
+
+:root {
+    /* Installer-specific tokens */
+    --installer-bg: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --installer-card-bg: rgba(255, 255, 255, 0.95);
+    --installer-text: #1a1a2e;
+    --installer-text-muted: #6b7280;
+    --installer-accent: #6366f1;
+    --installer-success: #10b981;
+    --installer-warning: #f59e0b;
+    --installer-error: #ef4444;
+    --installer-border: rgba(0, 0, 0, 0.1);
+
+    /* Spacing */
+    --installer-spacing-xs: 0.5rem;
+    --installer-spacing-sm: 1rem;
+    --installer-spacing-md: 1.5rem;
+    --installer-spacing-lg: 2rem;
+    --installer-spacing-xl: 3rem;
+
+    /* Typography */
+    --installer-font-family: 'Inter', -apple-system, system-ui, sans-serif;
+    --installer-font-size-sm: 0.875rem;
+    --installer-font-size-base: 1rem;
+    --installer-font-size-lg: 1.25rem;
+    --installer-font-size-xl: 1.5rem;
+    --installer-font-size-2xl: 2rem;
+    --installer-font-size-3xl: 2.5rem;
+
+    /* Animation */
+    --installer-transition: all 0.3s ease;
+}
+
+/* Full-screen wizard container */
+.installer-wizard {
+    min-height: 100vh;
+    background: var(--installer-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--installer-spacing-lg);
+    font-family: var(--installer-font-family);
+}
+
+/* Main card */
+.installer-card {
+    background: var(--installer-card-bg);
+    border-radius: 24px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    max-width: 600px;
+    width: 100%;
+    padding: var(--installer-spacing-xl);
+    animation: slideUp 0.5s ease;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Progress indicator */
+.installer-progress {
+    display: flex;
+    justify-content: center;
+    gap: var(--installer-spacing-sm);
+    margin-bottom: var(--installer-spacing-lg);
+}
+
+.installer-progress__dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--installer-border);
+    transition: var(--installer-transition);
+}
+
+.installer-progress__dot--active {
+    background: var(--installer-accent);
+    transform: scale(1.2);
+}
+
+.installer-progress__dot--completed {
+    background: var(--installer-success);
+}
+
+/* Step indicator text */
+.installer-step-label {
+    text-align: center;
+    color: var(--installer-text-muted);
+    font-size: var(--installer-font-size-sm);
+    margin-bottom: var(--installer-spacing-md);
+}
+
+/* Headings */
+.installer-title {
+    font-size: var(--installer-font-size-2xl);
+    font-weight: 700;
+    color: var(--installer-text);
+    text-align: center;
+    margin-bottom: var(--installer-spacing-sm);
+}
+
+.installer-subtitle {
+    font-size: var(--installer-font-size-base);
+    color: var(--installer-text-muted);
+    text-align: center;
+    margin-bottom: var(--installer-spacing-lg);
+    line-height: 1.6;
+}
+
+/* Options (radio buttons styled as cards) */
+.installer-options {
+    display: flex;
+    flex-direction: column;
+    gap: var(--installer-spacing-sm);
+    margin-bottom: var(--installer-spacing-lg);
+}
+
+.installer-option {
+    display: flex;
+    align-items: center;
+    gap: var(--installer-spacing-md);
+    padding: var(--installer-spacing-md);
+    border: 2px solid var(--installer-border);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: var(--installer-transition);
+}
+
+.installer-option:hover {
+    border-color: var(--installer-accent);
+    background: rgba(99, 102, 241, 0.05);
+}
+
+.installer-option--selected {
+    border-color: var(--installer-accent);
+    background: rgba(99, 102, 241, 0.1);
+}
+
+.installer-option__icon {
+    font-size: 2rem;
+}
+
+.installer-option__content {
+    flex: 1;
+}
+
+.installer-option__title {
+    font-weight: 600;
+    color: var(--installer-text);
+    margin-bottom: 0.25rem;
+}
+
+.installer-option__description {
+    font-size: var(--installer-font-size-sm);
+    color: var(--installer-text-muted);
+}
+
+/* Input fields */
+.installer-input-group {
+    margin-bottom: var(--installer-spacing-md);
+}
+
+.installer-input-label {
+    display: block;
+    font-weight: 500;
+    color: var(--installer-text);
+    margin-bottom: var(--installer-spacing-xs);
+}
+
+.installer-input {
+    width: 100%;
+    padding: var(--installer-spacing-sm);
+    border: 2px solid var(--installer-border);
+    border-radius: 8px;
+    font-size: var(--installer-font-size-base);
+    transition: var(--installer-transition);
+}
+
+.installer-input:focus {
+    outline: none;
+    border-color: var(--installer-accent);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+}
+
+.installer-input--error {
+    border-color: var(--installer-error);
+}
+
+.installer-input--success {
+    border-color: var(--installer-success);
+}
+
+/* Buttons */
+.installer-buttons {
+    display: flex;
+    gap: var(--installer-spacing-sm);
+    justify-content: space-between;
+    margin-top: var(--installer-spacing-lg);
+}
+
+.installer-btn {
+    padding: var(--installer-spacing-sm) var(--installer-spacing-lg);
+    border-radius: 8px;
+    font-size: var(--installer-font-size-base);
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--installer-transition);
+    border: none;
+}
+
+.installer-btn--primary {
+    background: var(--installer-accent);
+    color: white;
+}
+
+.installer-btn--primary:hover {
+    background: #4f46e5;
+    transform: translateY(-2px);
+}
+
+.installer-btn--secondary {
+    background: transparent;
+    color: var(--installer-text-muted);
+    border: 2px solid var(--installer-border);
+}
+
+.installer-btn--secondary:hover {
+    border-color: var(--installer-text-muted);
+}
+
+/* Help panel */
+.installer-help {
+    background: rgba(99, 102, 241, 0.1);
+    border-left: 4px solid var(--installer-accent);
+    padding: var(--installer-spacing-md);
+    border-radius: 0 8px 8px 0;
+    margin-bottom: var(--installer-spacing-md);
+}
+
+.installer-help__trigger {
+    color: var(--installer-accent);
+    font-size: var(--installer-font-size-sm);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.installer-help__content {
+    font-size: var(--installer-font-size-sm);
+    color: var(--installer-text);
+    line-height: 1.6;
+}
+
+/* Validation messages */
+.installer-validation {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: var(--installer-font-size-sm);
+    margin-top: var(--installer-spacing-xs);
+}
+
+.installer-validation--success {
+    color: var(--installer-success);
+}
+
+.installer-validation--error {
+    color: var(--installer-error);
+}
+
+.installer-validation--loading {
+    color: var(--installer-text-muted);
+}
+
+/* Health check items */
+.installer-health {
+    display: flex;
+    flex-direction: column;
+    gap: var(--installer-spacing-sm);
+}
+
+.installer-health__item {
+    display: flex;
+    align-items: center;
+    gap: var(--installer-spacing-sm);
+    padding: var(--installer-spacing-sm);
+    border-radius: 8px;
+    background: rgba(0, 0, 0, 0.03);
+}
+
+.installer-health__icon {
+    font-size: 1.25rem;
+}
+
+.installer-health__label {
+    flex: 1;
+}
+
+.installer-health__status {
+    font-size: var(--installer-font-size-sm);
+    font-weight: 500;
+}
+
+.installer-health__status--success {
+    color: var(--installer-success);
+}
+
+.installer-health__status--warning {
+    color: var(--installer-warning);
+}
+
+.installer-health__status--error {
+    color: var(--installer-error);
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+    .installer-card {
+        padding: var(--installer-spacing-lg);
+    }
+
+    .installer-title {
+        font-size: var(--installer-font-size-xl);
+    }
+
+    .installer-buttons {
+        flex-direction: column;
+    }
+}

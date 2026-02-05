@@ -1,0 +1,105 @@
+{
+    "version": "1.0.0",
+    "description": "Maps user answers to system configuration",
+    "hidden_from_user": true,
+    "answer_mappings": {
+        "business_type": {
+            "personal": {
+                "STORAGE_LIMIT_GB": 5,
+                "MAX_PRODUCTS": 50,
+                "MAX_TEAM_MEMBERS": 1,
+                "ANALYTICS_LEVEL": "basic",
+                "EMAIL_NOTIFICATIONS": "essential"
+            },
+            "small_business": {
+                "STORAGE_LIMIT_GB": 25,
+                "MAX_PRODUCTS": 500,
+                "MAX_TEAM_MEMBERS": 5,
+                "ANALYTICS_LEVEL": "standard",
+                "EMAIL_NOTIFICATIONS": "all"
+            },
+            "company": {
+                "STORAGE_LIMIT_GB": 100,
+                "MAX_PRODUCTS": 10000,
+                "MAX_TEAM_MEMBERS": 50,
+                "ANALYTICS_LEVEL": "advanced",
+                "EMAIL_NOTIFICATIONS": "all"
+            }
+        },
+        "deployment": {
+            "local": {
+                "DEPLOYMENT_MODE": "local",
+                "DATABASE_URL": "sqlite://./data/local.db",
+                "STORAGE_TYPE": "local",
+                "PORT": 3000
+            },
+            "cloud": {
+                "DEPLOYMENT_MODE": "cloud",
+                "DATABASE_URL": "${FIREBASE_DATABASE_URL}",
+                "STORAGE_TYPE": "firebase",
+                "PORT": 8080
+            },
+            "auto": {
+                "_resolver": "Use cloud for small_business/company, local for personal"
+            }
+        },
+        "login_method": {
+            "google": {
+                "AUTH_PROVIDERS": [
+                    "google"
+                ],
+                "GOOGLE_AUTH_ENABLED": true
+            },
+            "email": {
+                "AUTH_PROVIDERS": [
+                    "email"
+                ],
+                "EMAIL_AUTH_ENABLED": true
+            },
+            "otp": {
+                "AUTH_PROVIDERS": [
+                    "phone"
+                ],
+                "PHONE_AUTH_ENABLED": true
+            }
+        },
+        "ai_usage": {
+            "low": {
+                "AI_DAILY_LIMIT": 20,
+                "AI_BUDGET_USD": 5,
+                "AI_MODEL": "gpt-3.5-turbo"
+            },
+            "medium": {
+                "AI_DAILY_LIMIT": 100,
+                "AI_BUDGET_USD": 15,
+                "AI_MODEL": "gpt-4o-mini"
+            },
+            "high": {
+                "AI_DAILY_LIMIT": 500,
+                "AI_BUDGET_USD": 30,
+                "AI_MODEL": "gpt-4o"
+            }
+        }
+    },
+    "secrets_handling": {
+        "secrets": [
+            "STRIPE_SECRET_KEY",
+            "OPENAI_API_KEY",
+            "FIREBASE_ADMIN_KEY"
+        ],
+        "storage": "secrets_vault",
+        "never_log": true,
+        "never_display": true,
+        "mask_in_ui": "sk_live_****"
+    },
+    "output_files": {
+        "env_file": ".env.local",
+        "config_file": "config/app.json",
+        "secrets_file": "secrets/.secrets.enc"
+    },
+    "advanced_mode": {
+        "show_raw_config": false,
+        "enable_via": "Click 'Advanced' in settings",
+        "warning": "Only for developers who know what they're doing"
+    }
+}

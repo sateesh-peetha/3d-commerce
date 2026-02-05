@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Setup - Payment Processing</title>
+    <link rel="stylesheet" href="../components/wizard.css">
+    <style>
+        .service-guide {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .service-guide__step {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            align-items: flex-start;
+        }
+
+        .service-guide__number {
+            background: var(--installer-accent);
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .service-guide__check {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .service-guide__check:hover {
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        .service-guide__checkbox {
+            width: 20px;
+            height: 20px;
+        }
+
+        .external-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--installer-accent);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .external-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="installer-wizard">
+        <div class="installer-card">
+            <!-- Progress -->
+            <div class="installer-progress">
+                <div class="installer-progress__dot installer-progress__dot--completed"></div>
+                <div class="installer-progress__dot installer-progress__dot--completed"></div>
+                <div class="installer-progress__dot installer-progress__dot--completed"></div>
+                <div class="installer-progress__dot installer-progress__dot--completed"></div>
+                <div class="installer-progress__dot installer-progress__dot--active"></div>
+                <div class="installer-progress__dot"></div>
+                <div class="installer-progress__dot"></div>
+            </div>
+            <div class="installer-step-label">Step 5 of 7</div>
+
+            <!-- Content -->
+            <h1 class="installer-title">Accept Payments</h1>
+            <p class="installer-subtitle">
+                Do you want to accept credit card payments from customers?
+            </p>
+
+            <!-- Choice -->
+            <div class="installer-options" id="paymentChoice">
+                <label class="installer-option installer-option--selected" data-value="yes">
+                    <span class="installer-option__icon">💳</span>
+                    <div class="installer-option__content">
+                        <div class="installer-option__title">Yes, set up payments now</div>
+                        <div class="installer-option__description">
+                            We use Stripe — it's free to set up, you only pay when you make sales
+                        </div>
+                    </div>
+                </label>
+                <label class="installer-option" data-value="later">
+                    <span class="installer-option__icon">⏰</span>
+                    <div class="installer-option__content">
+                        <div class="installer-option__title">I'll set this up later</div>
+                        <div class="installer-option__description">
+                            You can still take orders, but customers won't be able to pay online
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <!-- Stripe Setup Guide (shown when "Yes" selected) -->
+            <div id="stripeGuide" class="service-guide">
+                <h3 style="margin-bottom: 1rem;">Quick Stripe Setup</h3>
+
+                <div class="service-guide__step">
+                    <div class="service-guide__number">1</div>
+                    <div>
+                        <a href="https://dashboard.stripe.com/register" target="_blank" class="external-link">
+                            Create a free Stripe account ↗
+                        </a>
+                        <p style="margin: 0.5rem 0 0; color: var(--installer-text-muted); font-size: 0.875rem;">
+                            If you already have one, just sign in
+                        </p>
+                    </div>
+                </div>
+
+                <div class="service-guide__step">
+                    <div class="service-guide__number">2</div>
+                    <div>
+                        Find your API key:
+                        <ol
+                            style="margin: 0.5rem 0 0 1rem; padding: 0; color: var(--installer-text-muted); font-size: 0.875rem;">
+                            <li>Click "Developers" in the left menu</li>
+                            <li>Click "API keys"</li>
+                            <li>Copy the "Secret key" (starts with sk_)</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <div class="service-guide__step">
+                    <div class="service-guide__number">3</div>
+                    <div style="flex: 1;">
+                        <label class="installer-input-label">Paste your secret key here:</label>
+                        <input type="password" class="installer-input" id="stripeKey" placeholder="sk_live_..."
+                            style="font-family: monospace;">
+                        <div class="installer-validation" id="stripeValidation"></div>
+                    </div>
+                </div>
+
+                <!-- Help -->
+                <div class="installer-help" style="margin-top: 1rem;">
+                    <div class="installer-help__content">
+                        <strong>Why do we need this?</strong><br>
+                        This key lets payments from your customers go directly to your bank account.
+                        We never store card details — Stripe handles that securely.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Buttons -->
+            <div class="installer-buttons">
+                <button class="installer-btn installer-btn--secondary" onclick="prevStep()">
+                    ← Back
+                </button>
+                <button class="installer-btn installer-btn--primary" onclick="nextStep()">
+                    Continue →
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let wantsPayments = true;
+        const stripeGuide = document.getElementById('stripeGuide');
+        const stripeKey = document.getElementById('stripeKey');
+        const stripeValidation = document.getElementById('stripeValidation');
+
+        // Toggle guide visibility
+        document.querySelectorAll('.installer-option').forEach(option => {
+            option.addEventListener('click', () => {
+                document.querySelectorAll('.installer-option').forEach(o =>
+                    o.classList.remove('installer-option--selected'));
+                option.classList.add('installer-option--selected');
+                wantsPayments = option.dataset.value === 'yes';
+                stripeGuide.style.display = wantsPayments ? 'block' : 'none';
+            });
+        });
+
+        // Stripe key validation
+        stripeKey.addEventListener('input', () => {
+            const key = stripeKey.value;
+            if (!key) {
+                stripeValidation.innerHTML = '';
+                stripeKey.classList.remove('installer-input--success', 'installer-input--error');
+            } else if (key.startsWith('sk_live_') || key.startsWith('sk_test_')) {
+                stripeValidation.innerHTML = '<span class="installer-validation--success">✓ Key format looks correct!</span>';
+                stripeKey.classList.add('installer-input--success');
+                stripeKey.classList.remove('installer-input--error');
+            } else {
+                stripeValidation.innerHTML = '<span class="installer-validation--error">Key should start with sk_live_ or sk_test_</span>';
+                stripeKey.classList.add('installer-input--error');
+                stripeKey.classList.remove('installer-input--success');
+            }
+        });
+
+        function prevStep() {
+            window.location.href = '04-admin-setup.html';
+        }
+
+        function nextStep() {
+            const key = stripeKey.value;
+            localStorage.setItem('installer_wants_payments', wantsPayments);
+            if (wantsPayments && key) {
+                localStorage.setItem('installer_stripe_key', key);
+            }
+            window.location.href = '06-ai-integrations.html';
+        }
+    </script>
+</body>
+
+</html>

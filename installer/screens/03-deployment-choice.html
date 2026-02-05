@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Setup - Where to Run</title>
+    <link rel="stylesheet" href="../components/wizard.css">
+</head>
+
+<body>
+    <div class="installer-wizard">
+        <div class="installer-card">
+            <!-- Progress -->
+            <div class="installer-progress">
+                <div class="installer-progress__dot installer-progress__dot--completed"></div>
+                <div class="installer-progress__dot installer-progress__dot--completed"></div>
+                <div class="installer-progress__dot installer-progress__dot--active"></div>
+                <div class="installer-progress__dot"></div>
+                <div class="installer-progress__dot"></div>
+                <div class="installer-progress__dot"></div>
+                <div class="installer-progress__dot"></div>
+            </div>
+            <div class="installer-step-label">Step 3 of 7</div>
+
+            <!-- Content -->
+            <h1 class="installer-title">Where Should This Run?</h1>
+            <p class="installer-subtitle">
+                Choose where your system will live. Don't worry if you're not sure —
+                we have a recommended option for most people.
+            </p>
+
+            <!-- Deployment Options -->
+            <div class="installer-options" id="deploymentType">
+                <label class="installer-option" data-value="local">
+                    <span class="installer-option__icon">💻</span>
+                    <div class="installer-option__content">
+                        <div class="installer-option__title">On My Computer</div>
+                        <div class="installer-option__description">
+                            Good for testing. Only works when your computer is on.
+                        </div>
+                    </div>
+                </label>
+                <label class="installer-option installer-option--selected" data-value="cloud">
+                    <span class="installer-option__icon">☁️</span>
+                    <div class="installer-option__content">
+                        <div class="installer-option__title">On the Cloud (Recommended)</div>
+                        <div class="installer-option__description">
+                            Always available, scales automatically. We'll use Google's free tier.
+                        </div>
+                    </div>
+                </label>
+                <label class="installer-option" data-value="auto">
+                    <span class="installer-option__icon">🤖</span>
+                    <div class="installer-option__content">
+                        <div class="installer-option__title">I'm Not Sure — Choose For Me</div>
+                        <div class="installer-option__description">
+                            We'll pick the best option based on your earlier answers.
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <!-- Help -->
+            <div class="installer-help">
+                <div class="installer-help__content">
+                    <strong>What's the difference?</strong><br>
+                    • <strong>Your computer:</strong> Free, but only available when your computer is running.<br>
+                    • <strong>Cloud:</strong> Always available to customers, even when you're offline.
+                    Google offers a free tier that works for most small businesses.
+                </div>
+            </div>
+
+            <!-- Buttons -->
+            <div class="installer-buttons">
+                <button class="installer-btn installer-btn--secondary" onclick="prevStep()">
+                    ← Back
+                </button>
+                <button class="installer-btn installer-btn--primary" onclick="nextStep()">
+                    Continue →
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let selectedType = 'cloud'; // Default
+
+        document.querySelectorAll('.installer-option').forEach(option => {
+            option.addEventListener('click', () => {
+                document.querySelectorAll('.installer-option').forEach(o =>
+                    o.classList.remove('installer-option--selected'));
+                option.classList.add('installer-option--selected');
+                selectedType = option.dataset.value;
+            });
+        });
+
+        function prevStep() {
+            window.location.href = '02-business-context.html';
+        }
+
+        function nextStep() {
+            localStorage.setItem('installer_deployment', selectedType);
+            window.location.href = '04-admin-setup.html';
+        }
+    </script>
+</body>
+
+</html>

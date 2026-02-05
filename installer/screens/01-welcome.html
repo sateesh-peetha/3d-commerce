@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Setup - Welcome</title>
+    <link rel="stylesheet" href="../components/wizard.css">
+</head>
+
+<body>
+    <div class="installer-wizard">
+        <div class="installer-card">
+            <!-- Progress -->
+            <div class="installer-progress">
+                <div class="installer-progress__dot installer-progress__dot--active"></div>
+                <div class="installer-progress__dot"></div>
+                <div class="installer-progress__dot"></div>
+                <div class="installer-progress__dot"></div>
+                <div class="installer-progress__dot"></div>
+                <div class="installer-progress__dot"></div>
+                <div class="installer-progress__dot"></div>
+            </div>
+            <div class="installer-step-label">Step 1 of 7</div>
+
+            <!-- Content -->
+            <h1 class="installer-title">Welcome! Let's Get You Set Up</h1>
+            <p class="installer-subtitle">
+                You're about to set up your own 3D printing commerce platform.
+                This will let you accept custom 3D print orders, manage your printers,
+                and grow your business.
+            </p>
+
+            <!-- What you'll need -->
+            <div class="installer-help">
+                <div class="installer-help__content">
+                    <strong>What you'll need:</strong>
+                    <ul style="margin: 0.5rem 0 0 1rem; padding: 0;">
+                        <li>An email address for your admin account</li>
+                        <li>About 10-15 minutes</li>
+                        <li>Optional: A Stripe account for payments</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Reassurance -->
+            <p style="text-align: center; color: var(--installer-text-muted); font-size: 0.875rem;">
+                ✨ Don't worry — you can change any of these settings later.
+            </p>
+
+            <!-- Buttons -->
+            <div class="installer-buttons" style="justify-content: center;">
+                <button class="installer-btn installer-btn--primary" onclick="nextStep()">
+                    Let's Begin →
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function nextStep() {
+            window.location.href = '02-business-context.html';
+        }
+    </script>
+</body>
+
+</html>

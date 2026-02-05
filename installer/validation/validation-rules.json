@@ -1,0 +1,70 @@
+{
+    "version": "1.0.0",
+    "description": "Validation rules with friendly error messages",
+    "principle": "No technical jargon, no error codes, always offer help",
+    "validators": {
+        "email": {
+            "pattern": "^[^@]+@[^@]+\\.[^@]+$",
+            "friendly_error": "Hmm, that doesn't look like an email address. It should have an @ and a dot, like you@example.com",
+            "success_message": "✓ Looks good!"
+        },
+        "stripe_key": {
+            "pattern": "^sk_(live|test)_[A-Za-z0-9]+$",
+            "friendly_error": "This key doesn't look quite right. Stripe keys start with 'sk_live_' or 'sk_test_'. Check that you copied the whole thing.",
+            "success_message": "✓ Key format looks correct!",
+            "help_link": "Where do I find this?"
+        },
+        "openai_key": {
+            "pattern": "^sk-[A-Za-z0-9]+$",
+            "friendly_error": "OpenAI keys start with 'sk-'. Make sure you copied the complete key from your OpenAI dashboard.",
+            "success_message": "✓ Key format looks correct!",
+            "help_link": "How do I get an API key?"
+        },
+        "firebase_project_id": {
+            "pattern": "^[a-z][a-z0-9-]*$",
+            "friendly_error": "Project IDs are lowercase letters, numbers, and dashes. You can find yours in the Firebase console.",
+            "success_message": "✓ Looks like a valid project ID!"
+        },
+        "url": {
+            "pattern": "^https?://",
+            "friendly_error": "This should be a web address starting with http:// or https://",
+            "success_message": "✓ Valid URL!"
+        }
+    },
+    "real_time_validation": {
+        "enabled": true,
+        "debounce_ms": 500,
+        "show_checking_state": true,
+        "checking_message": "Checking..."
+    },
+    "api_key_testing": {
+        "stripe": {
+            "test_endpoint": "/api/installer/validate/stripe",
+            "success_message": "✓ Connected to Stripe successfully!",
+            "error_message": "We couldn't connect to Stripe with this key. Double-check that you copied it correctly.",
+            "timeout_message": "Taking longer than expected... Stripe might be slow right now. Try again?"
+        },
+        "openai": {
+            "test_endpoint": "/api/installer/validate/openai",
+            "success_message": "✓ AI connection working!",
+            "error_message": "We couldn't connect to OpenAI. Make sure the key is correct and has credits available.",
+            "timeout_message": "OpenAI is taking a while to respond. This sometimes happens. Try again?"
+        }
+    },
+    "error_display": {
+        "never_show": [
+            "stack traces",
+            "error codes",
+            "technical details",
+            "HTTP status codes",
+            "JSON errors"
+        ],
+        "always_show": [
+            "What went wrong (plain English)",
+            "How to fix it",
+            "Option to try again",
+            "Link to help"
+        ],
+        "template": "{friendly_message}. [Try Again] [Get Help]"
+    }
+}

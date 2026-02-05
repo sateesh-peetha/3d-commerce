@@ -1,0 +1,88 @@
+{
+    "version": "1.0.0",
+    "description": "Post-install guided tour to help users get started",
+    "trigger": "First login after installation",
+    "skippable": true,
+    "remember_skip": true,
+    "steps": [
+        {
+            "id": "welcome",
+            "type": "modal",
+            "title": "Welcome to Your Dashboard! 🎉",
+            "content": "You're all set up! Let's take a quick 2-minute tour to show you around.",
+            "buttons": [
+                "Start Tour",
+                "Skip for Now"
+            ]
+        },
+        {
+            "id": "dashboard_overview",
+            "type": "highlight",
+            "target": "#dashboard-stats",
+            "title": "Your Dashboard",
+            "content": "This is your home base. You'll see your orders, revenue, and activity here.",
+            "position": "bottom"
+        },
+        {
+            "id": "first_product",
+            "type": "action",
+            "title": "Let's Add Your First Product",
+            "content": "Click the + button to create your first product listing.",
+            "target": "#add-product-btn",
+            "wait_for": "product_created",
+            "fallback": {
+                "after_seconds": 30,
+                "message": "No pressure! You can add products anytime.",
+                "action": "skip_step"
+            }
+        },
+        {
+            "id": "upload_model",
+            "type": "action",
+            "title": "Upload a 3D Model",
+            "content": "Try uploading a .STL or .OBJ file. We'll show you a preview!",
+            "target": "#upload-zone",
+            "wait_for": "file_uploaded",
+            "sample_file_offer": true
+        },
+        {
+            "id": "pricing",
+            "type": "highlight",
+            "target": "#pricing-section",
+            "title": "Set Your Prices",
+            "content": "Adjust materials and pricing here. Customers see prices instantly.",
+            "position": "left"
+        },
+        {
+            "id": "test_checkout",
+            "type": "action",
+            "title": "Test the Checkout",
+            "content": "Let's make sure payments work. Try a test purchase (no real charge).",
+            "target": "#test-checkout-btn",
+            "only_if": "payments_enabled"
+        },
+        {
+            "id": "admin_menu",
+            "type": "highlight",
+            "target": "#admin-nav",
+            "title": "Admin Tools",
+            "content": "Manage orders, customers, printers, and settings from here.",
+            "position": "right"
+        },
+        {
+            "id": "complete",
+            "type": "modal",
+            "title": "You're All Set! 🚀",
+            "content": "You now know the basics. Need help? Click the ? button anytime.",
+            "buttons": [
+                "Start Using My Store"
+            ],
+            "confetti": true
+        }
+    ],
+    "help_always_available": {
+        "button_position": "bottom-right",
+        "icon": "?",
+        "label": "Need Help?"
+    }
+}

@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Setup - Review & Confirm</title>
+    <link rel="stylesheet" href="../components/wizard.css">
+    <style>
+        .review-section {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+        }
+
+        .review-section__title {
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .review-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .review-item:last-child {
+            border-bottom: none;
+        }
+
+        .review-item__label {
+            color: var(--installer-text-muted);
+        }
+
+        .review-item__value {
+            font-weight: 500;
+        }
+
+        .review-item__value--success {
+            color: var(--installer-success);
+        }
+
+        .review-item__value--warning {
+            color: var(--installer-warning);
+        }
+
+        .edit-link {
+            color: var(--installer-accent);
+            font-size: 0.875rem;
+            cursor: pointer;
+            margin-left: 0.5rem;
+        }
+
+        .final-cta {
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .final-cta__title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .final-cta__subtitle {
+            color: var(--installer-text-muted);
+            margin-bottom: 1.5rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="installer-wizard">
+        <div class="installer-card">
+            <!-- Progress -->
+            <div class="installer-progress">
+                <div class="installer-progress__dot installer-progress__dot--completed"></div>
+                <div class="installer-progress__dot installer-progress__dot--completed"></div>
+                <div class="installer-progress__dot installer-progress__dot--completed"></div>
+                <div class="installer-progress__dot installer-progress__dot--completed"></div>
+                <div class="installer-progress__dot installer-progress__dot--completed"></div>
+                <div class="installer-progress__dot installer-progress__dot--completed"></div>
+                <div class="installer-progress__dot installer-progress__dot--active"></div>
+            </div>
+            <div class="installer-step-label">Step 7 of 7</div>
+
+            <!-- Content -->
+            <h1 class="installer-title">Review Your Setup</h1>
+            <p class="installer-subtitle">
+                Here's what we'll configure. Everything looks good?
+            </p>
+
+            <!-- Account Section -->
+            <div class="review-section">
+                <div class="review-section__title">
+                    👤 Your Account
+                    <span class="edit-link" onclick="goTo('04-admin-setup.html')">Edit</span>
+                </div>
+                <div class="review-item">
+                    <span class="review-item__label">Admin Email</span>
+                    <span class="review-item__value" id="reviewEmail">Loading...</span>
+                </div>
+                <div class="review-item">
+                    <span class="review-item__label">Login Method</span>
+                    <span class="review-item__value" id="reviewLogin">Loading...</span>
+                </div>
+            </div>
+
+            <!-- Hosting Section -->
+            <div class="review-section">
+                <div class="review-section__title">
+                    🏠 Where It Runs
+                    <span class="edit-link" onclick="goTo('03-deployment-choice.html')">Edit</span>
+                </div>
+                <div class="review-item">
+                    <span class="review-item__label">Deployment</span>
+                    <span class="review-item__value" id="reviewDeployment">Loading...</span>
+                </div>
+            </div>
+
+            <!-- Payments Section -->
+            <div class="review-section">
+                <div class="review-section__title">
+                    💳 Payments
+                    <span class="edit-link" onclick="goTo('05-external-services.html')">Edit</span>
+                </div>
+                <div class="review-item">
+                    <span class="review-item__label">Accept Payments</span>
+                    <span class="review-item__value" id="reviewPayments">Loading...</span>
+                </div>
+            </div>
+
+            <!-- AI Section -->
+            <div class="review-section">
+                <div class="review-section__title">
+                    ✨ AI Features
+                    <span class="edit-link" onclick="goTo('06-ai-integrations.html')">Edit</span>
+                </div>
+                <div class="review-item">
+                    <span class="review-item__label">AI Enabled</span>
+                    <span class="review-item__value" id="reviewAI">Loading...</span>
+                </div>
+                <div class="review-item" id="aiCostRow" style="display: none;">
+                    <span class="review-item__label">Estimated Cost</span>
+                    <span class="review-item__value" id="reviewAICost">-</span>
+                </div>
+            </div>
+
+            <!-- Final CTA -->
+            <div class="final-cta">
+                <div class="final-cta__title">Ready to Install!</div>
+                <div class="final-cta__subtitle">
+                    This will take about 30 seconds. You can change any settings later.
+                </div>
+            </div>
+
+            <!-- Buttons -->
+            <div class="installer-buttons">
+                <button class="installer-btn installer-btn--secondary" onclick="prevStep()">
+                    ← Back
+                </button>
+                <button class="installer-btn installer-btn--primary" onclick="beginInstall()" id="installBtn"
+                    style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+                    🚀 Install Now
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Load all saved values
+        window.onload = function () {
+            const email = localStorage.getItem('installer_admin_email') || 'Not set';
+            const login = localStorage.getItem('installer_login_method') || 'google';
+            const deployment = localStorage.getItem('installer_deployment') || 'cloud';
+            const wantsPayments = localStorage.getItem('installer_wants_payments') === 'true';
+            const hasStripe = localStorage.getItem('installer_stripe_key');
+            const wantsAI = localStorage.getItem('installer_wants_ai') !== 'false';
+            const aiUsage = localStorage.getItem('installer_ai_usage') || 'medium';
+
+            document.getElementById('reviewEmail').textContent = email;
+
+            const loginNames = { google: 'Google Sign-In', email: 'Email & Password', otp: 'Phone OTP' };
+            document.getElementById('reviewLogin').textContent = loginNames[login] || login;
+
+            const deployNames = { local: 'Your Computer', cloud: 'Cloud (Recommended)', auto: 'Auto-selected' };
+            document.getElementById('reviewDeployment').textContent = deployNames[deployment] || deployment;
+
+            const paymentsEl = document.getElementById('reviewPayments');
+            if (wantsPayments && hasStripe) {
+                paymentsEl.innerHTML = '<span class="review-item__value--success">✓ Stripe Connected</span>';
+            } else if (wantsPayments) {
+                paymentsEl.innerHTML = '<span class="review-item__value--warning">⚠ Key needed</span>';
+            } else {
+                paymentsEl.textContent = 'Set up later';
+            }
+
+            const aiEl = document.getElementById('reviewAI');
+            if (wantsAI) {
+                aiEl.innerHTML = '<span class="review-item__value--success">✓ Enabled</span>';
+                document.getElementById('aiCostRow').style.display = 'flex';
+                const costs = { low: '~$2-5/mo', medium: '~$5-15/mo', high: '~$15-30/mo' };
+                document.getElementById('reviewAICost').textContent = costs[aiUsage];
+            } else {
+                aiEl.textContent = 'Disabled';
+            }
+        };
+
+        function goTo(page) {
+            window.location.href = page;
+        }
+
+        function prevStep() {
+            window.location.href = '06-ai-integrations.html';
+        }
+
+        function beginInstall() {
+            const btn = document.getElementById('installBtn');
+            btn.disabled = true;
+            btn.innerHTML = '⏳ Installing...';
+
+            // Simulate install process
+            setTimeout(() => {
+                window.location.href = 'health-check.html';
+            }, 2000);
+        }
+    </script>
+</body>
+
+</html>

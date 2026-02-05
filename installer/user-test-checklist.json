@@ -1,0 +1,157 @@
+{
+    "version": "1.0.0",
+    "description": "Non-technical user test checklist",
+    "purpose": "Validate that installer requires zero-external help",
+    "success_criteria": "User completes setup without asking any questions",
+    "test_protocol": {
+        "participant": {
+            "requirements": [
+                "No software development experience",
+                "Has run a small business or side project",
+                "Comfortable using basic apps (email, browser)",
+                "Never used this software before"
+            ],
+            "ideal_profiles": [
+                "Small business owner",
+                "Etsy/Shopify seller",
+                "Hobbyist maker",
+                "Office administrator"
+            ]
+        },
+        "environment": {
+            "provide": [
+                "Computer with browser",
+                "Access to email",
+                "Test Stripe account (optional)"
+            ],
+            "observer_rules": [
+                "Watch without commenting",
+                "Note every moment of confusion",
+                "Do NOT answer questions unless user is truly stuck",
+                "Time each step"
+            ]
+        }
+    },
+    "checklist": {
+        "pre_test": [
+            {
+                "id": "consent",
+                "check": "User understands this is a test of the software, not them"
+            },
+            {
+                "id": "fresh_state",
+                "check": "Software is in unconfigured state (INSTALLER_MODE)"
+            },
+            {
+                "id": "recording",
+                "check": "Screen recording started (with permission)"
+            }
+        ],
+        "during_test": [
+            {
+                "id": "step_1_welcome",
+                "task": "User understands what the software does",
+                "pass": "Proceeds without confusion",
+                "fail": "Asks 'What is this?' or seems confused"
+            },
+            {
+                "id": "step_2_business",
+                "task": "User selects business type",
+                "pass": "Chooses option confidently",
+                "fail": "Hesitates or asks for explanation"
+            },
+            {
+                "id": "step_3_deployment",
+                "task": "User chooses where to run",
+                "pass": "Selects option (cloud is fine)",
+                "fail": "Asks technical questions about hosting"
+            },
+            {
+                "id": "step_4_admin",
+                "task": "User creates admin account",
+                "pass": "Enters email, picks login method",
+                "fail": "Confused by options"
+            },
+            {
+                "id": "step_5_payments",
+                "task": "User configures or skips payments",
+                "pass": "Either sets up Stripe OR skips confidently",
+                "fail": "Confused by API key instructions"
+            },
+            {
+                "id": "step_6_ai",
+                "task": "User handles AI settings",
+                "pass": "Enables/disables with understanding of costs",
+                "fail": "Confused by cost estimates or API key"
+            },
+            {
+                "id": "step_7_review",
+                "task": "User confirms settings",
+                "pass": "Reviews and clicks Install",
+                "fail": "Unsure if settings are correct"
+            },
+            {
+                "id": "health_check",
+                "task": "User waits for installation",
+                "pass": "Understands progress indicators",
+                "fail": "Confused by any error messages"
+            },
+            {
+                "id": "first_login",
+                "task": "User accesses dashboard",
+                "pass": "Reaches dashboard successfully",
+                "fail": "Cannot log in or is lost"
+            },
+            {
+                "id": "guided_tour",
+                "task": "User completes optional tour",
+                "pass": "Follows tour or skips intentionally",
+                "fail": "Tour is confusing"
+            }
+        ],
+        "post_test": [
+            {
+                "id": "interview_difficulty",
+                "question": "On a scale of 1-10, how easy was this?",
+                "target": "8 or higher"
+            },
+            {
+                "id": "interview_confusion",
+                "question": "Was there anything confusing?",
+                "target": "No or minor issues"
+            },
+            {
+                "id": "interview_help",
+                "question": "Did you need to look anything up?",
+                "target": "No"
+            },
+            {
+                "id": "interview_recommendation",
+                "question": "Would you recommend this to a friend?",
+                "target": "Yes"
+            }
+        ]
+    },
+    "failure_responses": {
+        "user_asked_question": {
+            "action": "Note the exact question",
+            "fix": "Update installer to answer proactively"
+        },
+        "user_hesitated": {
+            "action": "Note what caused hesitation",
+            "fix": "Add clarification or example"
+        },
+        "user_made_error": {
+            "action": "Note the error and recovery",
+            "fix": "Improve validation or guidance"
+        },
+        "user_gave_up": {
+            "action": "Note the step where they stopped",
+            "fix": "Major redesign needed for that step"
+        }
+    },
+    "definition_of_done": {
+        "target": "3 out of 3 participants complete without external help",
+        "retry": "After each failure, fix issues and test with new participant"
+    }
+}

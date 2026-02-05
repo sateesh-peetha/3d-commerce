@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Setup - About Your Business</title>
+    <link rel="stylesheet" href="../components/wizard.css">
+</head>
+
+<body>
+    <div class="installer-wizard">
+        <div class="installer-card">
+            <!-- Progress -->
+            <div class="installer-progress">
+                <div class="installer-progress__dot installer-progress__dot--completed"></div>
+                <div class="installer-progress__dot installer-progress__dot--active"></div>
+                <div class="installer-progress__dot"></div>
+                <div class="installer-progress__dot"></div>
+                <div class="installer-progress__dot"></div>
+                <div class="installer-progress__dot"></div>
+                <div class="installer-progress__dot"></div>
+            </div>
+            <div class="installer-step-label">Step 2 of 7</div>
+
+            <!-- Content -->
+            <h1 class="installer-title">Tell Us About Your Use</h1>
+            <p class="installer-subtitle">
+                This helps us set up sensible defaults so you don't have to configure everything manually.
+            </p>
+
+            <!-- Business Type -->
+            <h3 style="margin-bottom: 0.75rem;">What best describes you?</h3>
+            <div class="installer-options" id="businessType">
+                <label class="installer-option" data-value="personal">
+                    <span class="installer-option__icon">🏠</span>
+                    <div class="installer-option__content">
+                        <div class="installer-option__title">Personal / Hobbyist</div>
+                        <div class="installer-option__description">Just for me or friends & family</div>
+                    </div>
+                </label>
+                <label class="installer-option" data-value="small_business">
+                    <span class="installer-option__icon">🏪</span>
+                    <div class="installer-option__content">
+                        <div class="installer-option__title">Small Business</div>
+                        <div class="installer-option__description">Selling to customers, 1-10 orders per week</div>
+                    </div>
+                </label>
+                <label class="installer-option" data-value="company">
+                    <span class="installer-option__icon">🏢</span>
+                    <div class="installer-option__content">
+                        <div class="installer-option__title">Company / High Volume</div>
+                        <div class="installer-option__description">Many orders, multiple staff, need advanced features
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <!-- Help -->
+            <div class="installer-help">
+                <div class="installer-help__content">
+                    <strong>Why we ask:</strong> We'll pre-configure settings like storage limits,
+                    email notifications, and pricing features based on your answer.
+                    You can always change these later.
+                </div>
+            </div>
+
+            <!-- Buttons -->
+            <div class="installer-buttons">
+                <button class="installer-btn installer-btn--secondary" onclick="prevStep()">
+                    ← Back
+                </button>
+                <button class="installer-btn installer-btn--primary" onclick="nextStep()" id="nextBtn" disabled>
+                    Continue →
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let selectedType = null;
+
+        document.querySelectorAll('.installer-option').forEach(option => {
+            option.addEventListener('click', () => {
+                document.querySelectorAll('.installer-option').forEach(o =>
+                    o.classList.remove('installer-option--selected'));
+                option.classList.add('installer-option--selected');
+                selectedType = option.dataset.value;
+                document.getElementById('nextBtn').disabled = false;
+            });
+        });
+
+        function prevStep() {
+            window.location.href = '01-welcome.html';
+        }
+
+        function nextStep() {
+            if (selectedType) {
+                localStorage.setItem('installer_business_type', selectedType);
+                window.location.href = '03-deployment-choice.html';
+            }
+        }
+    </script>
+</body>
+
+</html>

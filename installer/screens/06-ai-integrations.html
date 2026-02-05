@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Setup - AI Features</title>
+    <link rel="stylesheet" href="../components/wizard.css">
+    <style>
+        .cost-estimate {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            border-radius: 12px;
+            padding: 1.25rem;
+            margin: 1rem 0;
+            text-align: center;
+        }
+
+        .cost-estimate__amount {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--installer-accent);
+        }
+
+        .cost-estimate__label {
+            color: var(--installer-text-muted);
+            font-size: 0.875rem;
+        }
+
+        .usage-selector {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .usage-btn {
+            flex: 1;
+            padding: 1rem;
+            border: 2px solid var(--installer-border);
+            border-radius: 8px;
+            background: white;
+            cursor: pointer;
+            transition: var(--installer-transition);
+            text-align: center;
+        }
+
+        .usage-btn:hover {
+            border-color: var(--installer-accent);
+        }
+
+        .usage-btn--selected {
+            border-color: var(--installer-accent);
+            background: rgba(99, 102, 241, 0.1);
+        }
+
+        .usage-btn__title {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .usage-btn__desc {
+            font-size: 0.75rem;
+            color: var(--installer-text-muted);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="installer-wizard">
+        <div class="installer-card">
+            <!-- Progress -->
+            <div class="installer-progress">
+                <div class="installer-progress__dot installer-progress__dot--completed"></div>
+                <div class="installer-progress__dot installer-progress__dot--completed"></div>
+                <div class="installer-progress__dot installer-progress__dot--completed"></div>
+                <div class="installer-progress__dot installer-progress__dot--completed"></div>
+                <div class="installer-progress__dot installer-progress__dot--completed"></div>
+                <div class="installer-progress__dot installer-progress__dot--active"></div>
+                <div class="installer-progress__dot"></div>
+            </div>
+            <div class="installer-step-label">Step 6 of 7</div>
+
+            <!-- Content -->
+            <h1 class="installer-title">AI-Powered Features</h1>
+            <p class="installer-subtitle">
+                AI helps with smart layout suggestions, automated descriptions, and customer support.
+                It's optional and you control the costs.
+            </p>
+
+            <!-- AI Choice -->
+            <div class="installer-options" id="aiChoice">
+                <label class="installer-option installer-option--selected" data-value="yes">
+                    <span class="installer-option__icon">✨</span>
+                    <div class="installer-option__content">
+                        <div class="installer-option__title">Enable AI Features</div>
+                        <div class="installer-option__description">
+                            Smart suggestions, automated content, and more
+                        </div>
+                    </div>
+                </label>
+                <label class="installer-option" data-value="no">
+                    <span class="installer-option__icon">⏸️</span>
+                    <div class="installer-option__content">
+                        <div class="installer-option__title">Skip for Now</div>
+                        <div class="installer-option__description">
+                            You can enable this anytime in settings
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <!-- AI Settings (shown when "Yes" selected) -->
+            <div id="aiSettings">
+                <h3 style="margin-bottom: 0.75rem;">How much AI usage do you expect?</h3>
+                <div class="usage-selector">
+                    <button class="usage-btn" data-usage="low">
+                        <div class="usage-btn__title">Low</div>
+                        <div class="usage-btn__desc">Occasional use</div>
+                    </button>
+                    <button class="usage-btn usage-btn--selected" data-usage="medium">
+                        <div class="usage-btn__title">Medium</div>
+                        <div class="usage-btn__desc">Regular use</div>
+                    </button>
+                    <button class="usage-btn" data-usage="high">
+                        <div class="usage-btn__title">High</div>
+                        <div class="usage-btn__desc">Heavy use</div>
+                    </button>
+                </div>
+
+                <!-- Cost Estimate -->
+                <div class="cost-estimate">
+                    <div class="cost-estimate__label">Estimated monthly cost</div>
+                    <div class="cost-estimate__amount" id="costAmount">~$5-15</div>
+                    <div class="cost-estimate__label">Based on medium usage</div>
+                </div>
+
+                <!-- API Key -->
+                <div class="installer-input-group">
+                    <label class="installer-input-label">OpenAI API Key (optional now)</label>
+                    <input type="password" class="installer-input" id="aiKey" placeholder="sk-..."
+                        style="font-family: monospace;">
+                    <div class="installer-validation" id="aiValidation"></div>
+                    <p style="margin-top: 0.5rem; color: var(--installer-text-muted); font-size: 0.875rem;">
+                        <a href="https://platform.openai.com/api-keys" target="_blank"
+                            style="color: var(--installer-accent);">
+                            Get an API key from OpenAI ↗
+                        </a>
+                    </p>
+                </div>
+
+                <!-- Help -->
+                <div class="installer-help">
+                    <div class="installer-help__content">
+                        <strong>About costs:</strong> You set a spending limit in OpenAI's dashboard.
+                        We'll also warn you before expensive operations. You're always in control.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Buttons -->
+            <div class="installer-buttons">
+                <button class="installer-btn installer-btn--secondary" onclick="prevStep()">
+                    ← Back
+                </button>
+                <button class="installer-btn installer-btn--primary" onclick="nextStep()">
+                    Continue →
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let wantsAI = true;
+        let usageLevel = 'medium';
+        const aiSettings = document.getElementById('aiSettings');
+        const costAmount = document.getElementById('costAmount');
+        const aiKey = document.getElementById('aiKey');
+
+        const costs = {
+            low: '~$2-5',
+            medium: '~$5-15',
+            high: '~$15-30'
+        };
+
+        // Toggle AI settings visibility
+        document.querySelectorAll('.installer-option').forEach(option => {
+            option.addEventListener('click', () => {
+                document.querySelectorAll('.installer-option').forEach(o =>
+                    o.classList.remove('installer-option--selected'));
+                option.classList.add('installer-option--selected');
+                wantsAI = option.dataset.value === 'yes';
+                aiSettings.style.display = wantsAI ? 'block' : 'none';
+            });
+        });
+
+        // Usage level selection
+        document.querySelectorAll('.usage-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.usage-btn').forEach(b =>
+                    b.classList.remove('usage-btn--selected'));
+                btn.classList.add('usage-btn--selected');
+                usageLevel = btn.dataset.usage;
+                costAmount.textContent = costs[usageLevel];
+            });
+        });
+
+        // AI key validation
+        aiKey.addEventListener('input', () => {
+            const key = aiKey.value;
+            const validation = document.getElementById('aiValidation');
+            if (!key) {
+                validation.innerHTML = '';
+                aiKey.classList.remove('installer-input--success', 'installer-input--error');
+            } else if (key.startsWith('sk-')) {
+                validation.innerHTML = '<span class="installer-validation--success">✓ Key format looks correct!</span>';
+                aiKey.classList.add('installer-input--success');
+            } else {
+                validation.innerHTML = '<span class="installer-validation--error">Key should start with sk-</span>';
+                aiKey.classList.add('installer-input--error');
+            }
+        });
+
+        function prevStep() {
+            window.location.href = '05-external-services.html';
+        }
+
+        function nextStep() {
+            localStorage.setItem('installer_wants_ai', wantsAI);
+            localStorage.setItem('installer_ai_usage', usageLevel);
+            if (wantsAI && aiKey.value) {
+                localStorage.setItem('installer_ai_key', aiKey.value);
+            }
+            window.location.href = '07-review-confirm.html';
+        }
+    </script>
+</body>
+
+</html>

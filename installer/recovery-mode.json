@@ -1,0 +1,97 @@
+{
+    "version": "1.0.0",
+    "description": "Recovery and repair mode for the installer",
+    "access": "/setup?mode=repair",
+    "principles": [
+        "No fear - users can always fix things",
+        "Re-runnable without data loss",
+        "Partial updates are safe",
+        "Clear before/after comparison"
+    ],
+    "modes": {
+        "repair": {
+            "description": "Fix broken configuration",
+            "preserves": [
+                "User data",
+                "Products",
+                "Orders",
+                "Customers"
+            ],
+            "can_change": [
+                "API keys",
+                "Settings",
+                "Integrations"
+            ],
+            "flow": [
+                {
+                    "step": "diagnosis",
+                    "title": "Let's See What's Wrong",
+                    "content": "We'll check your configuration and show what needs attention."
+                },
+                {
+                    "step": "issues_found",
+                    "title": "Here's What We Found",
+                    "show": "List of issues with 'Fix Now' buttons"
+                },
+                {
+                    "step": "fix_each",
+                    "title": "Fixing: {issue_name}",
+                    "content": "Guide user through fixing each issue"
+                },
+                {
+                    "step": "verify",
+                    "title": "All Fixed!",
+                    "content": "Run health checks and confirm everything works"
+                }
+            ]
+        },
+        "update": {
+            "description": "Change existing settings",
+            "flow": [
+                {
+                    "step": "choose_setting",
+                    "title": "What Would You Like to Change?",
+                    "options": [
+                        "Admin account",
+                        "Payment settings",
+                        "AI settings",
+                        "Advanced configuration"
+                    ]
+                },
+                {
+                    "step": "edit_setting",
+                    "title": "Editing: {setting_name}",
+                    "show_current": true,
+                    "confirm_change": true
+                }
+            ]
+        },
+        "reset": {
+            "description": "Start completely fresh",
+            "warning": "This will erase all settings but keep your data",
+            "requires_confirmation": true,
+            "confirmation_phrase": "RESET SETTINGS",
+            "preserves": [
+                "User data",
+                "Products",
+                "Orders"
+            ],
+            "erases": [
+                "All configuration",
+                "API keys",
+                "Preferences"
+            ]
+        }
+    },
+    "data_protection": {
+        "backup_before_changes": true,
+        "backup_location": "backups/config_{timestamp}.json",
+        "restore_option": true,
+        "max_backups": 5
+    },
+    "user_messaging": {
+        "entering_repair": "Don't worry! We'll help you fix things without losing any data.",
+        "before_change": "Here's what will change. Your data stays safe.",
+        "after_fix": "All fixed! Your store is back to normal."
+    }
+}

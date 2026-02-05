@@ -32,7 +32,7 @@ To prevent mismatched expectations, we clearly define the system's scope:
 
 All capabilities below are **audited and verified** as of the latest System Audit (v1.0.0):
 
-- **Installer-First Deployment:** A non-technical, browser-based setup wizard handles initial configuration, database connection, and admin creation. [See Installer Docs](docs/getting-started/installer-guide.md).
+- **Installer-First Deployment:** A non-technical, browser-based setup wizard handles initial configuration, database connection, and admin creation. [See Installer Docs](docs/getting-started/installation-guide.md).
 - **3D Model Upload & Pricing:** Secure ingestion pipeline for 3D models with real-time, deterministic pricing calculations (Trace ID: FO-001/FO-003).
 - **Secure Checkout:** Redirect-based secure checkout flow ensuring zero payment data persistence on local servers.
 - **AI-Assisted Layout Generation:** Governed AI agents suggest UI layouts within strict safety bounds, requiring human approval for application (Trace ID: FO-007).
@@ -44,14 +44,36 @@ All capabilities below are **audited and verified** as of the latest System Audi
 
 The platform follows a **10-Layer Audited Architecture** designed for zero-drift and maximum reliability.
 
-![Architecture Diagram](docs/architecture/high-level-diagram.png)
+```mermaid
+graph TD
+    User[User/Browser] -->|HTTPS| CDN[CDN/Edge]
+    CDN -->|Static Assets| S3[Storage Bucket]
+    CDN -->|API Req| LB[Load Balancer]
+    LB -->|Traffic| API[API Gateway / Backend]
+    
+    subgraph "Core System (Trusted)"
+        API -->|Read/Write| DB[(Primary DB)]
+        API -->|Pricing Logic| PE[Pricing Engine (Deterministic)]
+    end
+    
+    subgraph "AI Layer (Governed)"
+        API -->|Request| AG[AI Governance Proxy]
+        AG -->|Sanitized Prompt| LLM[LLM Service]
+        LLM -->|Suggestion| AG
+    end
+    
+    subgraph "Extensions (Sandboxed)"
+        API -->|Hook| PM[Plugin Manager]
+        PM -->|Limited Context| PL[Plugins]
+    end
+```
 
 ### Core Principles
 1.  **Deterministic Behavior:** Core business logic (pricing, orders) is hard-coded and invariant-checked, never AI-generated on the fly.
 2.  **Agentic Pipeline:** AI agents operate as distinct services with strict input/output contracts, unable to mutate system state directly.
 3.  **Human-in-the-Loop:** Critical mutations (applying layouts, changing configs) require explicit administrative approval.
 
-[Read Full Architecture Docs](docs/architecture/README.md)
+[Read Full Architecture Docs](docs/architecture/system-overview.md)
 
 ## Quick Start (Non-Technical)
 
@@ -68,7 +90,7 @@ The platform follows a **10-Layer Audited Architecture** designed for zero-drift
     *   **Step 3:** Configure Store Settings.
 5.  **Finish:** Click "Complete Setup" to launch your Admin Dashboard.
 
-> **Need Help?** See the [Step-by-Step Installer Guide](docs/getting-started/installer-guide.md).
+> **Need Help?** See the [Step-by-Step Installer Guide](docs/getting-started/installation-guide.md).
 
 ## Quick Start (Developers)
 
@@ -95,7 +117,7 @@ npm run start:local
 - **Local Dev URL:** `http://localhost:3000`
 - **Emulator:** Firebase emulators start automatically with `npm run start:local`.
 
-[Developer Guide](docs/getting-started/developer-setup.md)
+[Developer Guide](docs/getting-started/installation-guide.md#local-development)
 
 ## Configuration & Installer
 
@@ -194,8 +216,8 @@ Extend the platform safely without forking the core.
 All documentation is versioned and maintained.
 
 - **📚 Getting Started**
-    - [Installation Guide](docs/getting-started/installer-guide.md)
-    - [Developer Setup](docs/getting-started/developer-setup.md)
+    - [Installation Guide](docs/getting-started/installation-guide.md)
+    - [Developer Setup](docs/getting-started/installation-guide.md#local-development)
 - **🏗 Architecture**
     - [System Overview](docs/architecture/system-overview.md)
     - [Security Audit](audit/system-audit-report.json)

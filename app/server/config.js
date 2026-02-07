@@ -16,7 +16,7 @@ function isInstalled() {
             return false;
         }
         const config = readConfig();
-        return config && config.installed === true && config.adminEmail;
+        return !!(config && config.installed === true && config.adminEmail);
     } catch (error) {
         return false;
     }

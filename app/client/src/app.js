@@ -7,7 +7,7 @@
 
 // App State
 const state = {
-    mode: 'loading', // loading, installer, login, dashboard
+    mode: 'loading', // loading, installer, login, dashboard, admin, store, upload
     step: 1,
     formData: {
         adminEmail: '',
@@ -15,44 +15,102 @@ const state = {
     },
     sessionId: localStorage.getItem('sessionId'),
     adminEmail: null,
-    error: null
+    error: null,
+    route: window.location.pathname
 };
 
-// Initialize App
-async function init() {
+// Handle routing
+function handleRoute() {
+    const path = window.location.pathname;
+    state.route = path;
+
+    // Check if we need authentication for this route
+    const protectedRoutes = ['/admin', '/store', '/upload'];
+    const needsAuth = protectedRoutes.some(route => path.startsWith(route));
+
+    if (needsAuth && !state.sessionId) {
+        // Check session first
+        checkSessionAndRender();
+        return;
+    }
+
+    // Route to appropriate page
+    if (path === '/admin' || path.startsWith('/admin')) {
+        state.mode = 'admin';
+    } else if (path === '/store' || path.startsWith('/store')) {
+        state.mode = 'store';
+    } else if (path === '/upload' || path.startsWith('/upload')) {
+        state.mode = 'upload';
+    } else {
+        // Default: check installation status
+        checkInstallationStatus();
+        return;
+    }
+
+    render();
+}
+
+// Check installation status
+async function checkInstallationStatus() {
     try {
         const response = await fetch('/api/status');
         const data = await response.json();
 
         if (data.installed) {
-            // Check if we have a valid session
-            if (state.sessionId) {
-                const sessionCheck = await fetch('/api/session', {
-                    headers: { 'X-Session-Id': state.sessionId }
-                });
-                const sessionData = await sessionCheck.json();
-
-                if (sessionData.valid) {
-                    state.mode = 'dashboard';
-                    state.adminEmail = sessionData.email;
-                } else {
-                    state.mode = 'login';
-                    state.adminEmail = data.adminEmail;
-                }
-            } else {
-                state.mode = 'login';
-                state.adminEmail = data.adminEmail;
-            }
+            checkSessionAndRender();
         } else {
             state.mode = 'installer';
+            render();
         }
-
-        render();
     } catch (error) {
         console.error('Init error:', error);
         state.error = 'Failed to connect to server';
         render();
     }
+}
+
+// Check session and render dashboard
+async function checkSessionAndRender() {
+    if (state.sessionId) {
+        const sessionCheck = await fetch('/api/session', {
+            headers: { 'X-Session-Id': state.sessionId }
+        });
+        const sessionData = await sessionCheck.json();
+
+        if (sessionData.valid) {
+            state.adminEmail = sessionData.email;
+            if (state.route === '/' || state.route === '') {
+                state.mode = 'dashboard';
+            } else {
+                handleRoute();
+                return;
+            }
+        } else {
+            state.mode = 'login';
+        }
+    } else {
+        state.mode = 'login';
+    }
+    render();
+}
+
+// Initialize App
+async function init() {
+    // Listen for route changes
+    window.addEventListener('popstate', handleRoute);
+    
+    // Intercept link clicks
+    document.addEventListener('click', (e) => {
+        const link = e.target.closest('a');
+        if (link && link.href && link.href.startsWith(window.location.origin)) {
+            e.preventDefault();
+            const path = new URL(link.href).pathname;
+            window.history.pushState({}, '', path);
+            handleRoute();
+        }
+    });
+
+    handleRoute();
 }
 
 // Render based on current state
@@ -71,6 +129,15 @@ function render() {
             break;
         case 'dashboard':
             root.innerHTML = renderDashboard();
+            break;
+        case 'admin':
+            root.innerHTML = renderAdminPanel();
+            break;
+        case 'store':
+            root.innerHTML = renderStore();
+            break;
+        case 'upload':
+            root.innerHTML = renderUpload();
             break;
         default:
             root.innerHTML = renderLoading();
@@ -284,9 +351,9 @@ function renderLogin() {
 // Dashboard
 function renderDashboard() {
     return `
-        <div class="card" style="max-width: 550px;">
+        <div class="card" style="max-width: 800px;">
             <div class="dashboard-header">
-                <h1 style="margin: 0;">Dashboard</h1>
+                <h1 style="margin: 0;">Admin Dashboard</h1>
                 <span class="status-badge">✓ Active</span>
             </div>
             
@@ -294,14 +361,49 @@ function renderDashboard() {
             <h2 style="text-align: center; margin-bottom: 8px;">System Ready!</h2>
             <p class="subtitle">Your 3D Commerce platform is configured and running.</p>
             
-            <div class="info-row">
-                <div class="info-label">Admin Email</div>
-                <div class="info-value">${state.adminEmail}</div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin: 24px 0;">
+                <div class="info-row">
+                    <div class="info-label">Admin Email</div>
+                    <div class="info-value">${state.adminEmail}</div>
+                </div>
+                
+                <div class="info-row">
+                    <div class="info-label">Status</div>
+                    <div class="info-value" style="color: #059669;">✓ Installed & Running</div>
+                </div>
             </div>
-            
-            <div class="info-row">
-                <div class="info-label">Status</div>
-                <div class="info-value" style="color: #059669;">✓ Installed & Running</div>
+
+            <div style="margin-top: 32px; padding-top: 24px; border-top: 1px solid #e5e7eb;">
+                <h3 style="font-size: 1.125rem; margin-bottom: 16px; color: #1f2937;">Quick Actions</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px;">
+                    <a href="/admin" style="text-decoration: none;">
+                        <div style="padding: 16px; background: #f9fafb; border: 2px solid #e5e7eb; border-radius: 8px; text-align: center; transition: all 0.2s; cursor: pointer;" 
+                             onmouseover="this.style.borderColor='#6366f1'; this.style.background='#eef2ff';" 
+                             onmouseout="this.style.borderColor='#e5e7eb'; this.style.background='#f9fafb';">
+                            <div style="font-size: 2rem; margin-bottom: 8px;">📊</div>
+                            <div style="font-weight: 600; color: #1f2937;">Admin Panel</div>
+                            <div style="font-size: 0.875rem; color: #6b7280; margin-top: 4px;">View full dashboard</div>
+                        </div>
+                    </a>
+                    <a href="/store" style="text-decoration: none;">
+                        <div style="padding: 16px; background: #f9fafb; border: 2px solid #e5e7eb; border-radius: 8px; text-align: center; transition: all 0.2s; cursor: pointer;" 
+                             onmouseover="this.style.borderColor='#6366f1'; this.style.background='#eef2ff';" 
+                             onmouseout="this.style.borderColor='#e5e7eb'; this.style.background='#f9fafb';">
+                            <div style="font-size: 2rem; margin-bottom: 8px;">🛍️</div>
+                            <div style="font-weight: 600; color: #1f2937;">Store</div>
+                            <div style="font-size: 0.875rem; color: #6b7280; margin-top: 4px;">Browse products</div>
+                        </div>
+                    </a>
+                    <a href="/upload" style="text-decoration: none;">
+                        <div style="padding: 16px; background: #f9fafb; border: 2px solid #e5e7eb; border-radius: 8px; text-align: center; transition: all 0.2s; cursor: pointer;" 
+                             onmouseover="this.style.borderColor='#6366f1'; this.style.background='#eef2ff';" 
+                             onmouseout="this.style.borderColor='#e5e7eb'; this.style.background='#f9fafb';">
+                            <div style="font-size: 2rem; margin-bottom: 8px;">📤</div>
+                            <div style="font-weight: 600; color: #1f2937;">Upload 3D</div>
+                            <div style="font-size: 0.875rem; color: #6b7280; margin-top: 4px;">Upload model</div>
+                        </div>
+                    </a>
+                </div>
             </div>
             
             <div style="margin-top: 24px; padding-top: 24px; border-top: 1px solid #e5e7eb;">
@@ -428,6 +530,121 @@ async function resetSetup() {
     } catch (error) {
         alert('Failed to reset');
     }
+}
+
+// Admin Panel
+function renderAdminPanel() {
+    return `
+        <div class="card" style="max-width: 900px;">
+            <div class="dashboard-header">
+                <h1 style="margin: 0;">Admin Panel</h1>
+                <a href="/" style="text-decoration: none; color: #6366f1; font-size: 0.875rem;">← Back to Dashboard</a>
+            </div>
+            
+            <div style="margin-top: 24px;">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 32px;">
+                    <div class="info-row">
+                        <div class="info-label">Total Orders</div>
+                        <div class="info-value">0</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Active Printers</div>
+                        <div class="info-value">0</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Revenue</div>
+                        <div class="info-value">$0.00</div>
+                    </div>
+                </div>
+
+                <div style="background: #f9fafb; padding: 20px; border-radius: 12px; margin-top: 24px;">
+                    <h3 style="font-size: 1.125rem; margin-bottom: 12px; color: #1f2937;">Quick Links</h3>
+                    <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+                        <a href="/admin/orders" style="padding: 8px 16px; background: white; border: 1px solid #e5e7eb; border-radius: 6px; text-decoration: none; color: #1f2937; font-size: 0.875rem;">Orders</a>
+                        <a href="/admin/products" style="padding: 8px 16px; background: white; border: 1px solid #e5e7eb; border-radius: 6px; text-decoration: none; color: #1f2937; font-size: 0.875rem;">Products</a>
+                        <a href="/admin/printers" style="padding: 8px 16px; background: white; border: 1px solid #e5e7eb; border-radius: 6px; text-decoration: none; color: #1f2937; font-size: 0.875rem;">Printers</a>
+                        <a href="/admin/customers" style="padding: 8px 16px; background: white; border: 1px solid #e5e7eb; border-radius: 6px; text-decoration: none; color: #1f2937; font-size: 0.875rem;">Customers</a>
+                    </div>
+                </div>
+
+                <div style="margin-top: 24px; padding: 16px; background: #fef3c7; border-left: 4px solid #f59e0b; border-radius: 4px;">
+                    <p style="margin: 0; color: #92400e; font-size: 0.875rem;">
+                        <strong>Note:</strong> This is a minimal admin panel. Full features (orders, printers, analytics) require backend API implementation.
+                    </p>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+// Store Page
+function renderStore() {
+    return `
+        <div class="card" style="max-width: 900px;">
+            <div class="dashboard-header">
+                <h1 style="margin: 0;">Store</h1>
+                <a href="/" style="text-decoration: none; color: #6366f1; font-size: 0.875rem;">← Back to Dashboard</a>
+            </div>
+            
+            <div style="margin-top: 24px;">
+                <p class="subtitle">Browse our 3D printable products</p>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; margin-top: 24px;">
+                    <div style="background: #f9fafb; padding: 20px; border-radius: 12px; text-align: center;">
+                        <div style="font-size: 3rem; margin-bottom: 12px;">📦</div>
+                        <div style="font-weight: 600; margin-bottom: 4px;">Product 1</div>
+                        <div style="color: #6b7280; font-size: 0.875rem;">$29.99</div>
+                    </div>
+                    <div style="background: #f9fafb; padding: 20px; border-radius: 12px; text-align: center;">
+                        <div style="font-size: 3rem; margin-bottom: 12px;">🎨</div>
+                        <div style="font-weight: 600; margin-bottom: 4px;">Product 2</div>
+                        <div style="color: #6b7280; font-size: 0.875rem;">$39.99</div>
+                    </div>
+                    <div style="background: #f9fafb; padding: 20px; border-radius: 12px; text-align: center;">
+                        <div style="font-size: 3rem; margin-bottom: 12px;">🔧</div>
+                        <div style="font-weight: 600; margin-bottom: 4px;">Product 3</div>
+                        <div style="color: #6b7280; font-size: 0.875rem;">$49.99</div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 24px; padding: 16px; background: #fef3c7; border-left: 4px solid #f59e0b; border-radius: 4px;">
+                    <p style="margin: 0; color: #92400e; font-size: 0.875rem;">
+                        <strong>Note:</strong> Product data requires backend API implementation. This is a placeholder view.
+                    </p>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+// Upload Page
+function renderUpload() {
+    return `
+        <div class="card" style="max-width: 900px;">
+            <div class="dashboard-header">
+                <h1 style="margin: 0;">Upload 3D Model</h1>
+                <a href="/" style="text-decoration: none; color: #6366f1; font-size: 0.875rem;">← Back to Dashboard</a>
+            </div>
+            
+            <div style="margin-top: 24px;">
+                <p class="subtitle">Upload your 3D model file to get a price estimate</p>
+                
+                <div style="margin-top: 32px; padding: 40px; border: 2px dashed #e5e7eb; border-radius: 12px; text-align: center; background: #f9fafb;">
+                    <div style="font-size: 4rem; margin-bottom: 16px;">📤</div>
+                    <h3 style="margin-bottom: 8px; color: #1f2937;">Drop your file here</h3>
+                    <p style="color: #6b7280; margin-bottom: 20px;">or click to browse</p>
+                    <button class="btn-primary" style="cursor: pointer;">Choose File</button>
+                    <p style="color: #9ca3af; font-size: 0.875rem; margin-top: 16px;">Supported formats: .stl, .obj, .3mf</p>
+                </div>
+
+                <div style="margin-top: 24px; padding: 16px; background: #fef3c7; border-left: 4px solid #f59e0b; border-radius: 4px;">
+                    <p style="margin: 0; color: #92400e; font-size: 0.875rem;">
+                        <strong>Note:</strong> File upload functionality requires backend API implementation. This is a placeholder view.
+                    </p>
+                </div>
+            </div>
+        </div>
+    `;
 }
 
 // Start app
